@@ -1,5 +1,6 @@
 " Vim color file
 " Converted from Textmate theme Twilight using Coloration v0.2.5 (http://github.com/sickill/coloration)
+" Modified by thePapacy
 
 set background=dark
 highlight clear
@@ -15,7 +16,7 @@ hi Visual  guifg=NONE guibg=#3c4043 gui=NONE
 hi CursorLine  guifg=NONE guibg=#1b1b1b gui=NONE
 hi CursorColumn  guifg=NONE guibg=#1b1b1b gui=NONE
 hi LineNr  guifg=#868686 guibg=#141414 gui=NONE
-hi VertSplit  guifg=#3f3f3f guibg=#3f3f3f gui=NONE
+hi VertSplit  guifg=#141414 guibg=#3f3f3f gui=NONE
 hi MatchParen  guifg=#cda869 guibg=NONE gui=NONE
 hi StatusLine  guifg=#f8f8f8 guibg=#3f3f3f gui=bold
 hi StatusLineNC  guifg=#f8f8f8 guibg=#3f3f3f gui=NONE
