@@ -4,4 +4,6 @@ set encoding=utf-8                " Use UTF-8 everywhere.
 set guioptions-=T                 " Hide toolbar.
 set lines=36 columns=99           " Window dimensions.
 set guioptions-=r                 " Don't show right scrollbar
+set guioptions=l		  " I have to set then unset this to get it to work.
+set guioptions-=l
 
