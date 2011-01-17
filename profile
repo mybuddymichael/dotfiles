@@ -30,10 +30,8 @@ alias m="mvim"
 
 # git
 alias gs="git status"
-alias gl="git log"
-alias gld="git log --decorate"
-alias glo="git log --oneline"
-alias glod="git log --oneline --decorate"
+alias gl="git log --decorate"
+alias glo="git log --oneline --decorate"
 alias ga="git add"
 alias gpu="git push origin"
 alias gdm="git diff | mate"
