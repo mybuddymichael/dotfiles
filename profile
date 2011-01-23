@@ -10,6 +10,9 @@ export LSCOLORS=ExGxcxdxCxegedabagacad
 # PATH
 export PATH="/Users/michael/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
+# import my secrets
+source .secrets
+
 # file system navigation
 alias la="ls -alh"
 alias t="tree -aC"
