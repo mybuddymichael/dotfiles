@@ -18,9 +18,7 @@ alias la="ls -alh"
 alias t="tree -aC"
 
 # path shortcuts
-alias poke="cd ~/Dropbox/repos/poke/"
-alias htdocs="cd /Applications/MAMP/htdocs/"
-alias workenv="cd ~/workenv/"
+alias we="cd ~/workenv/"
 
 # ruby
 alias r="ruby"
