@@ -11,7 +11,7 @@ export LSCOLORS=ExGxcxdxCxegedabagacad
 export PATH="/Users/michael/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 # import my secrets
-source .secrets
+source ~/.secrets
 
 # file system navigation
 alias la="ls -alh"
@@ -45,3 +45,4 @@ alias gc="git commit"
 alias gca="git commit -a"
 alias gb="git branch"
 alias gco="git checkout"
+alias gsub="git submodule"
