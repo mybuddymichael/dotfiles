@@ -17,6 +17,9 @@ source .secrets
 alias la="ls -alh"
 alias t="tree -aC"
 
+# program modifications
+alias mv="mv -v"
+
 # path shortcuts
 alias we="cd ~/workenv/"
 
