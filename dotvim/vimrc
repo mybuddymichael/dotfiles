@@ -50,6 +50,9 @@ set laststatus=2				  " Show the status line all the time
 nmap <leader>l :set list!<CR>
 set listchars=tab:▸\ ,trail:·,eol:¬
 
+" Open NERDTree
+map <leader>n :NERDTree<CR>
+
 " Useful status information at bottom of screen
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
