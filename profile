@@ -46,3 +46,6 @@ alias gca="git commit -a"
 alias gb="git branch"
 alias gco="git checkout"
 alias gsub="git submodule"
+
+# Load RVM
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
