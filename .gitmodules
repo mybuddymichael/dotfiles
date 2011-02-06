@@ -7,3 +7,6 @@
 [submodule "dotvim/bundle/vim-git"]
 	path = dotvim/bundle/vim-git
 	url = git://github.com/thePapacy/vim-git.git
+[submodule "dotvim/bundle/vim-rails"]
+	path = dotvim/bundle/vim-rails
+	url = git://github.com/tpope/vim-rails.git
