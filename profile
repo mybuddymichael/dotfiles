@@ -18,7 +18,7 @@ alias la="ls -alh"
 alias t="tree -aC"
 
 # program modifications
-alias mv="mv -v"
+alias mv="mv -iv"
 
 # path shortcuts
 alias we="cd ~/workenv/"
