@@ -1,7 +1,7 @@
 export EDITOR="/Users/michael/bin/vim"
 
 # prompt format
-export PS1="[\u@\h \W]$ "
+export PS1="\n[\u@\h \w]\n$ "
 
 # shell syntax coloring
 export CLICOLOR=1
