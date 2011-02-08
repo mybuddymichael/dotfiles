@@ -1,7 +1,15 @@
 export EDITOR="/Users/michael/bin/vim"
 
+# get git in the prompt
+function parse_git_dirty {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+}
+
 # prompt format
-export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\]\n$ "
+export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\] $(parse_git_branch)\n$ "
 
 # shell syntax coloring
 export CLICOLOR=1
