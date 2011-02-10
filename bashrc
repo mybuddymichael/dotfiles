@@ -11,7 +11,9 @@ export LSCOLORS=ExGxcxdxCxegedabagacad
 export PATH="/Users/michael/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 # import my secrets
-source ~/.secrets
+if [ -f ~/.secrets ]; then
+	. ~/.secrets
+fi
 
 # file system navigation
 alias la="ls -alh"
