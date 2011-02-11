@@ -1,18 +1,34 @@
 export EDITOR="/Users/michael/bin/vim"
 
-# prompt format
-export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\]\n$ "
+
+
 
 # shell syntax coloring
 export CLICOLOR=1
 export LSCOLORS=ExGxcxdxCxegedabagacad
 
 # PATH
-export PATH="/Users/michael/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+if [ -d ~/bin ]; then
+	export PATH="~/bin:$PATH"
+fi
 
+if [ -d /usr/local/mysql/bin ]; then
+	export PATH="$PATH:/usr/local/mysql/bin"
+fi
 # import my secrets
 if [ -f ~/.secrets ]; then
 	. ~/.secrets
+fi
+
+# git autocompletion
+if [ -f /usr/local/git/contrib/completion/git-completion.bash ]; then
+	. /usr/local/git/contrib/completion/git-completion.bash 
+fi
+GIT_PS1_SHOWDIRTYSTATE=true
+
+# bash-completion
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
 fi
 
 # file system navigation
@@ -48,6 +64,9 @@ alias gca="git commit -a"
 alias gb="git branch"
 alias gco="git checkout"
 alias gsub="git submodule"
+
+# prompt format
+export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\] $(__git_ps1)\n\$ "
 
 # Load RVM
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
