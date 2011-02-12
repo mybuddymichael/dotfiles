@@ -1,4 +1,8 @@
-export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a Terminal"'
+if [ -d ~/bin ]; then
+	export EDITOR='~/bin/vim'
+else
+	export EDITOR='vim'
+fi
 
 # shell syntax coloring
 export CLICOLOR=1
@@ -48,6 +52,33 @@ alias md5="openssl md5"
 
 # MacVim 
 alias m="mvim"
+
+# add or modify README
+function readme {
+	if [ -f ~/bin/mvim ]; then
+		local editor=mvim
+	else
+		local editor=vim
+	fi
+
+	if [ -f README.md ]; then
+			$editor README.md
+	elif [ -f README ]; then
+		read -s -n 1 -p "Are you sure you would like to modify this README? [y/n]"
+		if [[ $REPLY = 'y' || $REPLY = 'Y' ]]; then
+			echo -e "\n"
+			mv README README.md
+			$editor README.md
+		elif [[ $REPLY = 'n' || $REPLY = 'N' ]]; then
+			echo -e -n "\n"
+			return
+		else
+			echo "$REPLY is not a valid input."
+		fi
+	else
+		touch README.md && $editor README.md
+	fi
+}		
 
 # git
 alias gs="git status"
