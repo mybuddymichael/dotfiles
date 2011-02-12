@@ -1,8 +1,5 @@
 export EDITOR="/Users/michael/bin/vim"
 
-
-
-
 # shell syntax coloring
 export CLICOLOR=1
 export LSCOLORS=ExGxcxdxCxegedabagacad
@@ -21,8 +18,8 @@ if [ -f ~/.secrets ]; then
 fi
 
 # git autocompletion
-if [ -f /usr/local/git/contrib/completion/git-completion.bash ]; then
-	. /usr/local/git/contrib/completion/git-completion.bash 
+if [ -f ~/workenv/bash/git-completion.sh ]; then
+	. ~/workenv/bash/git-completion.sh 
 fi
 GIT_PS1_SHOWDIRTYSTATE=true
 
@@ -66,7 +63,7 @@ alias gco="git checkout"
 alias gsub="git submodule"
 
 # prompt format
-export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\] $(__git_ps1)\n\$ "
+export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\]\$(__git_ps1)\n\$ "
 
 # Load RVM
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
