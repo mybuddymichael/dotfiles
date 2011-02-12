@@ -27,6 +27,9 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
 fi
 
+# source profile and bashrc
+alias reload='. ~/.profile'
+
 # file system navigation
 alias la="ls -alh"
 alias t="tree -aC"
