@@ -21,7 +21,6 @@ fi
 if [ -f ~/workenv/bash/git-completion.sh ]; then
 	. ~/workenv/bash/git-completion.sh 
 fi
-GIT_PS1_SHOWDIRTYSTATE=true
 
 # bash-completion
 if [ -f `brew --prefix`/etc/bash_completion ]; then
@@ -62,7 +61,6 @@ alias gb="git branch"
 alias gco="git checkout"
 alias gsub="git submodule"
 
-# prompt format
 # colors
 txtblk='\[\e[0;30m\]' # Black - Regular
 txtred='\[\e[0;31m\]' # Red
@@ -98,7 +96,9 @@ bakcyn='\[\e[46m\]'   # Cyan
 bakwht='\[\e[47m\]'   # White
 txtrst='\[\e[0m\]'    # Text Reset
 
-export PS1="\n\u@\h \[\e[0;35m\]\w\[\e[0m\]\$(__git_ps1)\n\$ "
+# prompt format
+GIT_PS1_SHOWDIRTYSTATE=true
+export PS1="\n\u@\h ${txtpur}\w${txtrst}${txtcyn}\$(__git_ps1)${txtrst}\n\$ "
 
 # Load RVM
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
