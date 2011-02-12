@@ -133,7 +133,8 @@ txtrst='\[\e[0m\]'    # Text Reset
 
 # prompt format
 GIT_PS1_SHOWDIRTYSTATE=true
-export PS1="\n\u@\h ${txtpur}\w${txtrst}${txtcyn}\$(__git_ps1)${txtrst}\n\$ "
+GIT_PS1_SHOWUNTRACKEDFILES=true
+export PS1="\n\u@\h ${txtpur}\w${txtrst}${txtcyn}\$(__git_ps1)${txtrst} $txtred\$(~/.rvm/bin/rvm-prompt)$txtrst \n\$ "
 
 # Load RVM
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
