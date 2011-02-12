@@ -53,6 +53,21 @@ alias md5="openssl md5"
 # MacVim 
 alias m="mvim"
 
+# git
+alias gs="git status"
+alias gl="git log --decorate"
+alias glo="git log --oneline --decorate"
+alias ga="git add"
+alias gpo="git push origin"
+alias gpom="git push origin master"
+alias gd="git diff"
+alias gdm="git diff | mate"
+alias gc="git commit"
+alias gca="git commit -a"
+alias gb="git branch"
+alias gco="git checkout"
+alias gsub="git submodule"
+
 # add or modify README
 function readme {
 	if [ -f ~/bin/mvim ]; then
@@ -79,21 +94,6 @@ function readme {
 		touch README.md && $editor README.md
 	fi
 }		
-
-# git
-alias gs="git status"
-alias gl="git log --decorate"
-alias glo="git log --oneline --decorate"
-alias ga="git add"
-alias gpo="git push origin"
-alias gpom="git push origin master"
-alias gd="git diff"
-alias gdm="git diff | mate"
-alias gc="git commit"
-alias gca="git commit -a"
-alias gb="git branch"
-alias gco="git checkout"
-alias gsub="git submodule"
 
 # colors
 txtblk='\[\e[0;30m\]' # Black - Regular
