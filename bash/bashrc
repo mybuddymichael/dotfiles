@@ -89,7 +89,7 @@ function readme {
 			return
 		else
 			echo -e -n "\n"
-			echo "\"$REPLY\" is not a valid input."
+			echo "\"$REPLY\" is not a valid input. Terminating process."
 		fi
 	else
 		touch README.md && $editor README.md
