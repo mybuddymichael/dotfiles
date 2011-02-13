@@ -77,7 +77,7 @@ function readme {
 	fi
 
 	if [ -f README.md ]; then
-			$editor README.md
+		$editor README.md
 	elif [ -f README ]; then
 		read -s -n 1 -p "Are you sure you would like to modify this README? [y/n]"
 		if [[ $REPLY = 'y' || $REPLY = 'Y' ]]; then
