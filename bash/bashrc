@@ -40,6 +40,7 @@ alias t="tree -aC"
 
 # program modifications
 alias mv="mv -iv"
+alias cp='cp -v'
 
 # path shortcuts
 alias we="cd ~/workenv/"
