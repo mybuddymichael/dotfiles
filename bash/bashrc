@@ -68,34 +68,6 @@ alias gb="git branch"
 alias gco="git checkout"
 alias gsub="git submodule"
 
-# add or modify README
-function readme {
-	if [ -f ~/bin/mvim ]; then
-		local editor=mvim
-	else
-		local editor=vim
-	fi
-
-	if [ -f README.md ]; then
-		$editor README.md
-	elif [ -f README ]; then
-		read -s -n 1 -p "Are you sure you would like to modify this README? [y/n]"
-		if [[ $REPLY = 'y' || $REPLY = 'Y' ]]; then
-			echo -e "\n"
-			mv README README.md
-			$editor README.md
-		elif [[ $REPLY = 'n' || $REPLY = 'N' ]]; then
-			echo -e -n "\n"
-			return
-		else
-			echo -e -n "\n"
-			echo "\"$REPLY\" is not a valid input. Terminating process."
-		fi
-	else
-		touch README.md && $editor README.md
-	fi
-}		
-
 # colors
 txtblk='\[\e[0;30m\]' # Black - Regular
 txtred='\[\e[0;31m\]' # Red
