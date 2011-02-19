@@ -9,13 +9,13 @@ export CLICOLOR=1
 export LSCOLORS=ExGxcxdxCxegedabagacad
 
 # PATH
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+
+# more PATH
 if [ -d ~/bin ]; then
 	export PATH="~/bin:$PATH"
 fi
 
-if [ -d /usr/local/mysql/bin ]; then
-	export PATH="$PATH:/usr/local/mysql/bin"
-fi
 # import my secrets
 if [ -f ~/.secrets ]; then
 	. ~/.secrets
