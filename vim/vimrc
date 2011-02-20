@@ -54,6 +54,9 @@ set listchars=tab:▸\ ,trail:·,eol:¬
 " Use :Wrap for soft-wrapping text by word.
 command! -nargs=* Wrap set wrap linebreak nolist
 set showbreak=…
+set wrap
+set linebreak
+set nolist
 
 " Open NERDTree
 map <leader>n :NERDTree<CR>
