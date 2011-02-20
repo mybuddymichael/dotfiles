@@ -25,6 +25,7 @@ set smartcase                     " But case-sensitive if expression contains a 
 
 set number                        " Show line numbers.
 set ruler                         " Show cursor position.
+set colorcolumn=85
 
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
