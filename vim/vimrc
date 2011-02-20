@@ -49,7 +49,7 @@ set laststatus=2                  " Show the status line all the time
 
 " Invisibles toggling and formatting.
 nmap <leader>l :set list!<CR>
-set listchars=tab:▸\ ,trail:·,eol:¬
+set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
 
 " Use :Wrap for soft-wrapping text by word.
 command! -nargs=* Wrap set wrap linebreak nolist
