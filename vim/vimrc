@@ -50,13 +50,13 @@ set laststatus=2                  " Show the status line all the time
 " Invisibles toggling and formatting.
 nmap <leader>l :set list!<CR>
 set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
+set nolist
 
-" Use :Wrap for soft-wrapping text by word.
-command! -nargs=* Wrap set wrap linebreak nolist
-set showbreak=…
+" Set wrap settings and create :Wrap command.
 set wrap
 set linebreak
-set nolist
+command! -nargs=* Wrap set wrap linebreak nolist
+set showbreak=…
 
 " Open NERDTree
 map <leader>n :NERDTree<CR>
