@@ -13,3 +13,6 @@
 [submodule "vim/bundle/vim-ruby"]
 	path = vim/bundle/vim-ruby
 	url = https://github.com/thePapacy/vim-ruby.git
+[submodule "vim/bundle/snipmate"]
+	path = vim/bundle/snipmate
+	url = https://github.com/thePapacy/snipmate.vim.git
