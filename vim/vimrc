@@ -64,6 +64,14 @@ map <leader>n :NERDTree<CR>
 " Useful status information at bottom of screen
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
+" Map alignment shortcuts.
+if exists(":Tabularize")
+	nmap <leader>a= :Tabularize /=<CR>
+	vmap <leader>a= :Tabularize /=<CR>
+	nmap <leader>a: :Tabularize /:\zs<CR>
+	vmap <leader>a: :Tabularize /:\zs<CR>
+endif
+
 " Colorscheme.
 colorscheme wombat
 
