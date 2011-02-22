@@ -12,14 +12,10 @@ export LSCOLORS=ExGxcxdxCxegedabagacad
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 # more PATH
-if [ -d ~/bin ]; then
-	export PATH="~/bin:$PATH"
-fi
+[ -d ~/bin ] && export PATH="~/bin:$PATH"
 
 # import my secrets
-if [ -f ~/.secrets ]; then
-	. ~/.secrets
-fi
+[ -f ~/.secrets ] && . ~/.secrets
 
 # git autocompletion
 if [ -f ~/workenv/bash/git-completion.sh ]; then
