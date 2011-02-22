@@ -47,13 +47,13 @@ alias cp='cp -v'
 alias we='cd ~/workenv/'
 
 # ruby
-alias r='ruby'
+alias r=ruby
 
 # openssl
 alias md5='openssl md5'
 
 # MacVim 
-alias m='mvim'
+alias m=mvim
 
 # git
 alias git=hub
