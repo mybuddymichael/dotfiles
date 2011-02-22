@@ -60,6 +60,7 @@ alias md5='openssl md5'
 alias m='mvim'
 
 # git
+alias git=hub
 alias gs='git status'
 alias gl='git log --decorate'
 alias glo='git log --oneline --decorate'
