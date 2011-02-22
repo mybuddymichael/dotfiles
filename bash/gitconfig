@@ -1,8 +1,6 @@
 [user]
 	name = Michael Hanson
 	email = Michael@Hal
-[core]
-	editor = vim
 [color]
 	ui = auto
 [color "branch"]
