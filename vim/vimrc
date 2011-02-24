@@ -25,7 +25,10 @@ set smartcase                     " But case-sensitive if expression contains a 
 
 set number                        " Show line numbers.
 set ruler                         " Show cursor position.
-set colorcolumn=85
+set cursorline                    " Show the cursor's line.
+set cursorcolumn                  " Show the curser's column.
+set colorcolumn=85                " Show a column at 85 so I don't overtype.
+:nnoremap <leader>c<cr> :set cursorline! cursorcolumn!<cr>
 
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
