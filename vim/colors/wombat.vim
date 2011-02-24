@@ -1,6 +1,5 @@
-" Maintainer:   Lars H. Nielsen (dengmao@gmail.com)
-" Last Change:  January 22 2007
-" Modified by Michael Hanson in 2011
+" Maintainer:  Michael Hanson
+" Last Change: February 22 2011
 
 set background=dark
 
