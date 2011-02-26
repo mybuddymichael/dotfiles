@@ -1,7 +1,7 @@
 if [ -d ~/bin ]; then
 	export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a Terminal"'
 else
-	export EDITOR='vim'
+	export EDITOR=vim
 fi
 
 # shell syntax coloring
@@ -12,25 +12,22 @@ export LSCOLORS=ExGxcxdxCxegedabagacad
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 # more PATH
-[ -d ~/bin ] && export PATH="~/bin:$PATH"
+[[ -d ~/bin ]] && export PATH="~/bin:$PATH"
 
 # import my secrets
-[ -f ~/.secrets ] && . ~/.secrets
+[[ -f ~/.secrets ]] && . ~/.secrets
 
 # git autocompletion
-if [ -f ~/workenv/bash/git-completion.sh ]; then
-	. ~/workenv/bash/git-completion.sh 
-fi
+[[ -f ~/workenv/bash/git-completion.sh ]] && . ~/workenv/bash/git-completion.sh
 
 # homebrew autocompletion
-if [ -f `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]; then
-	. `brew --prefix`/Library/Contributions/brew_bash_completion.sh
-fi
+[[ -f `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]] && . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+
+# rvm autocompletion
+[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
 
 # bash-completion
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-  . `brew --prefix`/etc/bash_completion
-fi
+[[ -f `brew --prefix`/etc/bash_completion ]] && . `brew --prefix`/etc/bash_completion
 
 # source profile and bashrc
 alias reload='. ~/.profile'
