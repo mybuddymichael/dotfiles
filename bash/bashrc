@@ -23,9 +23,6 @@ export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 # homebrew autocompletion
 [[ -f `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]] && . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
 
-# rvm autocompletion
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
-
 # bash-completion
 [[ -f `brew --prefix`/etc/bash_completion ]] && . `brew --prefix`/etc/bash_completion
 
@@ -106,7 +103,10 @@ txtrst='\[\e[0m\]'    # Text Reset
 # prompt format
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
-export PS1="\n\u@\h $txtpur\w$txtrst$txtcyn\$(__git_ps1)$txtrst $txtred\$(~/.rvm/bin/rvm-prompt v g)$txtrst \n⍟ "
+export PS1="\n\u@\h $txtpur\w$txtrst$txtcyn\$(__git_ps1)$txtrst $txtred\$(~/.rvm/bin/rvm-prompt v p g)$txtrst \n⍟ "
 
 # Load RVM
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# rvm autocompletion
+[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
