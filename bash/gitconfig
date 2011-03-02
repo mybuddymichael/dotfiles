@@ -30,3 +30,5 @@
 	mr = merge --no-ff
 	unstage = reset HEAD
 	grep = grep -n
+[core]
+	excludesfile = /Users/michael/.gitignore_global
