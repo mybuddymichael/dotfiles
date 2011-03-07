@@ -6,8 +6,6 @@ call pathogen#helptags()          " Load pathogen bundles and generate docs.
 syntax enable                     " Turn on syntax highlighting.
 filetype plugin indent on         " Turn on file type detection.
 
-runtime macros/matchit.vim        " Load the matchit plugin.
-
 let mapleader=","                 " Change leader key from \ to ,
 
 set showcmd                       " Display incomplete commands.
@@ -47,7 +45,6 @@ set directory=$HOME/.vim/tmp//,.  " Keep swap files in one location
 
 set tabstop=4                     " Global tab width.
 set shiftwidth=4                  " And again, related.
-"set expandtab                    " Use spaces instead of tabs
 
 set laststatus=2                  " Show the status line all the time
 
