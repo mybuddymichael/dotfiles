@@ -90,13 +90,14 @@ if has("autocmd")
 	autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 	" Customisations based on house-style (arbitrary)
-	autocmd FileType css setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType haml setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType html setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
-	autocmd FileType ruby setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType sass setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType scss setlocal ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType css        setlocal foldmethod=indent ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType haml       setlocal foldmethod=indent ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType html       setlocal foldmethod=syntax ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType javascript setlocal foldmethod=syntax ts=4 sts=4 sw=4 noexpandtab
+	autocmd FileType ruby       setlocal foldmethod=syntax ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType sass       setlocal foldmethod=indent ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType scss       setlocal foldmethod=indent ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType vim        setlocal foldmethod=syntax ts=2 sts=2 sw=2 noexpandtab
 
 	" Treat .rss files as XML
 	autocmd BufNewFile,BufRead *.rss setfiletype xml
