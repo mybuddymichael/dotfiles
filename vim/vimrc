@@ -8,6 +8,8 @@ filetype plugin indent on         " Turn on file type detection.
 
 let mapleader=","                 " Change leader key from \ to ,
 
+colorscheme wombat                " Colorscheme.
+
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
 
@@ -43,19 +45,13 @@ set nobackup                      " Don't make a backup before overwriting a fil
 set nowritebackup                 " And again.
 set directory=$HOME/.vim/tmp//,.  " Keep swap files in one location
 
-set tabstop=4                     " Global tab width.
-set shiftwidth=4                  " And again, related.
-
 set laststatus=2                  " Show the status line all the time
 
 " Invisibles toggling and formatting.
-nmap <leader>l :set list!<CR>
+nnoremap <leader>l :set list!<CR>
 set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
-set nolist
 
 " Set wrap settings and create :Wrap command.
-set wrap
-set linebreak
 command! -nargs=* Wrap set wrap linebreak nolist
 set showbreak=…
 
@@ -136,9 +132,6 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
-" Colorscheme.
-colorscheme wombat
 
 " Tab mappings.
 " map <leader>tt :tabnew<cr>
