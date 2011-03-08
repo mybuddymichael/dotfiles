@@ -55,6 +55,9 @@ set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
 command! -nargs=* Wrap set wrap linebreak nolist
 set showbreak=…
 
+" Easy escape
+inoremap jj <esc>
+
 " Easy window switching
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
