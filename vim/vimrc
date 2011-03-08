@@ -63,7 +63,12 @@ set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLo
 
 " Source hexhighlight script and set up mapping to call it.
 source ~/.vim/bundle/vim-hexhighlight/hexHighlight.vim
-map <leader>hh :call HexHighlight()<cr>
+nnoremap <leader>hh :call HexHighlight()<cr>
+
+" Source the vimrc file after saving it
+if has("autocmd")
+	autocmd bufwritepost .vimrc source $MYVIMRC
+endif
 
 " Map alignment shortcuts.
 if exists(":Tabularize")
@@ -91,6 +96,7 @@ if has("autocmd")
 	autocmd FileType sass       setlocal foldmethod=indent ts=2 sts=2 sw=2 noexpandtab
 	autocmd FileType scss       setlocal foldmethod=indent ts=2 sts=2 sw=2 noexpandtab
 	autocmd FileType vim        setlocal foldmethod=syntax ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType vimrc      setlocal foldmethod=syntax ts=2 sts=2 sw=2 noexpandtab
 
 	" Treat .rss files as XML
 	autocmd BufNewFile,BufRead *.rss setfiletype xml
