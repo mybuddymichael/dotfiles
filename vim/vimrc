@@ -65,6 +65,9 @@ set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLo
 source ~/.vim/bundle/vim-hexhighlight/hexHighlight.vim
 nnoremap <leader>hh :call HexHighlight()<cr>
 
+" Quick editing of vimrc.
+nnoremap <leader>z :e $MYVIMRC<cr>
+
 " Source the vimrc file after saving it
 if has("autocmd")
 	autocmd bufwritepost .vimrc source $MYVIMRC
