@@ -23,7 +23,7 @@ set wildmode=list:longest         " Complete files like a shell.
 set ignorecase                    " Case-insensitive searching.
 set smartcase                     " But case-sensitive if expression contains a capital letter.
 
-set number                        " Show line numbers.
+set relativenumber                " Show relative line numbers.
 set numberwidth=5                 " Line numbers are at least 5 characters wide.
 set ruler                         " Show cursor position.
 set cursorline                    " Show the cursor's line.
