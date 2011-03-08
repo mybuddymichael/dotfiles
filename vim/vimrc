@@ -82,6 +82,11 @@ if has("autocmd")
 	autocmd bufwritepost .vimrc source $MYVIMRC
 endif
 
+" Save on losing focus.
+if has("autocmd")
+	au FocusLost * :wa
+endif
+
 " Map alignment shortcuts.
 if exists(":Tabularize")
 	nmap <leader>a= :Tabularize /=<CR>
