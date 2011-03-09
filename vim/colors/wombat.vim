@@ -25,6 +25,7 @@ endif
 " General colors
 hi Cursor       guifg=NONE    guibg=#656565 gui=none
 hi Directory    guifg=#8ac6f2 guibg=NONE    gui=none
+hi FoldColumn   guifg=#cae682 guibg=NONE    gui=none
 hi Normal       guifg=#f6f3e8 guibg=#242424 gui=none
 hi NonText      guifg=#808080 guibg=NONE    gui=none
 hi LineNr       guifg=#444444 guibg=NONE    gui=none
