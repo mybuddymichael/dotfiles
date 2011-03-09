@@ -1,26 +1,19 @@
 #!/bin/sh
 
-if [ -f ~/bin/mvim ]; then
-	editor=mvim
-else
-	editor=vim
-fi
+editor=vim
+[[ -f ~/bin/mvim ]] && editor=mvim
 
-if [ -f README.md ]; then
-	$editor README.md
-elif [ -f README ]; then
-	read -s -n 1 -p "Are you sure you would like to modify this README? [y/n]"
-	if [[ $REPLY = 'y' || $REPLY = 'Y' ]]; then
-		echo -e "\n"
-		mv README README.md
-		$editor README.md
-	elif [[ $REPLY = 'n' || $REPLY = 'N' ]]; then
-		echo -e -n "\n"
-		return
-	else
-		echo -e -n "\n"
-		echo "\"$REPLY\" is not a valid input. Terminating process."
-	fi
+if [[ -f README ]]; then
+	read -s -n 1 -p 'Rename and edit this README? [y/n]'
+	case $REPLY in
+		'Y' | 'y' )
+		mv README README.md && $editor README.md ;;
+		'N' | 'n' )
+		exit 0 ;;
+		* )
+		echo "\n\"$REPLY\" is not a valid input." ;;
+	esac
+	exit 0
 else
-	touch README.md && $editor README.md
+	$editor README.md
 fi
