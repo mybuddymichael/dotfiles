@@ -27,9 +27,8 @@ set relativenumber                " Show relative line numbers.
 set numberwidth=5                 " Line numbers are at least 5 characters wide.
 set ruler                         " Show cursor position.
 set cursorline                    " Show the cursor's line.
-"set cursorcolumn                  " Show the curser's column.
 set colorcolumn=85                " Show a column at 85 so I don't overtype.
-:nnoremap <leader>c<cr> :set cursorline! cursorcolumn!<cr>
+nmap <leader>c<cr> :set cursorline! cursorcolumn!<cr>
 
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
@@ -65,14 +64,15 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
 " Open NERDTree
-map <leader>n :NERDTree<CR>
+nmap <leader>n :NERDTree<CR>
 
 " Useful status information at bottom of screen
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
 " Source hexhighlight script and set up mapping to call it.
 source ~/.vim/bundle/vim-hexhighlight/hexHighlight.vim
-nnoremap <leader>hh :call HexHighlight()<cr>
+nmap <leader>hh :call HexHighlight()<cr>
+vmap <leader>hh :call HexHighlight()<cr>
 
 " Quick editing of vimrc.
 nnoremap <leader>z :e $MYVIMRC<cr>
