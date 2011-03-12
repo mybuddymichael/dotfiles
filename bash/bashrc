@@ -52,6 +52,7 @@ alias m=mvim
 # git
 [[ -L `brew --prefix`/bin/hub ]] && alias git=hub
 alias gs='git status'
+alias gss='git status --short'
 alias gl='git log --decorate'
 alias glo='git log --oneline --decorate'
 alias ga='git add'
