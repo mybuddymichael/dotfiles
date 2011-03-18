@@ -1,3 +1,4 @@
+" Creator: Lars H. Nielsen (dengmao@gmail.com)
 " Maintainer:  Michael Hanson
 " Last Change: March 10 2011
 
