@@ -31,6 +31,7 @@ hi NonText      guifg=#808080 guibg=NONE    gui=none
 hi LineNr       guifg=#444444 guibg=NONE    gui=none
 hi StatusLine   guifg=#444444 guibg=#cae682 gui=italic,bold
 hi StatusLineNC guifg=#857b6f guibg=#444444 gui=italic
+hi MoreMsg      guifg=#e5786d guibg=NONE    gui=none
 hi VertSplit    guifg=#444444 guibg=#444444 gui=none
 hi Folded       guibg=#384048 guifg=#a0a8b0 gui=none
 hi Title        guifg=#f6f3e8 guibg=NONE    gui=bold
