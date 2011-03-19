@@ -8,6 +8,7 @@ filetype plugin indent on         " Turn on file type detection.
 
 let mapleader=","                 " Change leader key from \ to ,
 nnoremap ; :
+nnoremap <leader>q :q<cr>
 
 colorscheme wombat                " Colorscheme.
 
@@ -60,9 +61,6 @@ set showbreak=…
 
 " Easy escape
 inoremap jj <esc>
-
-" Easy quit
-nnoremap <leader>q :q<cr>
 
 " Easy window switching
 nnoremap <c-h> <c-w>h
