@@ -61,6 +61,9 @@ set showbreak=…
 " Easy escape
 inoremap jj <esc>
 
+" Easy quit
+nnoremap <leader>q :q<cr>
+
 " Easy window switching
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
