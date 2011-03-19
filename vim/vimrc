@@ -70,8 +70,9 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 
-" Open NERDTree
+" NERDTree stuff
 nmap <leader>n :NERDTree<CR>
+let NERDTreeShowHidden=1
 
 " Useful status information at bottom of screen
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
