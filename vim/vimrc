@@ -70,20 +70,8 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 nnoremap <c-c> <c-w>c
 
-" NERDTree stuff
-nmap <leader>n :NERDTree<CR>
-let NERDTreeShowHidden=1
-
 " Useful status information at bottom of screen
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
-
-" Source hexhighlight script and set up mapping to call it.
-source ~/.vim/bundle/vim-hexhighlight/hexHighlight.vim
-nmap <leader>hh :call HexHighlight()<cr>
-vmap <leader>hh :call HexHighlight()<cr>
-
-" Quick editing of vimrc.
-nnoremap <leader>z :e $MYVIMRC<cr>
 
 " Source the vimrc file after saving it
 if has("autocmd")
@@ -95,8 +83,20 @@ if has("autocmd")
 	au FocusLost * :wa
 endif
 
+" Quick editing of vimrc.
+nnoremap <leader>z :e $MYVIMRC<cr>
+
+" NERDTree stuff
+nmap <leader>n :NERDTree<CR>
+let NERDTreeShowHidden=1
+
 " Easy CommandTFlush
 nmap <leader>ctf :CommandTFlush<cr>
+
+" Source hexhighlight script and set up mapping to call it.
+source ~/.vim/bundle/vim-hexhighlight/hexHighlight.vim
+nmap <leader>hh :call HexHighlight()<cr>
+vmap <leader>hh :call HexHighlight()<cr>
 
 " Map alignment shortcuts.
 if exists(":Tabularize")
