@@ -15,7 +15,7 @@ let colors_name = "wombat"
 
 
 " General colors
-hi ColorColumn  guifg=NONE    guibg=#474d39 gui=none
+hi ColorColumn  guifg=NONE    guibg=#2d2d2d gui=none
 hi Cursor       guifg=NONE    guibg=#656565 gui=none
 hi CursorColumn guifg=NONE    guibg=#2d2d2d gui=none
 hi CursorLine   guifg=NONE    guibg=#2d2d2d gui=none
