@@ -32,6 +32,8 @@ set cursorline                    " Show the cursor's line.
 set colorcolumn=85                " Show a column at 85 so I don't overtype.
 nmap <leader>c<cr> :set cursorline! cursorcolumn!<cr>
 
+set nowrap                        " Don't wrap lines.
+
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
 
