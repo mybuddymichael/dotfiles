@@ -26,7 +26,7 @@ hi LineNr       guifg=#444444 guibg=NONE    gui=none
 hi MatchParen   guifg=#000000 guibg=#ab51c9 gui=bold
 hi MoreMsg      guifg=#e5786d guibg=NONE    gui=none
 hi Normal       guifg=#f6f3e8 guibg=#242424 gui=none
-hi NonText      guifg=#808080 guibg=NONE    gui=none
+hi NonText      guifg=#444444 guibg=NONE    gui=none
 hi Pmenu        guifg=#f6f3e8 guibg=#444444 gui=none
 hi PmenuSel     guifg=#000000 guibg=#cae682 gui=none
 hi SpecialKey   guifg=#808080 guibg=NONE    gui=none
