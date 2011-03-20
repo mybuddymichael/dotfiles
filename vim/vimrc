@@ -113,16 +113,16 @@ if has("autocmd")
 
 	" Syntax of these languages is fussy over tabs Vs spaces
 	autocmd FileType make       setlocal ts=8 sts=8 sw=8 noexpandtab
-	autocmd FileType yaml       setlocal ts=2 sts=2 sw=2 expandtab
+	autocmd FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
 
 	" Customisations based on house-style (arbitrary)
 	autocmd FileType css        setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType haml       setlocal ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType haml       setlocal ts=2 sts=2 sw=2   expandtab
 	autocmd FileType html       setlocal ts=3 sts=3 sw=3 noexpandtab
 	autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
 	autocmd FileType ruby       setlocal ts=2 sts=2 sw=2 noexpandtab
 	autocmd FileType sass       setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType scss       setlocal ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType scss       setlocal ts=2 sts=2 sw=2   expandtab
 	autocmd FileType sh         setlocal ts=2 sts=2 sw=2 noexpandtab
 	autocmd FileType vim        setlocal ts=2 sts=2 sw=2 noexpandtab
 	autocmd FileType vimrc      setlocal ts=2 sts=2 sw=2 noexpandtab
