@@ -95,6 +95,9 @@ if has("autocmd")
 	au FocusLost * :wa
 endif
 
+" Easy CommandTFlush
+nmap <leader>ctf :CommandTFlush<cr>
+
 " Map alignment shortcuts.
 if exists(":Tabularize")
 	nmap <leader>a= :Tabularize /=<CR>
