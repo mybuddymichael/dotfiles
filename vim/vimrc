@@ -107,6 +107,7 @@ if exists(":Tabularize")
 endif
 
 " Command to easily switch from regular numbering to relative numbering.
+command! -nargs=* Number call ToggleRelativeNumber()
 let g:relativeNumber = 1
 function! ToggleRelativeNumber()
 	if g:relativeNumber == 1
@@ -117,8 +118,6 @@ function! ToggleRelativeNumber()
 		set relativenumber
 	endif
 endfunction
-
-command! -nargs=* Number call ToggleRelativeNumber()
 
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
