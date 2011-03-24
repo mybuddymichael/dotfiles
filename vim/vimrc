@@ -106,6 +106,20 @@ if exists(":Tabularize")
 	vmap <leader>a: :Tabularize /:\zs<CR>
 endif
 
+" Command to easily switch from regular numbering to relative numbering.
+let g:relativeNumber = 1
+function! ToggleRelativeNumber()
+	if g:relativeNumber == 1
+		let g:relativeNumber = 0
+		set number
+	elseif g:relativeNumber == 0
+		let g:relativeNumber = 1
+		set relativenumber
+	endif
+endfunction
+
+command! -nargs=* Number call ToggleRelativeNumber()
+
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
 	" Enable file type detection
