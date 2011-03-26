@@ -87,7 +87,7 @@ endif
 nnoremap <leader>z :e $MYVIMRC<cr>
 
 " NERDTree stuff
-nmap <leader>n :NERDTree<CR>
+nmap <leader>n :NERDTreeToggle<cr>
 let NERDTreeShowHidden=1
 
 " Easy CommandTFlush
