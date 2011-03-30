@@ -30,8 +30,8 @@ hi NonText      guifg=#444444 guibg=NONE    gui=none
 hi Pmenu        guifg=#f6f3e8 guibg=#444444 gui=none
 hi PmenuSel     guifg=#000000 guibg=#cae682 gui=none
 hi SpecialKey   guifg=#808080 guibg=NONE    gui=none
-hi StatusLine   guifg=#444444 guibg=#cae682 gui=italic,bold
-hi StatusLineNC guifg=#857b6f guibg=#444444 gui=italic
+hi StatusLine   guifg=#444444 guibg=#cae682 gui=bold
+hi StatusLineNC guifg=#857b6f guibg=#444444 gui=none
 hi Title        guifg=#f6f3e8 guibg=NONE    gui=bold
 hi VertSplit    guifg=#444444 guibg=#444444 gui=none
 hi Visual       guifg=#f6f3e8 guibg=#444444 gui=none
