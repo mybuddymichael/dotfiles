@@ -94,8 +94,7 @@ let NERDTreeShowHidden=1
 " Easy CommandTFlush
 nmap <leader>ctf :CommandTFlush<cr>
 
-" Source hexhighlight script and set up mapping to call it.
-source ~/.vim/bundle/vim-hexhighlight/hexHighlight.vim
+" Easy hexhighlighting
 nmap <leader>hh :call HexHighlight()<cr>
 vmap <leader>hh :call HexHighlight()<cr>
 
