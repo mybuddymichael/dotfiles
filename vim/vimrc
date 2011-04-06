@@ -10,7 +10,8 @@ let mapleader=","                 " Change leader key from \ to ,
 nnoremap ; :
 nnoremap <leader>q :q<cr>
 
-colorscheme wombat                " Colorscheme.
+set background=dark
+colorscheme solarized             " Colorscheme.
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
