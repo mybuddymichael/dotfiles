@@ -120,6 +120,21 @@ function! ToggleRelativeNumber()
 	endif
 endfunction
 
+" Toggle light/dark solarized theme
+function! ToggleBackground()
+	if g:solarized_style=="dark"
+		let g:solarized_style="light"
+		colo solarized
+	else
+		let g:solarized_style="dark"
+		colo solarized
+	endif
+endfunction
+command! Togbg call ToggleBackground()
+nnoremap <f5> :call ToggleBackground()<cr>
+inoremap <f5> :call ToggleBackground()<cr>a
+vnoremap <f5> :call ToggleBackground()<cr>
+
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
 	" Enable file type detection
