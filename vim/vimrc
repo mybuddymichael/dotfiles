@@ -121,7 +121,7 @@ function! ToggleRelativeNumber()
 	endif
 endfunction
 
-" Toggle light/dark solarized theme
+" Toggle light/dark solarized theme using provided plugin.
 nmap <unique> <F5> <Plug>ToggleBackground
 imap <unique> <F5> <Plug>ToggleBackground
 vmap <unique> <F5> <Plug>ToggleBackground
@@ -131,11 +131,11 @@ if has("autocmd")
 	" Enable file type detection
 	filetype on
 
-	" Syntax of these languages is fussy over tabs Vs spaces
+	" Syntax of these languages is fussy over tabs vs spaces
 	autocmd FileType make       setlocal ts=8 sts=8 sw=8 noexpandtab
 	autocmd FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
 
-	" Customisations based on house-style (arbitrary)
+	" Arbitrary specifications
 	autocmd FileType css        setlocal ts=2 sts=2 sw=2 noexpandtab
 	autocmd FileType haml       setlocal ts=2 sts=2 sw=2   expandtab
 	autocmd FileType html       setlocal ts=3 sts=3 sw=3 noexpandtab
@@ -182,8 +182,8 @@ endfunction
 " Show syntax highlighting groups for word under cursor
 nmap <C-S-P> :call <SID>SynStack()<CR>
 function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+	if !exists("*synstack")
+		return
+	endif
+	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
