@@ -108,7 +108,7 @@ _PS1prefix="\n"
 _PS1userhost="\u@\h"
 _PS1path=" $txtpur\w$txtrst"
 _PS1git="$txtcyn\$(__git_ps1)$txtrst"
-_PS1rvm=" $txtred\$(~/.rvm/bin/rvm-prompt v p g)$txtrst"
+_PS1rvm=" $txtred\$(~/.rvm/bin/rvm-prompt g)$txtrst"
 _PS1prompt="\n⍟ "
 export PS1="$_PS1prefix$_PS1userhost$_PS1path$_PS1git$_PS1rvm$_PS1prompt"
 
