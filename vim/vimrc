@@ -122,19 +122,9 @@ function! ToggleRelativeNumber()
 endfunction
 
 " Toggle light/dark solarized theme
-function! ToggleBackground()
-	if g:solarized_style=="dark"
-		let g:solarized_style="light"
-		colo solarized
-	else
-		let g:solarized_style="dark"
-		colo solarized
-	endif
-endfunction
-command! Togbg call ToggleBackground()
-nnoremap <f5> :call ToggleBackground()<cr>
-inoremap <f5> :call ToggleBackground()<cr>a
-vnoremap <f5> :call ToggleBackground()<cr>
+nmap <unique> <F5> <Plug>ToggleBackground
+imap <unique> <F5> <Plug>ToggleBackground
+vmap <unique> <F5> <Plug>ToggleBackground
 
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
