@@ -10,7 +10,7 @@ let mapleader=","                 " Change leader key from \ to ,
 nnoremap ; :
 nnoremap <leader>q :q<cr>
 
-set background=light
+set background=dark
 colorscheme solarized             " Colorscheme.
 set transparency=4                " Set window as 96 percent opaque.
 
