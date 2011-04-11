@@ -39,6 +39,7 @@ alias cp='cp -v'
 
 # path shortcuts
 alias we='cd ~/workenv/'
+alias db='cd ~/Dropbox'
 
 # ruby
 alias r=ruby
