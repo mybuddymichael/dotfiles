@@ -12,7 +12,7 @@ nnoremap <leader>q :q<cr>
 
 set background=dark
 colorscheme solarized             " Colorscheme.
-set transparency=4                " Set window as 96 percent opaque.
+set transparency=3                " Set window as 97 percent opaque.
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
