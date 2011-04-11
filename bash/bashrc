@@ -6,7 +6,6 @@ fi
 
 # shell syntax coloring
 export CLICOLOR=1
-export LSCOLORS=ExGxcxdxCxegedabagacad
 
 # PATH
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
