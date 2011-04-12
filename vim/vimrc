@@ -10,7 +10,14 @@ let mapleader=","                 " Change leader key from \ to ,
 nnoremap ; :
 nnoremap <leader>q :q<cr>
 
-set background=dark
+" Function to set the scheme based on the time of day.
+set background=light
+let s:current_time = strftime("%H")
+if s:current_time < 6
+	set background=dark
+elseif s:current_time > 15
+	set background=dark
+endif
 colorscheme solarized             " Colorscheme.
 set transparency=3                " Set window as 97 percent opaque.
 
