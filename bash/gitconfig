@@ -32,3 +32,5 @@
 	grep = grep -n
 [core]
 	excludesfile = ~/.gitignore_global
+[url "https://github.com/"]
+	insteadOf = "gh:"
