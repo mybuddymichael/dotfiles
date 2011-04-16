@@ -12,14 +12,16 @@ nnoremap <leader>q :q<cr>
 
 " Function to set the scheme based on the time of day.
 set background=light
+set transparency=4
 let s:current_time = strftime("%H")
 if s:current_time < 6
 	set background=dark
+	set transparency=1
 elseif s:current_time > 15
 	set background=dark
+	set transparency=1
 endif
 colorscheme solarized             " Colorscheme.
-set transparency=3                " Set window as 97 percent opaque.
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
