@@ -129,9 +129,7 @@ function! ToggleRelativeNumber()
 endfunction
 
 " Toggle light/dark solarized theme using provided plugin.
-nmap <unique> <F5> <Plug>ToggleBackground
-imap <unique> <F5> <Plug>ToggleBackground
-vmap <unique> <F5> <Plug>ToggleBackground
+call togglebg#map("<F5>")
 
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
