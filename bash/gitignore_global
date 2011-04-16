@@ -14,4 +14,5 @@ Icon?
 *.un~
 Session.vim
 doc/tags
+.netrwhist
 
