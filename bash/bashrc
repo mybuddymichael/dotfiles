@@ -35,7 +35,7 @@
 
 # Set some shortcuts for frequently-accessed directories.
 
-	alias we='cd ~/workenv/'
+	alias we='cd ~/workenv'
 	alias db='cd ~/Dropbox'
 
 
