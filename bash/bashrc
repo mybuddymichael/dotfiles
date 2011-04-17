@@ -1,125 +1,110 @@
-if [ -d ~/bin ]; then
-	export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a Terminal"'
-else
-	export EDITOR=vim
-fi
+#     _/                            _/                            
+#    _/_/_/      _/_/_/    _/_/_/  _/_/_/    _/  _/_/    _/_/_/   
+#   _/    _/  _/    _/  _/_/      _/    _/  _/_/      _/          
+#  _/    _/  _/    _/      _/_/  _/    _/  _/        _/           
+# _/_/_/      _/_/_/  _/_/_/    _/    _/  _/          _/_/_/
+#
+#		A fine collection of bash settings.
+#   -----------------------------------
 
-# shell syntax coloring
-export CLICOLOR=1
-export LSCOLORS=Exfxbxdxcxegedabagacad
 
-# PATH
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+# Set the editor as MacVim if available, vim if not.
 
-# more PATH
-[[ -d ~/bin ]] && export PATH="~/bin:$PATH"
+	if [[ -s ~/bin/mvim ]]; then
+		export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a Terminal"'
+	else
+		export EDITOR=vim
+	fi
 
-# import my secrets
-[[ -f ~/.secrets ]] && . ~/.secrets
 
-# git autocompletion
-[[ -f ~/workenv/bash/git-completion.sh ]] && . ~/workenv/bash/git-completion.sh
+# Enable syntax coloring and set my custom colors.
 
-# homebrew autocompletion
-[[ -f `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]] && . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+	export CLICOLOR=1
+	export LSCOLORS=Exfxbxdxcxegedabagacad
 
-# bash-completion
-[[ -f `brew --prefix`/etc/bash_completion ]] && . `brew --prefix`/etc/bash_completion
 
-# source profile and bashrc
-alias reload='. ~/.profile'
+# Set my PATH.
 
-# file system navigation
-alias la='ls -alh'
-alias t='tree -aC'
+	export PATH="~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
-# program modifications
-alias mv='mv -iv'
-alias cp='cp -v'
 
-# path shortcuts
-alias we='cd ~/workenv/'
-alias db='cd ~/Dropbox'
+# Make an easy command to reload the profile and bashrc file.
 
-# ruby
-alias r=ruby
+	alias reload='. ~/.profile'
 
-# openssl
-alias md5='openssl md5'
 
-# MacVim 
-alias m=mvim
+# Set some shortcuts for frequently-accessed directories.
 
-# MAMP
-alias mamp='open /Applications/MAMP/MAMP.app'
+	alias we='cd ~/workenv/'
+	alias db='cd ~/Dropbox'
 
-# git
-[[ -L `brew --prefix`/bin/hub ]] && alias git=hub
-alias gs='git status'
-alias gss='git status --short'
-alias gl='git log --decorate'
-alias glo='git log --oneline --decorate'
-alias ga='git add'
-alias gpo='git push origin'
-alias gpom='git push origin master'
-alias gd='git diff'
-alias gdm='git diff | mate'
-alias gc='git commit'
-alias gca='git commit -a'
-alias gb='git branch'
-alias gco='git checkout'
-alias gsub='git submodule'
 
-# colors
-txtblk='\[\e[0;30m\]' # Black - Regular
-txtred='\[\e[0;31m\]' # Red
-txtgrn='\[\e[0;32m\]' # Green
-txtylw='\[\e[0;33m\]' # Yellow
-txtblu='\[\e[0;34m\]' # Blue
-txtpur='\[\e[0;35m\]' # Purple
-txtcyn='\[\e[0;36m\]' # Cyan
-txtwht='\[\e[0;37m\]' # White
-bldblk='\[\e[1;30m\]' # Black - Bold
-bldred='\[\e[1;31m\]' # Red
-bldgrn='\[\e[1;32m\]' # Green
-bldylw='\[\e[1;33m\]' # Yellow
-bldblu='\[\e[1;34m\]' # Blue
-bldpur='\[\e[1;35m\]' # Purple
-bldcyn='\[\e[1;36m\]' # Cyan
-bldwht='\[\e[1;37m\]' # White
-unkblk='\[\e[4;30m\]' # Black - Underline
-undred='\[\e[4;31m\]' # Red
-undgrn='\[\e[4;32m\]' # Green
-undylw='\[\e[4;33m\]' # Yellow
-undblu='\[\e[4;34m\]' # Blue
-undpur='\[\e[4;35m\]' # Purple
-undcyn='\[\e[4;36m\]' # Cyan
-undwht='\[\e[4;37m\]' # White
-bakblk='\[\e[40m\]'   # Black - Background
-bakred='\[\e[41m\]'   # Red
-bakgrn='\[\e[42m\]'   # Green
-bakylw='\[\e[43m\]'   # Yellow
-bakblu='\[\e[44m\]'   # Blue
-bakpur='\[\e[45m\]'   # Purple
-bakcyn='\[\e[46m\]'   # Cyan
-bakwht='\[\e[47m\]'   # White
-txtrst='\[\e[0m\]'    # Text Reset
+# Make some custom program modifications.
 
-# prompt format
-GIT_PS1_SHOWDIRTYSTATE=true
-GIT_PS1_SHOWUNTRACKEDFILES=true
-_PS1prefix="\n"
-_PS1userhost="\u@\h"
-_PS1path=" $txtpur\w$txtrst"
-_PS1git="$txtcyn\$(__git_ps1)$txtrst"
-_PS1rvm="$txtred no rvm$txtrst"
-	[[ -e ~/.rvm ]] && _PS1rvm=" $txtred\$(~/.rvm/bin/rvm-prompt g s)$txtrst"
-_PS1prompt="\n⍟ "
-export PS1="$_PS1prefix$_PS1userhost$_PS1path$_PS1git$_PS1rvm$_PS1prompt"
+	alias la='ls -alh'
+	alias t='tree -aC'
+	alias mv='mv -iv'
+	alias cp='cp -v'
 
-# Load RVM
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
-# rvm autocompletion
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
-export rvm_cd_complete_flag=1
+# Establish some shortcuts for frequently-used programs.
+
+	alias m=mvim
+	alias r=ruby
+	alias md5='openssl md5'
+	alias mamp='open /Applications/MAMP/MAMP.app'
+
+
+# Set several Git-related shortcuts.
+
+	[[ -L `brew --prefix`/bin/hub ]] && alias git=hub
+	alias gs='git status'
+	alias gss='git status --short'
+	alias gl='git log --decorate'
+	alias glo='git log --oneline --decorate'
+	alias ga='git add'
+	alias gpo='git push origin'
+	alias gpom='git push origin master'
+	alias gd='git diff'
+	alias gc='git commit'
+	alias gca='git commit -a'
+	alias gb='git branch'
+	alias gco='git checkout'
+	alias gsub='git submodule'
+
+# Load supporting files.
+
+	[[ -s ~/.secrets ]] && . ~/.secrets
+	[[ -s ~/workenv/bash/colors.sh ]] && . ~/workenv/bash/colors.sh
+
+
+# Load Ruby Version Manager.
+
+	[[ -s ~/.rvm/scripts/rvm ]] && . ~/.rvm/scripts/rvm
+
+
+# Load autocompletion scripts: Git, Homebrew, bash, and RVM.
+
+	[[ -s `brew --prefix`/etc/bash_completion.d/git-completion.bash ]] &&
+	. `brew --prefix`/etc/bash_completion.d/git-completion.bash
+	[[ -s `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]] &&
+	. `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+	[[ -s `brew --prefix`/etc/bash_completion ]] &&
+	. `brew --prefix`/etc/bash_completion
+	[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
+	export rvm_cd_complete_flag=1
+
+
+# And last, but certainly not least, create a useable prompt.
+
+	GIT_PS1_SHOWDIRTYSTATE=true
+	GIT_PS1_SHOWUNTRACKEDFILES=true
+	PS1prefix="\n"
+	PS1userhost="\u@\h"
+	PS1path=" $txtpur\w$txtrst"
+	PS1git="$txtcyn\$(__git_ps1)$txtrst"
+	PS1rvm="$txtred no rvm$txtrst"
+	[[ -e ~/.rvm ]] && PS1rvm=" $txtred\$(~/.rvm/bin/rvm-prompt g s)$txtrst"
+	PS1prompt="\n⍟ "
+
+	export PS1="$PS1prefix$PS1userhost$PS1path$PS1git$PS1rvm$PS1prompt"
