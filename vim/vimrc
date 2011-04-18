@@ -1,196 +1,248 @@
-set nocompatible                  " Must come first because it changes other options.
+"                 _/                                      
+"    _/      _/      _/_/_/  _/_/    _/  _/_/    _/_/_/   
+"   _/      _/  _/  _/    _/    _/  _/_/      _/          
+"    _/  _/    _/  _/    _/    _/  _/        _/           
+"     _/      _/  _/    _/    _/  _/          _/_/_/ 
+"
+"   A very nice set of Vim settings.
+"   --------------------------------
 
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()          " Load pathogen bundles and generate docs.
 
-syntax enable                     " Turn on syntax highlighting.
-filetype plugin indent on         " Turn on file type detection.
+" Start off by setting nocompatible mode. This isn't vi.
 
-let mapleader=","                 " Change leader key from \ to ,
-nnoremap ; :
-nnoremap <leader>q :q<cr>
+	set nocompatible
 
-" Function to set the scheme based on the time of day.
-set background=light
-set transparency=4
-let s:current_time = strftime("%H")
-if s:current_time < 6
-	set background=dark
-	set transparency=1
-elseif s:current_time > 15
-	set background=dark
-	set transparency=1
-endif
-colorscheme solarized             " Colorscheme.
 
-set showcmd                       " Display incomplete commands.
-set showmode                      " Display the mode you're in.
+" Load pathogen so that all the separate bundles are loaded.
 
-set backspace=indent,eol,start    " Intuitive backspacing.
+	call pathogen#runtime_append_all_bundles()
+	call pathogen#helptags()
 
-set hidden                        " Handle multiple buffers better.
 
-set wildmenu                      " Enhanced command line completion.
-set wildmode=list:longest         " Complete files like a shell.
+" Set my custom leader key and make some simple remaps for quicker commands.
 
-set ignorecase                    " Case-insensitive searching.
-set smartcase                     " But case-sensitive if expression contains a capital letter.
+	let mapleader=","
+	nnoremap <leader>q :q<cr>
+	nnoremap <leader>w :w<cr>
+	nnoremap ; :
 
-set relativenumber                " Show relative line numbers.
-set numberwidth=5                 " Line numbers are at least 5 characters wide.
-set ruler                         " Show cursor position.
-set cursorline                    " Show the cursor's line.
-set colorcolumn=85                " Show a column at 85 so I don't overtype.
-nmap <leader>c<cr> :set cursorline! cursorcolumn!<cr>
 
-set nowrap                        " Don't wrap lines.
+" Enable syntax highlighting and filetype detection.
 
-set incsearch                     " Highlight matches as you type.
-set hlsearch                      " Highlight matches.
+	syntax enable
+	filetype plugin indent on
 
-set scrolloff=3                   " Show 3 lines of context around the cursor.
 
-set title                         " Set the terminal's title
+" The colorscheme is Solarized, but let's change the background based on the time.
 
-set visualbell                    " No beeping.
+	set background=light
+	set transparency=4
 
-set nobackup                      " Don't make a backup before overwriting a file.
-set noswapfile                    " No swap files.
-set nowritebackup                 " And again.
-set directory=$HOME/.vim/tmp//,.  " Keep swap files in one location.
+	func! SetSolarizedToDark()
+		set background=dark
+		set transparency=1
+	endfunc
 
-set nomodeline                    " No modelines for security reasons.
-
-set laststatus=2                  " Show the status line all the time
-
-" Invisibles toggling and formatting.
-nnoremap <leader>l :set list!<CR>
-set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
-
-" Set wrap settings and create :Wrap command.
-command! -nargs=* Wrap set wrap linebreak nolist
-set showbreak=…
-
-" Easy escape
-inoremap jj <esc>
-
-" Easy window switching
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
-" Easy window closing
-nnoremap <c-c> <c-w>c
-
-" Useful status information at bottom of screen
-set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
-
-" Source the vimrc file after saving it
-if has("autocmd")
-	autocmd bufwritepost .vimrc source $MYVIMRC
-endif
-
-" Save on losing focus.
-if has("autocmd")
-	au FocusLost * :wa
-endif
-
-" Quick editing of vimrc.
-nnoremap <leader>z :e $MYVIMRC<cr>
-
-" NERDTree stuff
-nmap <leader>n :NERDTreeToggle<cr>
-let NERDTreeShowHidden=1
-
-" Easy CommandTFlush
-nmap <leader>ctf :CommandTFlush<cr>
-
-" Easy hexhighlighting
-nmap <leader>hh :call HexHighlight()<cr>
-vmap <leader>hh :call HexHighlight()<cr>
-
-" Map alignment shortcuts.
-if exists(":Tabularize")
-	nmap <leader>a= :Tabularize /=<CR>
-	vmap <leader>a= :Tabularize /=<CR>
-	nmap <leader>a: :Tabularize /:\zs<CR>
-	vmap <leader>a: :Tabularize /:\zs<CR>
-endif
-
-" Command to easily switch from regular numbering to relative numbering.
-command! Number call ToggleRelativeNumber()
-let g:relativeNumber = 1
-function! ToggleRelativeNumber()
-	if g:relativeNumber == 1
-		let g:relativeNumber = 0
-		set number
-	elseif g:relativeNumber == 0
-		let g:relativeNumber = 1
-		set relativenumber
+	if !exists("g:staydark")
+		let g:staydark = 0
 	endif
-endfunction
 
-" Toggle light/dark solarized theme using provided plugin.
-call togglebg#map("<F5>")
-
-" Only do this part when compiled with support for autocommands
-if has("autocmd")
-	" Enable file type detection
-	filetype on
-
-	" Syntax of these languages is fussy over tabs vs spaces
-	autocmd FileType make       setlocal ts=8 sts=8 sw=8 noexpandtab
-	autocmd FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
-
-	" Arbitrary specifications
-	autocmd FileType css        setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType haml       setlocal ts=2 sts=2 sw=2   expandtab
-	autocmd FileType html       setlocal ts=3 sts=3 sw=3 noexpandtab
-	autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
-	autocmd FileType ruby       setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType sass       setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType scss       setlocal ts=2 sts=2 sw=2   expandtab
-	autocmd FileType sh         setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType vim        setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType vimrc      setlocal ts=2 sts=2 sw=2 noexpandtab
-
-	" Treat .rss files as XML
-	autocmd BufNewFile,BufRead *.rss setfiletype xml
-endif
-
-" Set tabstop, softtabstop and shiftwidth to the same value
-command! -nargs=* Stab call Stab()
-function! Stab()
-	let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
-	if l:tabstop > 0
-		let &l:sts = l:tabstop
-		let &l:ts = l:tabstop
-		let &l:sw = l:tabstop
+	if g:staydark == 1
+		call SetSolarizedToDark()
 	endif
-	call SummarizeTabs()
-endfunction
- 
-function! SummarizeTabs()
-	try
-		echohl ModeMsg
-		echon 'tabstop='.&l:ts
-		echon ' shiftwidth='.&l:sw
-		echon ' softtabstop='.&l:sts
-		if &l:et
-			echon ' expandtab'
-		else
-			echon ' noexpandtab'
+
+	let s:current_time = strftime("%H")
+
+	if s:current_time < 6
+		call SetSolarizedToDark()
+	elseif s:current_time > 15
+		call SetSolarizedToDark()
+	endif
+
+	colorscheme solarized
+
+	call togglebg#map("<F5>")
+
+
+" Set some sane and reasonable defaults.
+
+	set hidden                         " Handle multiple buffers better.
+	set relativenumber                 " Show relative line numbers.
+	set nowrap                         " Don't wrap lines.
+	set showcmd                        " Display incomplete commands.
+	set showmode                       " Display the mode you're in.
+	set backspace=indent,eol,start     " Intuitive backspacing.
+	set wildmenu                       " Enhanced command line completion.
+	set wildmode=list:longest          " Complete files like a shell.
+	set hlsearch                       " Highlight matches.
+	set incsearch                      " Highlight matches as you type.
+	set ignorecase                     " Case-insensitive searching.
+	set smartcase                      " But case-sensitive if expression contains capitals.
+	set numberwidth=5                  " Line numbers are at least 5 characters wide.
+	set cursorline                     " Show the cursor's line.
+	set colorcolumn=85                 " Show a column at 85 so I don't overtype.
+	set scrolloff=3                    " Show 3 lines of context around the cursor.
+	set laststatus=2                   " Show the status line all the time
+	set title                          " Set the terminal's title
+	set visualbell                     " No beeping.
+	set nobackup                       " Don't make a backup before overwriting a file.
+	set noswapfile                     " No swap files.
+	set nowritebackup                  " And again.
+	set directory=$HOME/.vim/tmp//,.   " Keep swap files in one location.
+	set nomodeline                     " No modelines for security reasons.
+
+
+" Set the statusline to something useful and informative.
+
+	set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %=%-16(\ %l\/%c\ %)%P
+
+
+" Create a key-mapping for quick editing of the vimrc.
+
+	nnoremap <leader>z :e $MYVIMRC<cr>
+
+
+" Make it easy to escape insert mode by pressing 'jj'.
+
+	inoremap jj <esc>
+
+
+" Make window switching super-easy by setting some simple key remaps.
+	nnoremap <c-h> <c-w>h
+	nnoremap <c-j> <c-w>j
+	nnoremap <c-k> <c-w>k
+	nnoremap <c-l> <c-w>l
+	nnoremap <c-c> <c-w>c
+
+
+" Make a command to toggle showing invisible characters, and set those characters.
+
+	nnoremap <leader>l :set list!<cr>
+	set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
+
+
+" Create a ':Wrap' command, and set what the line-break symbol is.
+
+	command! Wrap set wrap! linebreak nolist
+	set showbreak=…
+
+
+" Automatically save all buffers when the GUI app loses focus.
+
+	if has("autocmd")
+		au FocusLost * :wa
+	endif
+
+
+" Automatically source the vimrc file after saving it.
+
+	if has("autocmd")
+		au bufwritepost .vimrc source $MYVIMRC
+	endif
+
+
+" Make it easy to call some commonly-used plugins.
+
+	if exists(":NERDTree")
+		nmap <leader>n :NERDTreeToggle<cr>
+		let NERDTreeShowHidden = 1
+	endif
+
+	if exists(":CommandT")
+		nmap <leader>ctf :CommandTFlush<cr>
+		let g:CommandTAlwaysShowDotFiles = 1
+		let g:CommandTScanDotDirectories = 1
+	endif
+
+	if exists(":Tabularize")
+		nmap <leader>a= :Tabularize /=<cr>
+		vmap <leader>a= :Tabularize /=<cr>
+		nmap <leader>a: :Tabularize /:\zs<cr>
+		vmap <leader>a: :Tabularize /:\zs<cr>
+	endif
+
+	nmap <leader>hh :call HexHighlight()<cr>
+	vmap <leader>hh :call HexHighlight()<cr>
+
+
+" Make a command to easily switch from regular numbering to relative numbering.
+
+	command! Number call ToggleRelativeNumber()
+
+	let s:relativeNumber = 1
+
+	func! ToggleRelativeNumber()
+		if s:relativeNumber == 1
+			let s:relativeNumber = 0
+			set number
+		elseif s:relativeNumber == 0
+			let s:relativeNumber = 1
+			set relativenumber
 		endif
-	finally
-		echohl None
-	endtry
-endfunction
+	endfunc
+
 
 " Show syntax highlighting groups for word under cursor
-nmap <C-S-P> :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-	if !exists("*synstack")
-		return
+
+	nmap <C-S-P> :call <SID>SynStack()<CR>
+	func! <SID>SynStack()
+		if !exists("*synstack")
+			return
+		endif
+		echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+	endfunc
+
+
+" Create a command to set tabstop, softtabstop and shiftwidth to the same value.
+
+	command! Stab call Stab()
+
+	func! Stab()
+		let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+		if l:tabstop > 0
+			let &l:sts = l:tabstop
+			let &l:ts = l:tabstop
+			let &l:sw = l:tabstop
+		endif
+		call SummarizeTabs()
+	endfunc
+
+	func! SummarizeTabs()
+		try
+			echohl ModeMsg
+			echon 'tabstop='.&l:ts
+			echon ' shiftwidth='.&l:sw
+			echon ' softtabstop='.&l:sts
+			if &l:et
+				echon ' expandtab'
+			else
+				echon ' noexpandtab'
+			endif
+		finally
+			echohl None
+		endtry
+	endfunc
+
+
+" Set some spaces vs. tabs settings for various filetypes.
+
+	if has("autocmd")
+		" These filetypes are picky.
+		au FileType make       setlocal ts=8 sts=8 sw=8 noexpandtab
+		au FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
+
+		" These filetypes are not picky.
+		au FileType css        setlocal ts=2 sts=2 sw=2 noexpandtab
+		au FileType haml       setlocal ts=2 sts=2 sw=2   expandtab
+		au FileType html       setlocal ts=3 sts=3 sw=3 noexpandtab
+		au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+		au FileType ruby       setlocal ts=2 sts=2 sw=2 noexpandtab
+		au FileType sass       setlocal ts=2 sts=2 sw=2   expandtab
+		au FileType scss       setlocal ts=2 sts=2 sw=2   expandtab
+		au FileType sh         setlocal ts=2 sts=2 sw=2 noexpandtab
+		au FileType vim        setlocal ts=2 sts=2 sw=2 noexpandtab
+		au FileType vimrc      setlocal ts=2 sts=2 sw=2 noexpandtab
+
+		" Treat .rss files as XML
+		au BufNewFile,BufRead *.rss setfiletype xml
 	endif
-	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
