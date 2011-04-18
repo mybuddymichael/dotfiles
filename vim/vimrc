@@ -116,6 +116,14 @@
 	nnoremap <c-c> <c-w>c
 
 
+" And let's make indentation super-easy as well.
+
+	nnoremap <d-]> >>
+	nnoremap <d-[> <<
+	vnoremap <d-]> >gv
+	vnoremap <d-[> <gv
+
+
 " Make a command to toggle showing invisible characters, and set those characters.
 
 	nnoremap <leader>l :set list!<cr>
