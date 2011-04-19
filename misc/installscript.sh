@@ -80,3 +80,12 @@
 	else
 		ehco 'RDIO NOT INSTALLED' >> $INSTALL_LOG
 	fi
+
+
+# Install 1password.
+
+	echo '*** Installing 1password'
+	curl -OLkf# http://aws.cachefly.net/aws/dmg/1PW3/English/1Password-3.5.9.zip
+	unzip 1Password-3.5.9.zip
+	mv -iv $INSTALL_ROOT/1Password.app ~/Applications/1Password.app
+	rm 1Password-3.5.9.zip
