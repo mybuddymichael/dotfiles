@@ -36,3 +36,4 @@
 	hdiutil attach -quiet -noautoopen $INSTALL_ROOT/Rdio.dmg
 	cp -iv /Volumes/Rdio/Rdio.app ~/Applications/Rdio.app
 	hdiutil detach -quiet /Volumes/Rdio
+	rm -f $INSTALL_ROOT/Rdio.dmg
