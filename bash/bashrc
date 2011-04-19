@@ -44,7 +44,7 @@
 	alias la='ls -alh'
 	alias t='tree -aC'
 	alias mv='mv -iv'
-	alias cp='cp -v'
+	alias cp='cp -iv'
 
 
 # Establish some shortcuts for frequently-used programs.
