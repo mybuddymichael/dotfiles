@@ -16,7 +16,7 @@
 # Install Git
 
 	echo '*** Installing Git...'
-	brew install Git
+	brew install git
 
 
 # Install Google Chrome.
