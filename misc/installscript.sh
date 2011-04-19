@@ -21,6 +21,16 @@
 	brew install git
 
 
+# Install my work environment.
+
+	echo '*** Installing workenv...'
+	cd ~
+	git pull git@github.com:thePapacy/workenv.git
+	cd ~/workenv
+	# ??
+	cd $INSTALL_ROOT
+
+
 # Install bash-completion.
 
 	echo '*** Installing bash-completion...'
