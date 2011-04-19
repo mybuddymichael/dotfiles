@@ -15,7 +15,7 @@
 	ruby -e "$(curl -fsSLk https://gist.github.com/raw/323731/install_homebrew.rb)"
 
 
-# Install Git
+# Install Git.
 
 	echo '*** Installing Git...'
 	brew install git
@@ -33,7 +33,7 @@
 	brew install hub
 
 
-# Install MacVim
+# Install MacVim.
 
 	echo '*** Installing MacVim...'
 	curl -OLkf# https://github.com/downloads/b4winckler/macvim/MacVim-snapshot-57.tbz
