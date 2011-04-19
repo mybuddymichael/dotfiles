@@ -1,6 +1,9 @@
+# Set it up.
+
 	[[ -d ~/installtmp ]] && mkdir ~/installtmp
 	INSTALL_ROOT = ~/installtmp
 	cd $INSTALL_ROOT
+
 
 # Install Homebrew.
 
