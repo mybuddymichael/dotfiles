@@ -19,6 +19,12 @@
 	brew install git
 
 
+# Install bash-completion.
+
+	echo '*** Installing bash-completion...'
+	brew install bash-completion
+
+
 # Install Google Chrome.
 
 	echo '*** Downloading and installing Google Chrome...'
