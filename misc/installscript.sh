@@ -8,8 +8,8 @@
 # Install Homebrew.
 
 	echo '*** Installing Homebrew...'
-	rm -rf /usr/local/include
-	rm -rf /usr/local/lib
+	sudo rm -rf /usr/local/include
+	sudo rm -rf /usr/local/lib
 	ruby -e "$(curl -fsSLk https://gist.github.com/raw/323731/install_homebrew.rb)"
 
 
