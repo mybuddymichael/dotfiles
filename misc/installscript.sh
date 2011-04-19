@@ -26,8 +26,7 @@
 	echo '*** Installing workenv...'
 	cd ~
 	git pull git@github.com:thePapacy/workenv.git
-	cd ~/workenv
-	# ??
+	. ~/workenv/misc/workenvsetup.sh
 	cd $INSTALL_ROOT
 
 
