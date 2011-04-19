@@ -13,6 +13,12 @@
 	ruby -e "$(curl -fsSLk https://gist.github.com/raw/323731/install_homebrew.rb)"
 
 
+# Install Git
+
+	echo '*** Installing Git...'
+	brew install Git
+
+
 # Install Google Chrome.
 
 	echo '*** Downloading and installing Google Chrome...'
