@@ -27,3 +27,12 @@
 	cp -iv /Volumes/Google\ Chrome/Google\ Chrome.app ~/Applications/Google\ Chrome.app
 	hdiutil detach -quiet /Volumes/Google\ Chrome
 	rm -f $INSTALL_ROOT/googlechrome.dmg
+
+
+# Install Rdio client.
+
+	echo '*** Installing Rdio...'
+	curl -OLkf# http://www.rdio.com/media/desktop/mac/Rdio.dmg
+	hdiutil attach -quiet -noautoopen $INSTALL_ROOT/Rdio.dmg
+	cp -iv /Volumes/Rdio/Rdio.app ~/Applications/Rdio.app
+	hdiutil detach -quiet /Volumes/Rdio
