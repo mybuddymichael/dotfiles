@@ -6,7 +6,7 @@
 # Install Google Chrome.
 
 	echo '*** Download Google Chrome...'
-	curl -# -O https://dl-ssl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
+	curl -OLkf# https://dl-ssl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
 	hdiutil attach -quiet -noautoopen $INSTALL_ROOT/googlechrome.dmg
 	cp -iv /Volumes/Google\ Chrome/Google\ Chrome.app ~/Applications/Google\ Chrome.app
 	hdiutil detach -quiet /Volumes/Google\ Chrome/
