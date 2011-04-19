@@ -1,7 +1,9 @@
 # Set it up.
 
-	[[ -d ~/installtmp ]] && mkdir ~/installtmp
+	[[ ! -d ~/installtmp ]] && mkdir ~/installtmp
+	[[ ! -e ~/installtmp/install_log.txt ]] && touch ~/installtmp/install_log.txt
 	INSTALL_ROOT = ~/installtmp
+	INSTALL_LOG  = ~/installtmp/install_log.txt
 	cd $INSTALL_ROOT
 
 
