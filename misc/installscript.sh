@@ -50,6 +50,11 @@
 	cp -iv /Volumes/Google\ Chrome/Google\ Chrome.app ~/Applications/Google\ Chrome.app
 	hdiutil detach -quiet /Volumes/Google\ Chrome
 	rm -f $INSTALL_ROOT/googlechrome.dmg
+	if [[ -s ~/Applications/Google\ Chrome.app ]]; then
+		echo 'Google Chrome installed' >> $INSTALL_LOG
+	else
+		echo 'GOOGLE CHROME NOT INSTALLED' >> $INSTALL_LOG
+	fi
 
 
 # Install Rdio client.
@@ -60,3 +65,8 @@
 	cp -iv /Volumes/Rdio/Rdio.app ~/Applications/Rdio.app
 	hdiutil detach -quiet /Volumes/Rdio
 	rm -f $INSTALL_ROOT/Rdio.dmg
+	if [[ -s ~/Applications/Rdio.app ]]; then
+		echo 'Rdio installed' >> $INSTALL_LOG
+	else
+		ehco 'RDIO NOT INSTALLED' >> $INSTALL_LOG
+	fi
