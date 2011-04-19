@@ -25,6 +25,12 @@
 	brew install bash-completion
 
 
+# Install hub.
+
+	echo '*** Installing hub...'
+	brew install hub
+
+
 # Install Google Chrome.
 
 	echo '*** Downloading and installing Google Chrome...'
