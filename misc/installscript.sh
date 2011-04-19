@@ -31,6 +31,15 @@
 	brew install hub
 
 
+# Install MacVim
+
+	echo '*** Installing MacVim...'
+	curl -OLkf# https://github.com/downloads/b4winckler/macvim/MacVim-snapshot-57.tbz
+	tar -xf MacVim-snapshot-57.tbz && mv MacVim-snapshot-57 MacVim
+	cp MacVim/MacVim.app /Applications/MacVim.app
+	rm -rf MacVim MacVim-snapshot-57.tbz
+
+
 # Install Google Chrome.
 
 	echo '*** Downloading and installing Google Chrome...'
