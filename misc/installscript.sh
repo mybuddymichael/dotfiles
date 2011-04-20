@@ -19,6 +19,11 @@
 
 	echo '*** Installing Git...'
 	brew install git
+	if [[ `which git` ]]; then
+		echo 'Git installed' >> $INSTALL_LOG
+	else
+		echo 'GIT NOT INSTALLED' >> $INSTALL_LOG
+	fi
 
 
 # Install my work environment.
