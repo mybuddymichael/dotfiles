@@ -87,7 +87,7 @@
 	if [[ -s ~/Applications/Rdio.app ]]; then
 		echo 'Rdio installed' >> $INSTALL_LOG
 	else
-		ehco 'RDIO NOT INSTALLED' >> $INSTALL_LOG
+		echo 'RDIO NOT INSTALLED' >> $INSTALL_LOG
 	fi
 
 
