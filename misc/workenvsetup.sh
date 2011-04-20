@@ -14,7 +14,7 @@
 	ln -nfs $BASE_DIR/bash/bashrc .bashrc
 	cp -iv  $BASE_DIR/bash/gitconfig .gitconfig
 
-	ln -nfs $BASE_DIR/vim/ vim
+	ln -nfs $BASE_DIR/vim/ .vim
 	ln -nfs $BASE_DIR/vim/vimrc .vimrc
 	ln -nfs $BASE_DIR/vim/gvimrc .gvimrc
 
