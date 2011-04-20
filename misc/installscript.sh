@@ -13,6 +13,11 @@
 	sudo rm -rf /usr/local/include
 	sudo rm -rf /usr/local/lib
 	ruby -e "$(curl -fsSLk https://gist.github.com/raw/323731/install_homebrew.rb)"
+	if [[ `which brew` ]]; then
+		echo 'Homebrew installed' >> $INSTALL_LOG
+	else
+		echo 'HOMEBREW NOT INSTALLED' >> $INSTALL_LOG
+	fi
 
 
 # Install Git.
