@@ -52,6 +52,16 @@
 	brew install hub
 
 
+# Install RVM.
+
+	echo '*** Installing Ruby Version Manager...'
+	bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
+	if [[ `which rvm` ]]; then
+		echo 'RVM installed' >> $INSTALL_LOG
+	else
+		echo 'RVM NOT INSTALLED' >> $INSTALL_LOG
+	fi
+
 # Install MacVim.
 
 	echo '*** Installing MacVim...'
