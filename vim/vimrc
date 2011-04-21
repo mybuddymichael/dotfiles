@@ -53,7 +53,7 @@
 
 	let s:current_time = strftime("%H")
 
-	if s:current_time < 7
+	if s:current_time < 8
 		call SetSolarizedToDark()
 	elseif s:current_time > 15
 		call SetSolarizedToDark()
