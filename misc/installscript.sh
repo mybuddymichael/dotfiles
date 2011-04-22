@@ -62,6 +62,7 @@
 		echo 'RVM NOT INSTALLED' >> $INSTALL_LOG
 	fi
 
+
 # Install MacVim.
 
 	echo '*** Installing MacVim...'
