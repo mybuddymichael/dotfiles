@@ -1,7 +1,7 @@
 # Set it up.
 
-	ORIGINAL_DIR = `pwd`
-	BASE_DIR = workenv/
+	ORIGINAL_DIR=`pwd`
+	BASE_DIR=workenv/
 	cd ~
 
 
