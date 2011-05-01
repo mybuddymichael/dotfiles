@@ -36,11 +36,9 @@
 " The colorscheme is Solarized, but let's change the background based on the time.
 
 	set background=light
-	set transparency=4
 
 	func! SetSolarizedToDark()
 		set background=dark
-		set transparency=1
 	endfunc
 
 	if !exists("g:staydark")
