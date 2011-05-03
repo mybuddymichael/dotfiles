@@ -241,7 +241,7 @@
 		" These filetypes are not picky.
 		au FileType css        setlocal ts=2 sts=2 sw=2 noexpandtab
 		au FileType haml       setlocal ts=2 sts=2 sw=2   expandtab
-		au FileType html       setlocal ts=3 sts=3 sw=3 noexpandtab
+		au FileType html       setlocal ts=3 sts=3 sw=3   expandtab
 		au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
 		au FileType ruby       setlocal ts=2 sts=2 sw=2 noexpandtab
 		au FileType sass       setlocal ts=2 sts=2 sw=2   expandtab
