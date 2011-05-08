@@ -155,6 +155,10 @@
 		let NERDTreeShowHidden = 1
 	endif
 
+	if exists(":Hammer")
+		nmap <leader>p :Hammer<cr>
+	endif
+
 	if exists(":CommandT")
 		nmap <leader>ctf :CommandTFlush<cr>
 		let g:CommandTAlwaysShowDotFiles = 1
