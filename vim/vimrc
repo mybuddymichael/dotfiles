@@ -258,6 +258,7 @@
 		au FileType vim        setlocal ts=2 sts=2 sw=2 noexpandtab
 		au FileType vimrc      setlocal ts=2 sts=2 sw=2 noexpandtab
 
-		" Treat .rss files as XML
-		au BufNewFile,BufRead *.rss setfiletype xml
+		" Use some custom filetypes.
+		au BufNewFile,BufRead *.rss set filetype=xml
+		au BufNewFile,BufRead *.md  set filetype=markdown
 	endif
