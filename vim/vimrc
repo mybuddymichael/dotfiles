@@ -181,6 +181,8 @@
 " Make a command to easily switch from regular numbering to relative numbering.
 
 	command! Number call ToggleRelativeNumber()
+	nmap <leader>m :Number<cr>
+	vmap <leader>m :Number<cr>
 
 	let s:relativeNumber = 1
 
