@@ -122,6 +122,12 @@
 	vnoremap <d-[> <gv
 
 
+" Clearing search highlighting should be super easy.
+
+	nnoremap <leader><space> :noh<cr>
+	vnoremap <leader><space> :noh<cr>
+
+
 " Make a command to toggle showing invisible characters, and set those characters.
 
 	nnoremap <leader>l :set list!<cr>
