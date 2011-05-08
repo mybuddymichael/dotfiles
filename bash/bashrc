@@ -11,7 +11,7 @@
 # Set the editor as MacVim if available, vim if not.
 
 	if [[ -s ~/bin/mvim ]]; then
-		export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a Terminal"'
+		export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
 	else
 		export EDITOR=vim
 	fi
