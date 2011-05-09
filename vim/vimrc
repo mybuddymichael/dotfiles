@@ -163,6 +163,7 @@
 
 	if exists(":CommandT")
 		nmap <leader>ctf :CommandTFlush<cr>
+		let g:CommandTMatchWindowReverse = 1
 		let g:CommandTAlwaysShowDotFiles = 1
 		let g:CommandTScanDotDirectories = 1
 	endif
