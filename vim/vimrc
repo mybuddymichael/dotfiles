@@ -177,6 +177,10 @@
 	nmap <leader>hh :call HexHighlight()<cr>
 	vmap <leader>hh :call HexHighlight()<cr>
 
+" I use Ruby a lot, so let's make a mapping to call it easily.
+
+	nnoremap <leader>r :w\|!ruby %<cr>
+
 
 " Make a command to easily switch from regular numbering to relative numbering.
 
