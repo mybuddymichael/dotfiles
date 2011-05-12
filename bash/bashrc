@@ -10,7 +10,7 @@
 
 # Set the editor as MacVim if available, vim if not.
 
-	if [[ -s ~/bin/mvim ]]; then
+	if [[ -s $HOME/bin/mvim ]]; then
 		export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
 	else
 		export EDITOR=vim
@@ -25,18 +25,18 @@
 
 # Set my PATH.
 
-	export PATH="~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+	export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
 
 # Make an easy command to reload the profile and bashrc file.
 
-	alias reload='. ~/.profile'
+	alias reload=". $HOME/.profile"
 
 
 # Set some shortcuts for frequently-accessed directories.
 
-	alias we='cd ~/workenv'
-	alias db='cd ~/Dropbox'
+	alias we="cd $HOME/workenv"
+	alias db="cd $HOME/Dropbox"
 
 
 # Make some custom program modifications.
@@ -76,13 +76,13 @@
 
 # Load supporting files.
 
-	[[ -s ~/.secrets ]] && . ~/.secrets
-	[[ -s ~/workenv/bash/colors.sh ]] && . ~/workenv/bash/colors.sh
+	[[ -s $HOME/.secrets ]] && . $HOME/.secrets
+	[[ -s $HOME/workenv/bash/colors.sh ]] && . $HOME/workenv/bash/colors.sh
 
 
 # Load Ruby Version Manager.
 
-	[[ -s ~/.rvm/scripts/rvm ]] && . ~/.rvm/scripts/rvm
+	[[ -s $HOME/.rvm/scripts/rvm ]] && . $HOME/.rvm/scripts/rvm
 
 
 # Load autocompletion scripts: Git, Homebrew, bash, and RVM.
@@ -106,7 +106,7 @@
 	PS1path=" $txtpur\w$txtrst"
 	PS1git="$txtcyn\$(__git_ps1)$txtrst"
 	PS1rvm="$txtred no rvm$txtrst"
-	[[ -e ~/.rvm ]] && PS1rvm=" $txtred\$(~/.rvm/bin/rvm-prompt g s)$txtrst"
+	[[ -e $HOME/.rvm ]] && PS1rvm=" $txtred\$($HOME/.rvm/bin/rvm-prompt g s)$txtrst"
 	PS1prompt="\n⍟ "
 
 	export PS1="$PS1prefix$PS1userhost$PS1path$PS1git$PS1rvm$PS1prompt"
