@@ -156,27 +156,26 @@
 
 " Make it easy to call some commonly-used plugins.
 
-	if exists(":NERDTree")
-		nmap <leader>n :NERDTreeToggle<cr>
-		let NERDTreeShowHidden = 1
-	endif
+	" NERDTree
+	nmap <leader>n :NERDTreeToggle<cr>
+	let NERDTreeShowHidden = 1
 
-	if exists(":CommandT")
-		nmap <leader>ff :CommandTFlush<cr>
-		let g:CommandTMatchWindowReverse = 1
-		let g:CommandTAlwaysShowDotFiles = 1
-		let g:CommandTScanDotDirectories = 1
-	endif
+	" CommandT
+	nmap <leader>ff :CommandTFlush<cr>
+	let g:CommandTMatchWindowReverse = 1
+	let g:CommandTAlwaysShowDotFiles = 1
+	let g:CommandTScanDotDirectories = 1
 
-	if exists(":Tabularize")
-		nmap <leader>a= :Tabularize /=<cr>
-		vmap <leader>a= :Tabularize /=<cr>
-		nmap <leader>a: :Tabularize /:\zs<cr>
-		vmap <leader>a: :Tabularize /:\zs<cr>
-	endif
+	" Tabularize
+	nmap <leader>a= :Tabularize /=<cr>
+	vmap <leader>a= :Tabularize /=<cr>
+	nmap <leader>a: :Tabularize /:\zs<cr>
+	vmap <leader>a: :Tabularize /:\zs<cr>
 
+	" HexHighlight
 	nmap <leader>hh :call HexHighlight()<cr>
 	vmap <leader>hh :call HexHighlight()<cr>
+
 
 " I use Ruby a lot, so let's make a mapping to call it easily.
 
