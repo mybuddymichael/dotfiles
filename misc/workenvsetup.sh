@@ -1,11 +1,12 @@
 # Set it up.
 
 	ORIGINAL_DIR=`pwd`
-	BASE_DIR=workenv/
-	cd ~
+	BASE_DIR=workenv
 
 
 # Link and copy files.
+
+	cd $HOME
 
 	ln -nfsv $BASE_DIR/bin/ bin
 
