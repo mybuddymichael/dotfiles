@@ -163,7 +163,6 @@
 	" CommandT
 	nmap <leader>ff :CommandTFlush<cr>
 	let g:CommandTMatchWindowReverse = 1
-	let g:CommandTAlwaysShowDotFiles = 1
 	let g:CommandTScanDotDirectories = 1
 
 	" Tabularize
