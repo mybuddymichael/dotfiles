@@ -76,6 +76,8 @@
 	set incsearch                      " Highlight matches as you type.
 	set ignorecase                     " Case-insensitive searching.
 	set smartcase                      " But case-sensitive if expression contains capitals.
+	set spell                          " Use spell-checking.
+	set spelllang=en_us                " U.S. English is the default language.
 	set numberwidth=5                  " Line numbers are at least 5 characters wide.
 	set cursorline                     " Show the cursor's line.
 	set colorcolumn=80                 " Show a column at 85 so I don't overtype.
@@ -128,7 +130,7 @@
 	vnoremap <leader><space> :noh<cr>
 
 
-" Make a command to toggle showing invisible characters, and set those characters.
+" Make a command to toggle showing invisible characters, and set what those are.
 
 	nnoremap <leader>l :set list!<cr>
 	set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
