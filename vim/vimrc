@@ -116,6 +116,11 @@
 	nnoremap <c-c> <c-w>c
 
 
+" Buffer switching is too tedious. Boom! Solved.
+
+	nnoremap <leader>p :bp<cr>
+
+
 " And let's make indentation super-easy as well.
 
 	nnoremap <d-]> >>
