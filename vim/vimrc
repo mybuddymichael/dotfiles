@@ -94,7 +94,7 @@
 
 " Set the statusline to something useful and informative.
 
-	set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %=%-16(\ %l\/%c\ %)%P
+	set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}\ %=%-26(\ %l\/%c\/%L\ %)%p
 
 
 " Create a key-mapping for quick editing of the vimrc.
