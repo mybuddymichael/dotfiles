@@ -1,25 +1,28 @@
 # Set it up.
 
-	ORIGINAL_DIR=`pwd`
-	BASE_DIR=workenv
+    ORIGINAL_DIR=`pwd`
+    BASE_DIR=workenv
 
 
 # Link and copy files.
 
-	cd $HOME
+    cd $HOME
 
-	ln -nfsv $BASE_DIR/bin/ bin
+    ln -sv $BASE_DIR/bin/ bin
 
-	ln -nfsv $BASE_DIR/bash/bashrc .bashrc
-	ln -nfsv $BASE_DIR/bash/profile .profile
-	ln -nfsv $BASE_DIR/bash/gitignore_global .gitignore_global
-	cp -iv   $BASE_DIR/bash/gitconfig .gitconfig
+    ln -sv $BASE_DIR/zsh/ .zsh
+    ln -sv $BASE_DIR/zsh/.zshrc .zshrc
 
-	ln -nfsv $BASE_DIR/vim/ .vim
-	ln -nfsv $BASE_DIR/vim/vimrc .vimrc
-	ln -nfsv $BASE_DIR/vim/gvimrc .gvimrc
+    ln -sv $BASE_DIR/bash/bashrc .bashrc
+    ln -sv $BASE_DIR/bash/profile .profile
+    ln -sv $BASE_DIR/bash/gitignore_global .gitignore_global
+    cp -iv $BASE_DIR/bash/gitconfig .gitconfig
+
+    ln -sv $BASE_DIR/vim/ .vim
+    ln -sv $BASE_DIR/vim/vimrc .vimrc
+    ln -sv $BASE_DIR/vim/gvimrc .gvimrc
 
 
 # Change back to the original directory.
 
-	cd $ORIGINAL_DIR
+    cd $ORIGINAL_DIR
