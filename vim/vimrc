@@ -178,6 +178,9 @@
 	nmap <leader>a: :Tabularize /:\zs<cr>
 	vmap <leader>a: :Tabularize /:\zs<cr>
 
+	" Gundo
+	nmap <leader>g :GundoToggle<cr>
+
 	" HexHighlight
 	nmap <leader>hh :call HexHighlight()<cr>
 	vmap <leader>hh :call HexHighlight()<cr>
