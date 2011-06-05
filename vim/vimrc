@@ -53,7 +53,7 @@
 
 	if s:current_time < 8
 		call SetSolarizedToDark()
-	elseif s:current_time > 15
+	elseif s:current_time > 17
 		call SetSolarizedToDark()
 	endif
 
