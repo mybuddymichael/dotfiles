@@ -145,7 +145,6 @@
 " Create a ':Wrap' command, and set what the line-break symbol is.
 
 	command! Wrap set wrap! linebreak nolist
-	set showbreak=…
 
 
 " Automatically save all buffers when the GUI app loses focus.
