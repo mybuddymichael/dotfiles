@@ -80,7 +80,7 @@
 	set spelllang=en_us                " U.S. English is the default language.
 	set numberwidth=5                  " Line numbers are at least 5 characters wide.
 	set cursorline                     " Show the cursor's line.
-	set colorcolumn=80                 " Show a column at 85 so I don't overtype.
+	set colorcolumn=80                 " Show a column at 80 so I don't overtype.
 	set scrolloff=3                    " Show 3 lines of context around the cursor.
 	set laststatus=2                   " Show the status line all the time
 	set title                          " Set the terminal's title
@@ -88,7 +88,8 @@
 	set nobackup                       " Don't make a backup before overwriting a file.
 	set noswapfile                     " No swap files.
 	set nowritebackup                  " And again.
-	set directory=$HOME/.vim/tmp//,.   " Keep swap files in one location.
+	set undofile                       " Store persistent undo's.
+	set undodir=$HOME/.undo/           " Set where to store undo's.
 	set nomodeline                     " No modelines for security reasons.
 
 
