@@ -40,12 +40,3 @@
 [submodule "vim/bundle/gundo"]
 	path = vim/bundle/gundo
 	url = https://github.com/sjl/gundo.vim.git
-[submodule "vim/bundle/snipmate"]
-	path = vim/bundle/snipmate
-	url = git://github.com/mybuddymichael/vim-snipmate.git
-[submodule "vim/bundle/tlib"]
-	path = vim/bundle/tlib
-	url = https://github.com/tomtom/tlib_vim.git
-[submodule "vim/bundle/mw-utils"]
-	path = vim/bundle/mw-utils
-	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
