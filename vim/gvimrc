@@ -2,7 +2,7 @@ set guifont=Meslo\ LG\ M:h13      " Font family and font size.
 set antialias                     " MacVim: smooth fonts.
 set encoding=utf-8                " Use UTF-8 everywhere.
 set guioptions=aAce               " Hide toolbar, disable scrollbars.
-set lines=29 columns=99           " Window dimensions.
+set lines=60 columns=99           " Window dimensions.
 
 if has("gui_macvim")
 	macmenu &File.New\ Tab key=<nop>
