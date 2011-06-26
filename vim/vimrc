@@ -171,6 +171,7 @@
   nmap <leader>ff :CommandTFlush<cr>
   let g:CommandTMatchWindowReverse = 1
   let g:CommandTScanDotDirectories = 1
+  let g:CommandTMaxHeight = 10
 
   " Tabularize
   nmap <leader>a=  :Tabularize /=<cr>
