@@ -101,12 +101,12 @@
 
 	GIT_PS1_SHOWDIRTYSTATE=true
 	GIT_PS1_SHOWUNTRACKEDFILES=true
-	PS1prefix="\n"
-	PS1userhost="\u@\h"
+	PS1prefix=""
+	PS1userhost="$txtblk\u@\h$txtrst"
 	PS1path=" $txtpur\w$txtrst"
 	PS1git="$txtcyn\$(__git_ps1)$txtrst"
 	PS1rvm="$txtred no rvm$txtrst"
 	[[ -e $HOME/.rvm ]] && PS1rvm=" $txtred\$($HOME/.rvm/bin/rvm-prompt g s)$txtrst"
 	PS1prompt="\n⍟ "
 
-	export PS1="$PS1prefix$PS1userhost$PS1path$PS1git$PS1rvm$PS1prompt"
+	export PS1="$PS1prefix$PS1userhost$PS1rvm$PS1git$PS1path$PS1prompt"
