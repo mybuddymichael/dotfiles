@@ -188,6 +188,11 @@
   let g:SuperTabContextDefaultCompletionType = "<c-p>"
   let g:SuperTabLongestEnhanced = 1
 
+  " CoffeeScript
+  if has("autocmd")
+     au BufWritePost *.coffee silent CoffeeMake! -b | cwindow
+  endif
+
   " HexHighlight
   nmap <leader>hh :call HexHighlight()<cr>
   vmap <leader>hh :call HexHighlight()<cr>
@@ -267,6 +272,7 @@
     au FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
 
     " These filetypes are not picky.
+    au FileType coffee     setlocal ts=2 sts=2 sw=2   expandtab
     au FileType css        setlocal ts=2 sts=2 sw=2 noexpandtab
     au FileType gitconfig  setlocal ts=4 sts=4 sw=4 noexpandtab
     au FileType haml       setlocal ts=2 sts=2 sw=2   expandtab
