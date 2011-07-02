@@ -15,7 +15,7 @@
 
 " Load pathogen so that all the separate bundles are loaded.
 
-  call pathogen#runtime_append_all_bundles()
+  call pathogen#infect()
   call pathogen#helptags()
 
 
