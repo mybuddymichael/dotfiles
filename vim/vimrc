@@ -289,6 +289,9 @@
     au FileType vimrc      setlocal ts=2 sts=2 sw=2   expandtab
     au FileType zsh        setlocal ts=4 sts=4 sw=4   expandtab
 
+    " Set markdown documents to use a hard wrap at 80 characters.
+    au FileType markdown   setlocal textwidth=80
+
     " Use some custom filetypes.
     au BufNewFile,BufRead *.rss set filetype=xml
     au BufNewFile,BufRead *.md  set filetype=markdown
