@@ -82,6 +82,7 @@
   set numberwidth=5                  " Line numbers are at least 5 characters wide.
   set cursorline                     " Show the cursor's line.
   set colorcolumn=80                 " Show a column at 80 so I don't overtype.
+  set textwidth=80                   " Hard wrap lines at column 80.
   set scrolloff=3                    " Show 3 lines of context around the cursor.
   set laststatus=2                   " Show the status line all the time
   set title                          " Set the terminal's title
