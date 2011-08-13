@@ -23,7 +23,6 @@
 
   let mapleader=","
   nnoremap <leader>q :q<cr>
-  nnoremap <leader>w :w<cr>
   nnoremap ; :
 
 
@@ -147,6 +146,12 @@
 " Create a ':Wrap' command, and set what the line-break symbol is.
 
   command! Wrap set wrap! linebreak nolist
+
+
+" Map <leader>w to hard-wrap the line
+
+  nnoremap <leader>w gqap
+  vnoremap <leader>w gq
 
 
 " Automatically save all buffers when the GUI app loses focus.
