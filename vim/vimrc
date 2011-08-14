@@ -150,7 +150,6 @@
 
 " Map <leader>w to hard-wrap the line
 
-  nnoremap <leader>w gqap
   vnoremap <leader>w gq
 
 
