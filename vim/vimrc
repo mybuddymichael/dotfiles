@@ -148,9 +148,9 @@
   command! Wrap set wrap! linebreak nolist
 
 
-" Map <leader>w to hard-wrap the line
+" Map <leader>w to hard-wrap the selected line(s).
 
-  vnoremap <leader>w gq
+  vnoremap <leader>w JVgq
 
 
 " Automatically save all buffers when the GUI app loses focus.
