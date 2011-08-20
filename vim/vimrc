@@ -32,32 +32,11 @@
   filetype plugin indent on
 
 
-" The colorscheme is Solarized, but let's change the background based on the time.
+" The colorscheme is Solarized, and I like things dark (like a submarine!).
+" Solarized can be toggled by hitting <F5>.
 
-  set background=light
-
-  func! SetSolarizedToDark()
-    set background=dark
-  endfunc
-
-  if !exists("g:staydark")
-    let g:staydark = 0
-  endif
-
-  if g:staydark == 1
-    call SetSolarizedToDark()
-  endif
-
-  let s:current_time = strftime("%H")
-
-  if s:current_time < 8
-    call SetSolarizedToDark()
-  elseif s:current_time > 17
-    call SetSolarizedToDark()
-  endif
-
+  set background=dark
   colorscheme solarized
-
   call togglebg#map("<F5>")
 
 
