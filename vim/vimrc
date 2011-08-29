@@ -24,6 +24,7 @@
   let mapleader=","
   nnoremap <leader>q :q<cr>
   nnoremap ; :
+  nnoremap \ ;
 
 
 " Enable syntax highlighting and filetype detection.
