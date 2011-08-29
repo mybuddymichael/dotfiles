@@ -12,3 +12,4 @@ dir_prompt=$'%{$fg[cyan]%}%~%{$reset_color%}'
 prompt_prompt=$'%{$fg[cyan]%}\n⍟%{$reset_color%} '
 
 PROMPT="$rbenv_prompt$git_prompt$dir_prompt$prompt_prompt"
+RPROMPT=$'%{$fg[black]%}%n@%m%{$reset_color%}'
