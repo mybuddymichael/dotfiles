@@ -1,7 +1,7 @@
 # get the name of the branch we are on
 function git_prompt_info() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo "$git_prefix${ref#refs/heads/}$(parse_git_dirty)$(git_prompt_status)$git_suffix"
+  echo "$git_prefix${ref#refs/heads/}$(parse_git_dirty)$(git_prompt_status)$(git_prompt_ahead)$git_suffix"
 }
 
 # Checks if working tree is dirty
@@ -10,6 +10,18 @@ parse_git_dirty() {
     echo "$git_prompt_dirty"
   else
     echo "$git_prompt_clean"
+  fi
+}
+
+current_branch() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo "${ref#refs/heads/}"
+}
+
+# Checks if there are commits ahead from remote
+git_prompt_ahead() {
+  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+    echo "$git_prompt_ahead"
   fi
 }
 

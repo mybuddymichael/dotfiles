@@ -11,6 +11,7 @@ git_prompt_deleted="%{$fg[red]%}x%{$reset_color%}"
 git_prompt_renamed="%{$fg[blue]%}➜%{$reset_color%}"
 git_prompt_unmerged="%{$fg[red]%}═%{$reset_color%}"
 git_prompt_untracked="%{$fg_bold[cyan]%}?%{$reset_color%}"
+git_prompt_ahead="%{$fg_bold[blue]%}Ω%{$reset_color%}"
 
 rbenv_prompt=$'%{$fg[red]%}$(rbenv_prompt_info)%{$reset_color%}'
 git_prompt=$'%{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}'
