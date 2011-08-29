@@ -32,37 +32,37 @@ function git_prompt_long_sha() {
 
 # Get the status of the working tree
 git_prompt_status() {
-  INDEX=$(git status --porcelain 2> /dev/null)
+  index=$(git status --porcelain 2> /dev/null)
   STATUS=""
-  if $(echo "$INDEX" | grep '^?? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  if $(echo "$index" | grep '^?? ' &> /dev/null); then
+    STATUS="$git_prompt_untracked$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  if $(echo "$index" | grep '^A  ' &> /dev/null); then
+    STATUS="$git_prompt_added$STATUS"
+  elif $(echo "$index" | grep '^M  ' &> /dev/null); then
+    STATUS="$git_prompt_added$STATUS"
+  elif $(echo "$index" | grep '^MM ' &> /dev/null); then
+    STATUS="$git_prompt_added$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  if $(echo "$index" | grep '^ M ' &> /dev/null); then
+    STATUS="$git_prompt_modified$STATUS"
+  elif $(echo "$index" | grep '^AM ' &> /dev/null); then
+    STATUS="$git_prompt_modified$STATUS"
+  elif $(echo "$index" | grep '^ T ' &> /dev/null); then
+    STATUS="$git_prompt_modified$STATUS"
+  elif $(echo "$index" | grep '^MM ' &> /dev/null); then
+    STATUS="$git_prompt_modified$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+  if $(echo "$index" | grep '^R  ' &> /dev/null); then
+    STATUS="$git_prompt_renamed$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  if $(echo "$index" | grep '^D  ' &> /dev/null); then
+    STATUS="$git_prompt_deleted$STATUS"
+  elif $(echo "$index" | grep '^AD ' &> /dev/null); then
+    STATUS="$git_prompt_deleted$STATUS"
   fi
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  if $(echo "$index" | grep '^UU ' &> /dev/null); then
+    STATUS="$git_prompt_unmerged$STATUS"
   fi
   echo $STATUS
 }
