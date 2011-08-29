@@ -1,3 +1,14 @@
+#
+#                                       _/_/  _/
+#      _/_/_/    _/_/    _/_/_/      _/            _/_/_/
+#   _/        _/    _/  _/    _/  _/_/_/_/  _/  _/    _/
+#  _/        _/    _/  _/    _/    _/      _/  _/    _/
+#   _/_/_/    _/_/    _/    _/    _/      _/    _/_/_/
+#                                                  _/
+#  Where custom zsh settings are born.        _/_/
+#  -----------------------------------
+
+
 # Enable syntax coloring and set my custom colors.
 
   export CLICOLOR=1
