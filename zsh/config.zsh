@@ -24,7 +24,7 @@
   export PATH=$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
 
 
-# Source super-secret .localrc file if it's there.
+# Source the super-secret .localrc file if it's there.
 
   [[ -s ~/.localrc ]] && source ~/.localrc
 
