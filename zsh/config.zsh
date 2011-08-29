@@ -32,7 +32,9 @@
 # Add rbenv to PATH.
 
   export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
+  if hash rbenv &> /dev/null; then
+    eval "$(rbenv init -)"
+  fi
 
 
 # And set the editor as MacVim if available, vim if not.
