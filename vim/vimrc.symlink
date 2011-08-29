@@ -272,7 +272,7 @@
     au FileType txt        setlocal ts=2 sts=2 sw=2   expandtab
     au FileType vim        setlocal ts=2 sts=2 sw=2   expandtab
     au FileType vimrc      setlocal ts=2 sts=2 sw=2   expandtab
-    au FileType zsh        setlocal ts=4 sts=4 sw=4   expandtab
+    au FileType zsh        setlocal ts=2 sts=2 sw=2   expandtab
 
     " Set markdown documents to use a hard wrap at 80 characters.
     au FileType markdown   setlocal textwidth=80
