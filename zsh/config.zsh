@@ -16,7 +16,7 @@
 
 # Set the editor as MacVim if available, vim if not.
 
-  if hash mvim &>/dev/null; then
+  if hash mvim &> /dev/null; then
     export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
   else
     export EDITOR=vim
