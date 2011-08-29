@@ -1,6 +1,17 @@
+# Enable syntax coloring and set my custom colors.
+
+  export CLICOLOR=1
+  export LSCOLORS=Exfxbxdxcxegedabagacad
+
+
 # My projects file used for tab-completion.
 
   export PROJECTS=~/Projects
+
+
+# Set my PATH.
+
+  export PATH=$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
 
 
 # Source super-secret .localrc file if it's there.
@@ -8,10 +19,10 @@
   [[ -s ~/.localrc ]] && source ~/.localrc
 
 
-# Enable syntax coloring and set my custom colors.
+# Add rbenv to PATH
 
-  export CLICOLOR=1
-  export LSCOLORS=Exfxbxdxcxegedabagacad
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
 
 
 # Set the editor as MacVim if available, vim if not.
@@ -21,14 +32,3 @@
   else
     export EDITOR=vim
   fi
-
-
-# Set my PATH.
-
-  export PATH=$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
-
-
-# Add rbenv to PATH
-
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
