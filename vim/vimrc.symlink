@@ -70,7 +70,7 @@
   set noswapfile                     " No swap files.
   set nowritebackup                  " And again.
   set undofile                       " Store persistent undo's.
-  set undodir=$HOME/.undo/           " Set where to store undo's.
+  set undodir=$HOME/.vim/undo        " Set where to store undo's.
   set nomodeline                     " No modelines for security reasons.
 
 
