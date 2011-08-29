@@ -17,7 +17,7 @@ You should check out `git/gitconfig.symlink.example`. Make whatever changes you
 need then rename it to `git/gitconfig.symlink`. Then you can run `rake` again
 to symlink the file.
 
-Much credit is due to [Robby Russell] and the `[oh-my-zsh]` team for creating a
+Much credit is due to [Robby Russell] and the [oh-my-zsh] team for creating a
 *pile* of cool zsh configurations.
 
 Also, [Zach Holman] has some great stuff in [his dotfiles repo], some of which
