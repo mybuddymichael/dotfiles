@@ -29,13 +29,13 @@
   [[ -s ~/.localrc ]] && source ~/.localrc
 
 
-# Add rbenv to PATH
+# Add rbenv to PATH.
 
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
 
 
-# Set the editor as MacVim if available, vim if not.
+# And set the editor as MacVim if available, vim if not.
 
   if hash mvim &> /dev/null; then
     export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
