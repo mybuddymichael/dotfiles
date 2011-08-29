@@ -1,0 +1,105 @@
+# Path to your oh-my-zsh configuration.
+export ZSH=$HOME/.zsh
+
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+export ZSH_THEME="michael_"
+
+# Set to this to use case-sensitive completion
+# export CASE_SENSITIVE="true"
+
+# Comment this out to disable weekly auto-update checks
+# export DISABLE_AUTO_UPDATE="true"
+
+# Uncomment following line if you want to disable colors in ls
+# export DISABLE_LS_COLORS="true"
+
+# Uncomment following line if you want to disable autosetting terminal title.
+# export DISABLE_AUTO_TITLE="true"
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git compleat brew)
+
+source $ZSH/oh-my-zsh.sh
+
+# Customize to your needs...
+
+# Set the editor as MacVim if available, vim if not.
+
+    if [[ -s $HOME/bin/mvim ]]; then
+        export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
+    else
+        export EDITOR=vim
+    fi
+
+
+# Enable syntax coloring and set my custom colors.
+
+    export CLICOLOR=1
+    export LSCOLORS=Exfxbxdxcxegedabagacad
+
+
+# Set my PATH.
+
+    export PATH="$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+
+
+# Add rbenv to PATH
+
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
+
+
+# Make an easy command to reload the profile and bashrc file.
+
+    alias reload=". $HOME/.zshrc"
+
+
+# Set some shortcuts for frequently-accessed directories.
+
+    alias we="cd $HOME/workenv"
+    alias db="cd $HOME/Dropbox"
+
+
+# Make some custom program modifications.
+
+    alias la='ls -alh'
+    alias t='tree -aC'
+    alias mv='mv -iv'
+    alias cp='cp -iv'
+
+
+# Establish some shortcuts for frequently-used programs.
+
+    alias m=mvim
+    alias r=ruby
+    alias rv='rbenv version'
+    alias be='bundle exec'
+    alias md5='openssl md5'
+
+
+# Set several Git-related shortcuts.
+
+    [[ -L `brew --prefix`/bin/hub ]] && function git(){hub "$@"}
+    alias gs='git status'
+    alias gss='git status --short'
+    alias gl='git log --decorate --all'
+    alias glo='git log --oneline --decorate --graph --all'
+    alias ga='git add'
+    alias gpo='git push origin'
+    alias gpom='git push origin master'
+    alias gd='git diff'
+    alias gdc='git diff --cached'
+    alias gc='git commit'
+    alias gb='git branch'
+    alias gco='git checkout'
+    alias gsub='git submodule'
+
+
+# Load supporting files.
+
+    [[ -s $HOME/.secrets ]] && . $HOME/.secrets
+    [[ -s $HOME/workenv/bash/colors.sh ]] && . $HOME/workenv/bash/colors.sh
