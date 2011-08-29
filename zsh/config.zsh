@@ -14,7 +14,7 @@
   export LSCOLORS=Exfxbxdxcxegedabagacad
 
 
-# My projects file used for tab-completion.
+# My projects directory used for tab-completion.
 
   export PROJECTS=~/Projects
 
