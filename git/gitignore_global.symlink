@@ -12,6 +12,7 @@ Icon?
 ## Vim
 .*.sw[a-z]
 *.un~
+*undo
 Session.vim
 doc/tags
 .netrwhist
