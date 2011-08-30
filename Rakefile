@@ -1,5 +1,7 @@
 require 'rake'
 
+task :default => 'install'
+
 desc "Hook our dotfiles into system-standard positions."
 task :install do
   linkables = Dir.glob('**/[^%]*{.symlink}')
@@ -36,4 +38,3 @@ task :install do
     `ln -s "$PWD/#{linkable}" "#{target}"`
   end
 end
-task :default => 'install'
