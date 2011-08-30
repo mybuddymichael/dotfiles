@@ -44,3 +44,8 @@
   else
     export EDITOR=vim
   fi
+
+
+# Set some default options.
+
+  setopt correct_all
