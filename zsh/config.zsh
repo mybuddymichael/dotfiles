@@ -49,3 +49,4 @@
 # Set some default options.
 
   setopt correct_all
+  setopt ignore_eof
