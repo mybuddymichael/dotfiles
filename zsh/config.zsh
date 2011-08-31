@@ -19,7 +19,7 @@
   export PROJECTS=~/Projects
 
 
-  # Set my PATH(s).
+# Set my PATH(s).
 
   export PATH=$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
   fpath=($ZSH/functions $fpath)
