@@ -40,9 +40,6 @@
 [submodule "vim/vim.symlink/bundle/snipmate"]
 	path = vim/vim.symlink/bundle/snipmate
 	url = gh:mybuddymichael/snipmate.vim.git
-[submodule "vim/vim.symlink/bundle/coffee-script"]
-	path = vim/vim.symlink/bundle/coffee-script
-	url = https://github.com/kchmck/vim-coffee-script.git
 [submodule "vim/vim.symlink/bundle/greplace"]
 	path = vim/vim.symlink/bundle/greplace
 	url = https://github.com/vim-scripts/greplace.vim.git
@@ -58,3 +55,6 @@
 [submodule "vim/vim.symlink/bundle/vim-slim"]
 	path = vim/vim.symlink/bundle/vim-slim
 	url = git://github.com/bbommarito/vim-slim.git
+[submodule "vim/vim.symlink/bundle/coffee-script"]
+	path = vim/vim.symlink/bundle/coffee-script
+	url = git://github.com/kchmck/vim-coffee-script.git
