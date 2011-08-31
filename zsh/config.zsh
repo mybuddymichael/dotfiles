@@ -25,6 +25,11 @@
   fpath=($ZSH/functions $fpath)
 
 
+# Load custom functions and completions.
+
+  autoload -U $ZSH/functions/*(:t)
+
+
 # Source the super-secret .localrc file if it's there.
 
   [[ -s ~/.localrc ]] && source ~/.localrc
