@@ -51,3 +51,5 @@
 
   setopt correct_all
   setopt ignore_eof
+  setopt auto_list
+  setopt no_list_beep
