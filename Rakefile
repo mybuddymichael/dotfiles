@@ -10,6 +10,10 @@ task :install do
   overwrite_all = false
   backup_all = false
 
+  options  = "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all,"
+  options += " [b]ackup, [B]ackup all"
+
+
   linkables.each do |linkable|
     overwrite = false
     backup = false
@@ -19,11 +23,9 @@ task :install do
 
     if File.exists?(target) || File.symlink?(target)
       unless skip_all || overwrite_all || backup_all
-        options  = "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all,"
-        options += " [b]ackup, [B]ackup all"
-
         puts "File already exists: #{target}, what do you want to do?"
         puts options
+
         case STDIN.gets.chomp
         when 'o' then overwrite = true
         when 'b' then backup = true
