@@ -1,5 +1,5 @@
 cat <<EOF | pbcopy
-The MIT License
+(The MIT License)
 
 Copyright (c) `date +"%C%y"` Michael Hanson
 
