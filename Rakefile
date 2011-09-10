@@ -39,4 +39,8 @@ task :install do
     end
     `ln -s "$PWD/#{linkable}" "#{target}"`
   end
+
+  unless File.directory?("#{ENV["HOME"]}/.vim/undo")
+    Dir.mkdir("#{ENV["HOME"]}/.vim/undo")
+  end
 end
