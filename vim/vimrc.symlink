@@ -141,13 +141,6 @@
   endif
 
 
-" Automatically source the vimrc file after saving it.
-
-  if has("autocmd")
-    au bufwritepost .vimrc source $MYVIMRC
-  endif
-
-
 " Make it easy to call some commonly-used plugins.
 
   " NERDTree
