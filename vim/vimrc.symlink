@@ -159,7 +159,6 @@
 
     " These filetypes are not picky.
     au FileType gitconfig  setlocal ts=4 sts=4 sw=4
-    au FileType html       setlocal ts=3 sts=3 sw=3
     au FileType markdown   setlocal ts=4 sts=4 sw=4
   endif
 
