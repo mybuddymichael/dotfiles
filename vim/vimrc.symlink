@@ -56,7 +56,6 @@
   set incsearch                      " Highlight matches as you type.
   set ignorecase                     " Case-insensitive searching.
   set smartcase                      " But case-sensitive if expression contains capitals.
-  set spell                          " Use spell-checking.
   set spelllang=en_us                " U.S. English is the default language.
   set numberwidth=5                  " Line numbers are at least 5 characters wide.
   set cursorline                     " Show the cursor's line.
@@ -144,8 +143,8 @@
 " Some filetypes need some special settings.
 
   if has('autocmd')
-    au BufNewFile,BufRead *.rss  set filetype=xml
-    au BufNewFile,BufRead *.md   set filetype=markdown
+    au BufNewFile,BufRead *.rss  setlocal filetype=xml
+    au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
     au BufNewFile,BufRead .git/* setlocal textwidth=72
   endif
 
