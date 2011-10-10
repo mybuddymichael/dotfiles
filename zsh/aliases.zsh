@@ -27,6 +27,7 @@
   alias r=ruby
   alias rv='rbenv version'
   alias be='bundle exec'
+  alias beg='bundle exec guard'
   alias md5='openssl md5'
 
 
