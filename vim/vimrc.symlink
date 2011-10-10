@@ -57,6 +57,7 @@
   set ignorecase                     " Case-insensitive searching.
   set smartcase                      " But case-sensitive if expression contains capitals.
   set spelllang=en_us                " U.S. English is the default language.
+  set spellfile=$HOME/.vim/spell/en.utf-8.add    " Define where to store the spellfile
   set numberwidth=5                  " Line numbers are at least 5 characters wide.
   set cursorline                     " Show the cursor's line.
   set colorcolumn=80                 " Show a column at 80 so I don't overtype.
