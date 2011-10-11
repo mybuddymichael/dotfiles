@@ -21,7 +21,7 @@
 
 # Set my PATH(s).
 
-  export PATH=$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
+  export PATH=.:bin:$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
   fpath=($ZSH/functions $fpath)
   export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
 
