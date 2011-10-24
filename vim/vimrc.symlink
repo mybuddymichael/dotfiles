@@ -96,7 +96,6 @@
   nnoremap <c-j> <c-w>j
   nnoremap <c-k> <c-w>k
   nnoremap <c-l> <c-w>l
-  nnoremap <c-c> <c-w>c
 
 
 " Buffer switching is too tedious. Boom! Solved.
