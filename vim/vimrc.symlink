@@ -13,10 +13,54 @@
   set nocompatible
 
 
-" Load pathogen so that all the separate bundles are loaded.
+" Vundle! Manages your vim plugins. (See https://github.com/gmarik/vundle).
 
-  call pathogen#infect()
-  call pathogen#helptags()
+  filetype off
+
+  set rtp+=~/.vim/bundle/vundle
+  call vundle#rc()
+
+  " Load Vundle itself.
+  Bundle 'gmarik/vundle'
+
+  " Solarized colorscheme
+  Bundle 'altercation/vim-colors-solarized'
+
+  " Git stuff
+  Bundle 'tpope/vim-git'
+  Bundle 'tpope/vim-fugitive'
+
+  " Helpful tool plugins
+  Bundle 'scrooloose/nerdtree'
+  Bundle 'tpope/vim-commentary'
+  Bundle 'wincent/Command-T'
+  Bundle 'mybuddymichael/snipmate.vim'
+  Bundle 'Raimondi/delimitMate'
+  Bundle 'godlygeek/tabular'
+  Bundle 'ervandew/supertab'
+  Bundle 'sjl/gundo.vim'
+  Bundle 'tpope/vim-surround'
+  Bundle 'davidoc/taskpaper.vim'
+  Bundle 'tpope/vim-ragtag'
+  Bundle 'tpope/vim-endwise'
+  Bundle 'tpope/vim-repeat'
+  Bundle 'majutsushi/tagbar'
+  Bundle 'mybuddymichael/vim-hexhighlight'
+
+  " Languages-ish plugins
+  Bundle 'kchmck/vim-coffee-script'
+  Bundle 'vim-ruby/vim-ruby'
+  Bundle 'pangloss/vim-javascript'
+  Bundle 'groenewege/vim-less'
+  Bundle 'tpope/vim-haml'
+  Bundle 'juvenn/mustache.vim'
+  Bundle 'tpope/vim-rails'
+
+
+" Enable syntax highlighting and filetype detection.
+
+  syntax enable
+  filetype plugin indent on
 
 
 " Set my custom leader key and make some simple remaps for quicker commands.
@@ -25,12 +69,6 @@
   nnoremap <leader>q :q<cr>
   nnoremap ; :
   nnoremap \ ;
-
-
-" Enable syntax highlighting and filetype detection.
-
-  syntax enable
-  filetype plugin indent on
 
 
 " The colorscheme is Solarized, and I like things dark (like a submarine!).

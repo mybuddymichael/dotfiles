@@ -43,4 +43,6 @@ task :install do
   unless File.directory?("#{ENV["HOME"]}/.vim/undo")
     Dir.mkdir("#{ENV["HOME"]}/.vim/undo")
   end
+
+  `git submodule update --init`
 end
