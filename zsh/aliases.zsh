@@ -25,6 +25,7 @@
 
   alias m=mvim
   alias r=ruby
+  alias pow=powder
   alias rv='rbenv version'
   alias be='bundle exec'
   alias beg='bundle exec guard'
