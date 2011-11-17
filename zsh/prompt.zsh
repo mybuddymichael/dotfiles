@@ -15,7 +15,7 @@ git_prompt_untracked="%{$fg_bold[cyan]%}?%{$reset_color%}"
 rbenv_prompt=$'%{$fg[red]%}$(rbenv_prompt_info)%{$reset_color%}'
 git_prompt=$'%{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}'
 dir_prompt=$'%{$fg[cyan]%}%~%{$reset_color%}'
-prompt_prompt=$'%{$fg[cyan]%}\n⍟%{$reset_color%} '
+prompt_prompt=$'%{$fg[white]%}\n›%{$reset_color%} '
 
 PROMPT="$rbenv_prompt$git_prompt$dir_prompt$prompt_prompt"
 RPROMPT=$'%{$fg[black]%}%n@%m%{$reset_color%}'
