@@ -21,7 +21,7 @@ Session.vim
 doc/tags
 .netrwhist
 
-# Xcode
+## Xcode
 build/*
 *.pbxuser
 !default.pbxuser
@@ -36,3 +36,6 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+
+## Pow
+.powenv
