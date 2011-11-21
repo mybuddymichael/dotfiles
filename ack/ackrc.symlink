@@ -1,0 +1,15 @@
+--type-add
+ruby=.slim,.haml,.builder,.rake
+--type-add
+css=.sass,.scss
+--type-add
+js=.coffee
+--type-set
+markdown=.markdown,.md,.mdown
+--type-set
+rdoc=.rdoc
+--ruby
+--css
+--js
+--markdown
+--objc
