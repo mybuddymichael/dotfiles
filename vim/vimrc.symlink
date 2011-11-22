@@ -23,17 +23,20 @@
   " Load Vundle itself.
   Bundle 'gmarik/vundle'
 
-  " Solarized colorscheme
+  " Colors
   Bundle 'altercation/vim-colors-solarized'
+  Bundle 'sr/Mustang2'
 
-  " Git stuff
+  " Essentials
   Bundle 'tpope/vim-git'
   Bundle 'tpope/vim-fugitive'
+  Bundle 'mileszs/ack.vim'
+  Bundle 'scrooloose/nerdtree'
+  Bundle 'wincent/Command-T'
 
   " Helpful tool plugins
-  Bundle 'scrooloose/nerdtree'
+  " Bundle 'skwp/greplace.vim'
   Bundle 'tpope/vim-commentary'
-  Bundle 'wincent/Command-T'
   Bundle 'mybuddymichael/snipmate.vim'
   Bundle 'Raimondi/delimitMate'
   Bundle 'godlygeek/tabular'
@@ -42,6 +45,7 @@
   Bundle 'tpope/vim-surround'
   Bundle 'davidoc/taskpaper.vim'
   Bundle 'tpope/vim-ragtag'
+  " Bundle 'mybuddymichael/vim-ragtag'
   Bundle 'tpope/vim-endwise'
   Bundle 'tpope/vim-repeat'
   Bundle 'majutsushi/tagbar'
@@ -55,6 +59,8 @@
   Bundle 'tpope/vim-haml'
   Bundle 'juvenn/mustache.vim'
   Bundle 'tpope/vim-rails'
+  Bundle 'hallison/vim-ruby-sinatra'
+  Bundle 'bbommarito/vim-slim'
 
 
 " Enable syntax highlighting and filetype detection.
