@@ -55,7 +55,15 @@
 
 # Set some default options.
 
+  HISTFILE=~/.zsh_history
+  HISTSIZE=10000
+  SAVEHIST=10000
+
   setopt correct_all
   setopt ignore_eof
   setopt auto_list
   setopt no_list_beep
+  setopt hist_verify
+  setopt hist_ignore_space
+  setopt inc_append_history
+  setopt share_history
