@@ -17,7 +17,7 @@ node_prompt=$'%{$fg[green]%}$(node_prompt_info)%{$reset_color%} '
 coffee_prompt=$'%{$fg[yellow]%}$(coffeescript_prompt_info)%{$reset_color%} '
 git_prompt=$'%{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}'
 dir_prompt=$'%{$fg[cyan]%}%~%{$reset_color%}'
-prompt_prompt=$'%{$fg[white]%}\n›%{$reset_color%} '
+prompt_prompt=$'%{$fg[black]%}\n›%{$reset_color%} '
 
 PROMPT="$rbenv_prompt$node_prompt$coffee_prompt$git_prompt$dir_prompt$prompt_prompt"
-RPROMPT=$'%{$fg[black]%}%n@%m%{$reset_color%}'
+RPROMPT=$'%{$fg[white]%}%n@%m%{$reset_color%}'
