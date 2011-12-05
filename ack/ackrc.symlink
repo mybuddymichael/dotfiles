@@ -1,5 +1,5 @@
 --type-add
-ruby=.slim,.haml,.builder,.rake
+ruby=.erb,.slim,.haml,.builder,.rake
 --type-add
 css=.sass,.scss,.less
 --type-add
