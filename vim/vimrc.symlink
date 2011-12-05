@@ -254,9 +254,16 @@
   let g:SuperTabLongestEnhanced = 1
 
   " CoffeeScript
-  " if has("autocmd")
-  "    au BufWritePost *.coffee silent CoffeeMake! | cwindow | redraw!
-  " endif
+  func! CheckForRackUp()
+    if filereadable('config.ru')
+    else
+      if has("autocmd")
+        silent CoffeeMake! | cwindow | redraw!
+      endif
+    endif
+  endfunc
+
+  au BufWritePost *.coffee call CheckForRackUp()
 
   " HexHighlight
   nmap <leader>hh :call HexHighlight()<cr>
