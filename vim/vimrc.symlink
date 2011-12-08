@@ -237,6 +237,9 @@
   let g:CommandTMatchWindowReverse = 1
   let g:CommandTScanDotDirectories = 1
   let g:CommandTMaxHeight = 10
+  if has('autocmd')
+    au FocusGained * :CommandTFlush
+  endif
 
   " Tabularize
   nmap <leader>a=  :Tabularize /=<cr>
