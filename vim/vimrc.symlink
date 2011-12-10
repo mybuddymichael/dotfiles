@@ -257,12 +257,17 @@
   let g:SuperTabLongestEnhanced = 1
 
   " CoffeeScript
+  let g:CoffeeCompile=0
   func! CheckForRackUp()
-    if filereadable('config.ru')
-    else
-      if has("autocmd")
-        silent CoffeeMake! | cwindow | redraw!
+    if g:CoffeeCompile==0
+      if filereadable('config.ru')
+      else
+        if has("autocmd")
+          silent CoffeeMake! | cwindow | redraw!
+        endif
       endif
+    else
+      silent CoffeeMake! | cwindow | redraw!
     endif
   endfunc
 
