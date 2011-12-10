@@ -80,7 +80,7 @@
 " The colorscheme is Solarized, and I like things dark (like a submarine!).
 " Solarized can be toggled by hitting <F5>.
 
-  set background=light
+  set background=dark
   colorscheme solarized
   call togglebg#map("<F5>")
 
