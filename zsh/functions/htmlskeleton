@@ -2,9 +2,10 @@ cat <<EOF | pbcopy
 <!doctype html>
 <html>
   <head>
-    <meta charset=utf-8>
+    <meta charset='utf-8' />
     <title></title>
-    <link href='' rel='stylesheet' type='text/css'>
+    <link href='' rel='stylesheet' type='text/css' />
+    <script src=''></script>
   </head>
   <body>
   </body>
