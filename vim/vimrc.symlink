@@ -229,6 +229,9 @@
 
 " Make it easy to call some commonly-used plugins.
 
+  " Powerline
+  let g:Powerline_symbols='fancy'
+
   " NERDTree
   nmap <leader>n :NERDTreeToggle<cr>
   let NERDTreeShowHidden = 1
