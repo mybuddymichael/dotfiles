@@ -33,6 +33,7 @@
   Bundle 'mileszs/ack.vim'
   Bundle 'scrooloose/nerdtree'
   Bundle 'wincent/Command-T'
+  Bundle 'Lokaltog/vim-powerline'
 
   " Helpful tool plugins
   " Bundle 'skwp/greplace.vim'
