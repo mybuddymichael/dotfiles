@@ -36,7 +36,6 @@
   Bundle 'Lokaltog/vim-powerline'
 
   " Helpful tool plugins
-  " Bundle 'skwp/greplace.vim'
   Bundle 'tpope/vim-commentary'
   Bundle 'mybuddymichael/snipmate.vim'
   Bundle 'Raimondi/delimitMate'
@@ -44,12 +43,9 @@
   Bundle 'ervandew/supertab'
   Bundle 'sjl/gundo.vim'
   Bundle 'tpope/vim-surround'
-  Bundle 'davidoc/taskpaper.vim'
   Bundle 'tpope/vim-ragtag'
-  " Bundle 'mybuddymichael/vim-ragtag'
   Bundle 'tpope/vim-endwise'
   Bundle 'tpope/vim-repeat'
-  Bundle 'majutsushi/tagbar'
   Bundle 'mybuddymichael/vim-hexhighlight'
 
   " Languages-ish plugins
@@ -60,8 +56,12 @@
   Bundle 'tpope/vim-haml'
   Bundle 'juvenn/mustache.vim'
   Bundle 'tpope/vim-rails'
-  Bundle 'hallison/vim-ruby-sinatra'
-  Bundle 'bbommarito/vim-slim'
+
+  " Old, but may be useful someday.
+  " Bundle 'mybuddymichael/vim-ragtag'
+  " Bundle 'davidoc/taskpaper.vim'
+  " Bundle 'scrooloose/syntastic'
+  " Bundle 'majutsushi/tagbar'
 
 
 " Enable syntax highlighting and filetype detection.
