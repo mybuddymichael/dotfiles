@@ -44,10 +44,10 @@
   fi
 
 
-# And set the editor as MacVim if available, vim if not.
+# And set the editor as Sublime Text 2 if available, vim if not.
 
-  if hash mvim &> /dev/null; then
-    export EDITOR='mvim -f --nomru -c "au VimLeave * !open -a iTerm"'
+  if hash subl &> /dev/null; then
+    export EDITOR='subl -w'
   else
     export EDITOR=vim
   fi
