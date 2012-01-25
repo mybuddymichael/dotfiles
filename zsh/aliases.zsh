@@ -23,6 +23,13 @@
 
 # Establish some shortcuts for frequently-used programs.
 
+  e() {
+    if [[ $1 == '-n' ]]; then
+      subl -n ${2:-'.'}
+    else
+      subl ${1:-'.'}
+    fi
+  }
   alias m=mvim
   alias r=ruby
   alias pow=powder
