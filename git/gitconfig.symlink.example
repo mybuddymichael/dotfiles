@@ -1,6 +1,26 @@
 [user]
 	name = Michael Hanson
 	email = Michael@Hal
+[core]
+  excludesfile = ~/.gitignore_global
+  editor = subl
+[url "https://github.com/"]
+  insteadOf = "gh:"
+[diff]
+  wordRegex = [^[:space:]]
+[alias]
+	st = status
+	ci = commit
+	br = branch
+	tag = tag -a
+	co = checkout
+	up = pull --tags origin master
+	pu = push origin
+	# log = log --topo-order --decorate
+	addp = add --patch
+	mr = merge --no-ff
+	unstage = reset HEAD
+	grep = grep -n
 [color]
 	ui = auto
 [color "branch"]
@@ -17,20 +37,3 @@
 	added = green
 	changed = yellow
 	untracked = cyan
-[alias]
-	st = status
-	ci = commit
-	br = branch
-	tag = tag -a
-	co = checkout
-	up = pull --tags origin master
-	pu = push origin
-	# log = log --topo-order --decorate
-	addp = add --patch
-	mr = merge --no-ff
-	unstage = reset HEAD
-	grep = grep -n
-[core]
-	excludesfile = ~/.gitignore_global
-[url "https://github.com/"]
-	insteadOf = "gh:"
