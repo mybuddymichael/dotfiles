@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Install Homebrew and some programs.
 
@@ -23,3 +23,8 @@ brew install rbenv
 brew install ruby-build
 brew install sqlite
 brew install tree
+
+# NPM
+curl http://npmjs.org/install.sh | sh
+
+npm install -g coffee-script
