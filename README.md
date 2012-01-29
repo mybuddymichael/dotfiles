@@ -23,10 +23,6 @@ Much credit is due to [Robby Russell] and the [oh-my-zsh] team for creating a
 Also, [Zach Holman] has some great stuff in [his dotfiles repo], some of which
 is borrowed here, and all of which is worth checking out.
 
-## License
-
-Copyright © 2011 Michael Hanson; see LICENSE.
-
 
 [Robby Russell]: https://github.com/robbyrussell
 [oh-my-zsh]: https://github.com/robbyrussell/oh-my-zsh
