@@ -17,8 +17,9 @@
 
   alias la='ls -alh'
   alias t='tree -aC'
-  alias mv='mv -iv'
-  alias cp='cp -iv'
+  alias mv='nocorrect mv -iv'
+  alias cp='nocorrect cp -iv'
+  alias mkdir='nocorrect mkdir'
 
 
 # Establish some shortcuts for frequently-used programs.
