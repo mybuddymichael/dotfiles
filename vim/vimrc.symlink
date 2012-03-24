@@ -29,9 +29,7 @@
 
   " Essentials
   Bundle 'tpope/vim-git'
-  Bundle 'tpope/vim-fugitive'
   Bundle 'mileszs/ack.vim'
-  Bundle 'scrooloose/nerdtree'
   Bundle 'wincent/Command-T'
   Bundle 'Lokaltog/vim-powerline'
 
@@ -43,19 +41,12 @@
   Bundle 'ervandew/supertab'
   Bundle 'sjl/gundo.vim'
   Bundle 'tpope/vim-surround'
-  Bundle 'tpope/vim-ragtag'
   Bundle 'tpope/vim-endwise'
-  Bundle 'tpope/vim-repeat'
-  Bundle 'mybuddymichael/vim-hexhighlight'
 
   " Languages-ish plugins
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'vim-ruby/vim-ruby'
-  Bundle 'pangloss/vim-javascript'
-  Bundle 'groenewege/vim-less'
   Bundle 'tpope/vim-haml'
-  Bundle 'juvenn/mustache.vim'
-  Bundle 'tpope/vim-rails'
 
   " Old, but may be useful someday.
   " Bundle 'mybuddymichael/vim-ragtag'
