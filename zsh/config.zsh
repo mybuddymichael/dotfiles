@@ -19,11 +19,23 @@
   export PROJECTS=~/Projects
 
 
-# Set my PATH(s).
+# Set some PATH(s).
 
-  export PATH=.:bin:$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH
+  export PATH="$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
   fpath=($ZSH/functions $fpath)
-  export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
+  export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
+
+
+# Add rbenv to PATH.
+
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  if hash rbenv &> /dev/null; then
+    eval "$(rbenv init -)"
+  fi
+
+
+# Add `.` and `bin` to the front of PATH.
+  export PATH=".:bin:$PATH"
 
 
 # Load custom functions and completions.
@@ -34,14 +46,6 @@
 # Source the super-secret .localrc file if it's there.
 
   [[ -s ~/.localrc ]] && source ~/.localrc
-
-
-# Add rbenv to PATH.
-
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  if hash rbenv &> /dev/null; then
-    eval "$(rbenv init -)"
-  fi
 
 
 # And set the editor as Sublime Text 2 if available, vim if not.
