@@ -24,7 +24,7 @@
 
 # Establish some shortcuts for frequently-used programs.
 
-  e() {
+  function e() {
     if [[ $1 == '-n' ]]; then
       subl -n ${2:-'.'}
     else
