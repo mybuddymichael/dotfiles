@@ -16,7 +16,7 @@
 # Custom program modifications.
 
   alias la='ls -alh'
-  alias t='tree -aC'
+  alias t='tree -aC -I .git'
   alias mv='nocorrect mv -iv'
   alias cp='nocorrect cp -iv'
   alias mkdir='nocorrect mkdir'
