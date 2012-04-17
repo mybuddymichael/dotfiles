@@ -1,0 +1,15 @@
+[
+  {
+    "keys": ["super+alt+i", "s"],
+    "command": "set_setting",
+    "args": { "setting": "draw_white_space", "value": "selection" }
+  },
+  {
+    "keys": ["super+alt+i", "a"],
+    "command": "set_setting",
+    "args": { "setting": "draw_white_space", "value": "all" }
+  },
+  { "keys": ["super+k", "super+l"],
+    "command": "toggle_setting",
+    "args": {"setting": "line_numbers"} }
+]

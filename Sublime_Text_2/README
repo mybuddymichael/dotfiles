@@ -1,0 +1,1 @@
+ln -s $HOME/.dotfiles/Sublime_Text_2 $HOME/Library/Application\ Support/Sublime\ Text\ 2/Packages/User

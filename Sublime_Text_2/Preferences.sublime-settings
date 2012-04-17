@@ -1,0 +1,30 @@
+{
+	"auto_complete_commit_on_tab": true,
+	"auto_complete_with_fields": true,
+	"caret_style": "phase",
+	"color_scheme": "Packages/Color Scheme - Default/Monokai Bright.tmTheme",
+	"ensure_newline_at_eof_on_save": true,
+	"font_size": 12.0,
+	"highlight_line": true,
+	"highlight_modified_tabs": true,
+	"ignored_packages":
+	[
+		"WordCount"
+	],
+	"indent_guide_options":
+	[
+		"draw_normal",
+		"draw_active"
+	],
+	"line_numbers": false,
+	"rulers":
+	[
+		72,
+		79
+	],
+	"show_tab_close_buttons": false,
+	"tab_size": 2,
+	"translate_tabs_to_spaces": true,
+	"trim_trailing_white_space_on_save": true,
+	"vintage_start_in_command_mode": true
+}

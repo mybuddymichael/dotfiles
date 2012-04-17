@@ -1,0 +1,13 @@
+{
+	"auto_upgrade_last_run": 1334635745,
+	"installed_packages":
+	[
+		"CoffeeScript",
+		"Git",
+		"Package Control",
+		"SCSS",
+		"SublimeClang",
+		"SublimeLinter",
+		"WordCount"
+	]
+}
