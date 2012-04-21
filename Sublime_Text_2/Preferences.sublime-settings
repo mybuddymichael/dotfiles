@@ -1,5 +1,6 @@
 {
 	"auto_complete_commit_on_tab": true,
+	"auto_complete_delay": 0,
 	"auto_complete_with_fields": true,
 	"caret_style": "phase",
 	"color_scheme": "Packages/Color Scheme - Default/Monokai Bright.tmTheme",
