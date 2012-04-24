@@ -1,7 +1,8 @@
 {
-	"auto_upgrade_last_run": 1334981383,
+	"auto_upgrade_last_run": 1335243352,
 	"installed_packages":
 	[
+		"AutoFileName",
 		"CoffeeScript",
 		"Git",
 		"Package Control",
