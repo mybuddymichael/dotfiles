@@ -30,7 +30,8 @@
   " Essentials
   Bundle 'tpope/vim-git'
   Bundle 'mileszs/ack.vim'
-  Bundle 'wincent/Command-T'
+  " Bundle 'wincent/Command-T'
+  Bundle 'kien/ctrlp.vim'
   Bundle 'Lokaltog/vim-powerline'
 
   " Helpful tool plugins
