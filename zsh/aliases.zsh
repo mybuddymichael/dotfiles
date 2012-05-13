@@ -20,6 +20,7 @@
   alias mv='nocorrect mv -iv'
   alias cp='nocorrect cp -iv'
   alias mkdir='nocorrect mkdir'
+  alias rake='noglob rake'
 
 
 # Establish some shortcuts for frequently-used programs.
