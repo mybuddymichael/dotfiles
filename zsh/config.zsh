@@ -14,11 +14,6 @@
   export LSCOLORS=Exfxbxdxcxegedabagacad
 
 
-# My projects directory used for tab-completion.
-
-  export PROJECTS=~/Projects
-
-
 # Set some PATH(s).
 
   export PATH="$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
@@ -48,14 +43,18 @@
   [[ -s ~/.localrc ]] && source ~/.localrc
 
 
-# And set the editor as Sublime Text 2 if available, vim if not.
+# And set the editor as Vim
+  export EDITOR=vim
 
-  if hash subl &> /dev/null; then
-    export EDITOR='subl -w'
-  else
-    export EDITOR=vim
-  fi
+# Allow the delete key to work as intended rather than insert tildes.
 
+bindkey    "^[[3~"          delete-char
+bindkey    "^[3;5~"         delete-char
+
+# Allow the Home and End keys to work.
+
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
 
 # Set some default options.
 
