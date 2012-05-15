@@ -43,9 +43,18 @@
   [[ -s ~/.localrc ]] && source ~/.localrc
 
 
-# And set the editor as Sublime Text 2 if available, vim if not.
+# And set the editor as Vim
   export EDITOR=vim
 
+# Allow the delete key to work as intended rather than insert tildes.
+
+bindkey    "^[[3~"          delete-char
+bindkey    "^[3;5~"         delete-char
+
+# Allow the Home and End keys to work.
+
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
 
 # Set some default options.
 
