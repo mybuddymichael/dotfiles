@@ -1,7 +1,7 @@
 autoload colors && colors
 setopt PROMPT_SUBST
 
-smiley="%(?,%{$fg[green]%}☺%{$reset_color%},%{$fg[red]%}☹%{$reset_color%})"
+smiley="%(?,%{$fg[green]%}›%{$reset_color%},%{$fg[red]%}›%{$reset_color%})"
 
 git_prefix=''
 git_suffix=' '
