@@ -5,8 +5,8 @@ My dotfiles and home-folder bin/ directory.
 
 ## Installation
 
-    git clone git://github.com/mybuddymichael/dotfiles.git ~/.dotfiles
-    cd ~/.dotfiles
+    git clone git://github.com/mybuddymichael/dotfiles.git ~/Dotfiles
+    cd ~/Dotfiles
     rake
 
 This will symlink everything with a `.symlink` extension into $HOME.

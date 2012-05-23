@@ -44,7 +44,7 @@ task :install do
     Dir.mkdir("#{ENV["HOME"]}/.vim/undo")
   end
 
-  FileUtils.ln_sf("#{ENV['HOME']}/.dotfiles/Sublime_Text_2",
+  FileUtils.ln_sf("#{ENV['HOME']}/Dotfiles/Sublime_Text_2",
     "#{ENV["HOME"]}/Library/Application Support/Sublime Text 2/Packages/User")
 
   `git submodule update --init`
