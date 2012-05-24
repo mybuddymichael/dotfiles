@@ -1,6 +1,6 @@
 export ZSH="$HOME/Dotfiles/zsh"
 
-for config_file ("$ZSH/**/*.zsh") source "$config_file"
+for config_file ($ZSH/**/*.zsh) source "$config_file"
 
 autoload -U compinit
 compinit
