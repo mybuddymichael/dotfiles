@@ -57,3 +57,4 @@
   alias gb='git branch'
   alias gco='git checkout'
   alias gsub='git submodule'
+  alias grbi='git rebase -i HEAD~10'
