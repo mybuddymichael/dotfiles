@@ -1,0 +1,14 @@
+#!/bin/sh
+
+breakchars="(){}[],^%$#@\"\";:''|\\"
+
+CLOJURE_DIR=~/clojure
+CLOJURE_JAR="$CLOJURE_DIR"/clojure.jar
+
+if [ $# -eq 0 ]; then
+  exec rlwrap --remember -c -b "$breakchars" \
+    -f "$HOME"/.clj_completions \
+    /usr/local/bin/clj
+else
+  exec /usr/local/bin/clj $1 -- "$@"
+fi
