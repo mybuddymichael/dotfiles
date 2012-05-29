@@ -10,7 +10,7 @@
 
 # Make reloading the shell easier.
 
-  alias reload=". $HOME/.zshrc"
+  alias reload="source $HOME/.zshrc"
 
 
 # Custom program modifications.
