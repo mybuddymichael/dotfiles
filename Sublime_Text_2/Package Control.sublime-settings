@@ -1,5 +1,5 @@
 {
-	"auto_upgrade_last_run": 1337690277,
+	"auto_upgrade_last_run": 1338604590,
 	"installed_packages":
 	[
 		"AutoFileName",
@@ -11,6 +11,8 @@
 		"SublimeClang",
 		"SublimeHaskell",
 		"SublimeLinter",
+		"Theme - Nil",
+		"Theme - Soda Refined",
 		"WordCount"
 	]
 }
