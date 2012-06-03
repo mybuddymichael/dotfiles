@@ -1,3 +1,4 @@
 *gitconfig.symlink
 /vim/vim.symlink/bundle
 !/vim/vim.symlinks/bundle/vundle
+*.tmTheme.cache
