@@ -3,7 +3,7 @@
 	"auto_complete_delay": 0,
 	"auto_complete_with_fields": true,
 	"caret_style": "phase",
-	"color_scheme": "Packages/Color Scheme - Default/Monokai Bright.tmTheme",
+	"color_scheme": "Packages/User/Solarized (dark).tmTheme",
 	"ensure_newline_at_eof_on_save": true,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
