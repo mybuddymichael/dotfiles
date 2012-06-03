@@ -43,7 +43,7 @@
 
 # Set several Git-related shortcuts.
 
-  if hash hub &> /dev/null; then; function git(){hub "$@"}; fi
+  if hash hub &> /dev/null; then; function git() {hub "$@"}; fi
   alias gs='git status'
   alias gss='git status --short --branch'
   alias gl='git log --decorate --all'
