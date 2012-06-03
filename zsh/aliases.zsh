@@ -53,6 +53,7 @@
   alias gpom='git push origin master'
   alias gd='git diff'
   alias gdc='git diff --cached'
+  alias gdw='git diff --color-words'
   alias gc='git commit'
   alias gb='git branch'
   alias gco='git checkout'
