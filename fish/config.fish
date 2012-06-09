@@ -52,6 +52,12 @@
 
   function fish_prompt -d 'Write out the prompt'
 
+    # This has to be first in this function or it won't work.
+    if test $status -gt 0
+      set __fish_prompt_symbol (set_color red)› (set_color normal)
+    else
+      set __fish_prompt_symbol (set_color green)› (set_color normal) ; end
+
     # Just calculate these once, to save a few cycles when displaying the prompt
     if not set -q __fish_prompt_hostname
       set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
@@ -71,6 +77,7 @@
         else
           set -g __fish_prompt_cwd (set_color $fish_color_cwd)
         end
+
       end
 
       echo -n -s "$USER" @ "$__fish_prompt_hostname" ' ' "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" '# '
@@ -81,11 +88,10 @@
         set -g __fish_prompt_cwd (set_color $fish_color_cwd)
       end
 
-      echo -n -s "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" \n'› '
+      echo -n -s (git_prompt_info) "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" \n "$__fish_prompt_symbol"
 
     end
   end
-
 
 
 # Aliases.
@@ -146,3 +152,12 @@
     git diff --color-words $argv ; end
   function grbi
     git rebase -i HEAD~10 $argv ; end
+
+
+  # Git helpers
+  # ===========
+
+  function git_prompt_info
+    if test -d .git
+      set ref (git symbolic-ref HEAD | sed 's/refs\/heads\///' ^/dev/null)
+      echo -n -s (set_color magenta) $ref ' ' (set_color normal) ; end ; end
