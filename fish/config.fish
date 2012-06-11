@@ -98,8 +98,15 @@
 # ========
 
   function reload
-    . ~/.config/fish/config.fish
-  end
+    . ~/.config/fish/config.fish ; end
+
+  function c
+    cd ~/Dropbox/Projects/$argv[1] ; end
+  complete -x -c c -a "(ls -a ~/Projects)" -d "Directory in ~/Projects"
+
+  function h
+    cd ~/$argv ; end
+  complete -x -c h -A -a "(ls -a ~)" -d "Directory in ~"
 
 
 # Custom program modifications.
@@ -111,17 +118,23 @@
   function cp
     cp -iv $argv; end
 
+
+# Shortcut for editing with Sublime.
+
   function e -d 'Edit a directory or file in Sublime'
-    if test $argv[1] = '-n'
-      if test -n $argv[2]
-        subl -n $argv[2]
+    if test $argv
+      if test $argv[1] = '-n'
+        if test $argv[2]
+          subl -n $argv[2]
+        else
+          subl -n . ; end
       else
-        subl . ; end
+        subl $argv ; end
     else
-      if test -n $argv[1]
-        subl $argv[1]
-      else
-        subl . ; end ; end ; end
+      subl . ; end ; end
+
+
+# Git aliases.
 
   if type hub >/dev/null ^&1
     function git
@@ -154,10 +167,65 @@
     git rebase -i HEAD~10 $argv ; end
 
 
-  # Git helpers
-  # ===========
+# Git helpers
+# ===========
+
+# Helping variables.
+
+  set git_prompt_clean (set_color green) ✔ (set_color normal)
+  set git_prompt_dirty (set_color red) ✘ (set_color normal)
+  set git_prompt_added (set_color green) ✝ (set_color normal)
+  set git_prompt_modified (set_color yellow) ⚑ (set_color normal)
+  set git_prompt_deleted (set_color red) x (set_color normal)
+  set git_prompt_renamed (set_color blue) ➜ (set_color normal)
+  set git_prompt_unmerged (set_color red) ═ (set_color normal)
+  set git_prompt_untracked (set_color cyan) ? (set_color normal)
+
+
+# Functions.
 
   function git_prompt_info
-    if test -d .git
-      set ref (git symbolic-ref HEAD | sed 's/refs\/heads\///' ^/dev/null)
-      echo -n -s (set_color magenta) $ref ' ' (set_color normal) ; end ; end
+    git rev-parse --git-dir >/dev/null ^&1; or return
+    set branch (git symbolic-ref HEAD | sed 's/refs\/heads\///' ^/dev/null)
+    echo -n -s (set_color magenta) $branch:(parse_git_status) (parse_repo_status) ' ' (set_color normal) ; end
+
+  function parse_git_status
+    set git_status (git status -s ^/dev/null)
+    if test -n "$git_status"
+      echo -n -s $git_prompt_dirty
+    else
+      echo -n -s $git_prompt_clean ; end ; end
+
+  function parse_repo_status
+    set status_index (git status --porcelain ^/dev/null)
+    set repo_status ''
+    echo $status_index | grep '^?? ' >/dev/null ^&1
+      and set repo_status $git_prompt_untracked$repo_status
+  #   fi
+  #   if $(echo "$status_index" | grep '^A  ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_added$repo_status"
+  #   elif $(echo "$status_index" | grep '^M  ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_added$repo_status"
+    echo $status_index | grep '^MM ' >/dev/null ^&1
+      and set repo_status $git_prompt_added$repo_status
+    echo $status_index | grep '^ M ' >/dev/null ^&1
+      and set repo_status $git_prompt_modified$repo_status
+  #   elif $(echo "$status_index" | grep '^AM ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_modified$repo_status"
+  #   elif $(echo "$status_index" | grep '^ T ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_modified$repo_status"
+  #   elif $(echo "$status_index" | grep '^MM ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_modified$repo_status"
+  #   fi
+  #   if $(echo "$status_index" | grep '^R  ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_renamed$repo_status"
+  #   fi
+  #   if $(echo "$status_index" | grep '^D  ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_deleted$repo_status"
+  #   elif $(echo "$status_index" | grep '^AD ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_deleted$repo_status"
+  #   fi
+  #   if $(echo "$status_index" | grep '^UU ' >/dev/null ^&1); then
+  #     repo_status="$git_prompt_unmerged$repo_status"
+  #   fi
+    echo $repo_status ; end
