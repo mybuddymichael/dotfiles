@@ -47,7 +47,8 @@
   alias gs='git status'
   alias gss='git status --short --branch'
   alias gl='git log --decorate --all'
-  alias glo='git log --oneline --decorate --graph --all'
+  # alias glo='git log --oneline --decorate --graph --all'
+  alias glo="git log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
   alias ga='git add'
   alias gpo='git push origin'
   alias gpom='git push origin master'
