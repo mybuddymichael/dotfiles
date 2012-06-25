@@ -24,7 +24,6 @@
   export PATH="$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
   fpath=($ZSH/functions /usr/local/share/zsh/site-functions $fpath)
   export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
-  export CLASSPATH="$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.2.0/clojure-contrib.jar"
 
 
 # Add rbenv to PATH.
