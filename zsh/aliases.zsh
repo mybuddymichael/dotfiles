@@ -28,6 +28,8 @@
   function e() {
     if [[ $1 == '-n' ]]; then
       subl -n ${2:-'.'}
+    elif [[ $1 == '-a' ]]; then
+      subl -a ${2:-'.'}
     else
       subl ${1:-'.'}
     fi
