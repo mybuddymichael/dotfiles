@@ -27,7 +27,7 @@
 	<key>Control</key>
 	<integer>1</integer>
 	<key>CopyLastNewline</key>
-	<false/>
+	<true/>
 	<key>CopySelection</key>
 	<true/>
 	<key>CursorType</key>
@@ -1305,7 +1305,7 @@
 			<key>Tags</key>
 			<array/>
 			<key>Terminal Type</key>
-			<string>xterm</string>
+			<string>xterm-256color</string>
 			<key>Transparency</key>
 			<real>0.078070446848869324</real>
 			<key>Triggers</key>
@@ -5986,7 +5986,7 @@
 	<key>PassOnControlClick</key>
 	<false/>
 	<key>PasteFromClipboard</key>
-	<true/>
+	<false/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
@@ -6039,7 +6039,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2012-06-08T05:06:41Z</date>
+	<date>2012-06-24T20:25:50Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
