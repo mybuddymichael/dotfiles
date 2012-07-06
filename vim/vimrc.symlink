@@ -25,7 +25,6 @@
 
   " Colors
   Bundle 'altercation/vim-colors-solarized'
-  Bundle 'sr/Mustang2'
 
   " Essentials
   Bundle 'tpope/vim-git'
@@ -48,6 +47,7 @@
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'tpope/vim-haml'
+  Bundle "vim-scripts/VimClojure"
 
   " Old, but may be useful someday.
   " Bundle 'mybuddymichael/vim-ragtag'
