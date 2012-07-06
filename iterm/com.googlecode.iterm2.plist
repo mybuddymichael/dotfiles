@@ -486,7 +486,7 @@
 	<key>HideScrollbar</key>
 	<true/>
 	<key>HideTab</key>
-	<false/>
+	<true/>
 	<key>HighlightTabLabels</key>
 	<true/>
 	<key>HotKeyBookmark</key>
@@ -657,9 +657,9 @@
 	<key>NSWindow Frame Preferences</key>
 	<string>259 693 924 485 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1198 10 717 1168 0 0 1920 1178 </string>
+	<string>1198 4 717 1174 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>275 10 640 1168 0 0 1920 1178 </string>
+	<string>275 24 717 1146 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
 	<string>1120 598 794 580 0 0 1920 1178 </string>
 	<key>New Bookmarks</key>
@@ -6039,7 +6039,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2012-06-24T20:25:50Z</date>
+	<date>2012-06-30T22:32:33Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
