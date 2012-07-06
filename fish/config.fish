@@ -172,14 +172,14 @@
 
 # Helping variables.
 
-  set git_prompt_clean (set_color green) ✔ (set_color normal)
-  set git_prompt_dirty (set_color red) ✘ (set_color normal)
-  set git_prompt_added (set_color green) ✝ (set_color normal)
-  set git_prompt_modified (set_color yellow) ⚑ (set_color normal)
-  set git_prompt_deleted (set_color red) x (set_color normal)
-  set git_prompt_renamed (set_color blue) ➜ (set_color normal)
-  set git_prompt_unmerged (set_color red) ═ (set_color normal)
-  set git_prompt_untracked (set_color cyan) ? (set_color normal)
+  set git_prompt_clean (set_color green) "✔" (set_color normal)
+  set git_prompt_dirty (set_color red) "" (set_color normal)
+  set git_prompt_added (set_color green) "✝" (set_color normal)
+  set git_prompt_modified (set_color yellow) "⚑" (set_color normal)
+  set git_prompt_deleted (set_color red) "x" (set_color normal)
+  set git_prompt_renamed (set_color blue) "➜" (set_color normal)
+  set git_prompt_unmerged (set_color red) "═" (set_color normal)
+  set git_prompt_untracked (set_color cyan) "?" (set_color normal)
 
 
 # Functions.
