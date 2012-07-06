@@ -1,0 +1,16 @@
+set -g default-terminal "xterm-256color"
+set -g history-limit 20000
+
+unbind-key C-b
+set-option -g prefix C-Space
+bind C-Space send-prefix
+
+set-option -g base-index 1
+
+setw -g mode-keys vi
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+set-option -s escape-time 10
+
