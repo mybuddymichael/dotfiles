@@ -62,6 +62,13 @@
   filetype plugin indent on
 
 
+" Deal with speed issues.
+
+  set notimeout
+  set ttimeout
+  set timeoutlen=50
+
+
 " Set my custom leader key and make some simple remaps for quicker commands.
 
   let mapleader=","
