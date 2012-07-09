@@ -48,13 +48,9 @@
   [[ -s ~/.localrc ]] && source ~/.localrc
 
 
-# And set the editor as Sublime Text 2 if available, vim if not.
+# Set the editor to vim.
 
-  if hash subl &> /dev/null; then
-    export EDITOR='subl -w'
-  else
-    export EDITOR=vim
-  fi
+  export EDITOR=vim
 
 
 # Set some default options.
