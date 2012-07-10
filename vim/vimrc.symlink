@@ -103,22 +103,6 @@
   set ts=2 sts=2 sw=2 expandtab      " Default setting for tabs (2 spaces).
 
 
-" Set the statusline to something useful and informative.
-
-  set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}\ %=%-26(\ 
-                 \%l\/%c\/%L\ %)%p
-
-
-" Create a key-mapping for quick editing of the vimrc.
-
-  nnoremap <leader>z :e $MYVIMRC<cr>
-
-
-" Make it easy to escape insert mode by pressing 'jj'.
-
-  inoremap jj <esc>
-
-
 " Make window switching super-easy by setting some simple key remaps.
 
   nnoremap <c-h> <c-w>h
