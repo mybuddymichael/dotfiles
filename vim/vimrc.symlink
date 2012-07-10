@@ -21,39 +21,23 @@
   call vundle#rc()
 
   " Load Vundle itself.
-  Bundle 'gmarik/vundle'
+  Bundle "gmarik/vundle"
 
-  " Colors
-  Bundle 'altercation/vim-colors-solarized'
+  " Solarized
+  Bundle "altercation/vim-colors-solarized"
 
-  " Essentials
-  Bundle 'tpope/vim-git'
-  Bundle 'mileszs/ack.vim'
-  " Bundle 'wincent/Command-T'
-  Bundle 'kien/ctrlp.vim'
-  Bundle 'Lokaltog/vim-powerline'
+  " Tim Pope
+  Bundle "tpope/vim-git"
+  Bundle "tpope/vim-commentary"
+  Bundle "tpope/vim-surround"
+  Bundle "tpope/vim-repeat"
 
-  " Helpful tool plugins
-  Bundle 'tpope/vim-commentary'
-  Bundle 'mybuddymichael/snipmate.vim'
-  Bundle 'Raimondi/delimitMate'
-  Bundle 'godlygeek/tabular'
-  Bundle 'ervandew/supertab'
-  Bundle 'sjl/gundo.vim'
-  Bundle 'tpope/vim-surround'
-  Bundle 'tpope/vim-endwise'
-
-  " Languages-ish plugins
-  Bundle 'kchmck/vim-coffee-script'
-  Bundle 'vim-ruby/vim-ruby'
-  Bundle 'tpope/vim-haml'
-  Bundle "vim-scripts/VimClojure"
-
-  " Old, but may be useful someday.
-  " Bundle 'mybuddymichael/vim-ragtag'
-  " Bundle 'davidoc/taskpaper.vim'
-  " Bundle 'scrooloose/syntastic'
-  " Bundle 'majutsushi/tagbar'
+  Bundle "kien/ctrlp.vim"
+  Bundle "Lokaltog/vim-powerline"
+  Bundle "sjl/gundo.vim"
+  Bundle "ervandew/supertab"
+  Bundle "mileszs/ack.vim"
+  Bundle "Raimondi/delimitMate"
 
 
 " Enable syntax highlighting and filetype detection.
