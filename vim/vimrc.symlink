@@ -197,27 +197,7 @@
 " Make it easy to call some commonly-used plugins.
 
   " Powerline
-  let g:Powerline_symbols='fancy'
-
-  " NERDTree
-  nmap <leader>n :NERDTreeToggle<cr>
-  let NERDTreeShowHidden = 1
-
-  " CommandT
-  nmap <leader>ff :CommandTFlush<cr>
-  let g:CommandTMatchWindowReverse = 1
-  let g:CommandTScanDotDirectories = 1
-  let g:CommandTMaxHeight = 10
-  if has('autocmd')
-    au FocusGained * :CommandTFlush
-  endif
-
-  " Tabularize
-  nmap <leader>a=  :Tabularize /=<cr>
-  vmap <leader>a=  :Tabularize /=<cr>
-  nmap <leader>a:  :Tabularize /:\zs<cr>
-  vmap <leader>a:  :Tabularize /:\zs<cr>
-  nmap <leader>ap: :Tabularize /:/r0c1l0<cr>
+  let g:Powerline_symbols="fancy"
 
   " Gundo
   nmap <leader>g :GundoToggle<cr>
@@ -226,27 +206,6 @@
   let g:SuperTabDefaultCompletionType = "context"
   let g:SuperTabContextDefaultCompletionType = "<c-p>"
   let g:SuperTabLongestEnhanced = 1
-
-  " CoffeeScript
-  let g:CoffeeCompile=0
-  func! CheckForRackUp()
-    if g:CoffeeCompile==0
-      if filereadable('config.ru')
-      else
-        if has("autocmd")
-          silent CoffeeMake! | cwindow | redraw!
-        endif
-      endif
-    else
-      silent CoffeeMake! | cwindow | redraw!
-    endif
-  endfunc
-
-  au BufWritePost *.coffee call CheckForRackUp()
-
-  " HexHighlight
-  nmap <leader>hh :call HexHighlight()<cr>
-  vmap <leader>hh :call HexHighlight()<cr>
 
 
 " Make a command to easily switch from regular numbering to relative numbering.
