@@ -177,7 +177,6 @@
   if has("autocmd")
     au BufNewFile,BufRead *.rss  setlocal filetype=xml
     au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
-    au BufNewFile,BufRead .git/* setlocal textwidth=72
   endif
 
 
