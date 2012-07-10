@@ -118,10 +118,10 @@
 
 " And let's make indentation super-easy as well.
 
-  nnoremap <d-]> >>
-  nnoremap <d-[> <<
-  vnoremap <d-]> >gv
-  vnoremap <d-[> <gv
+  nnoremap <c-]> >>
+  nnoremap <c-[> <<
+  vnoremap <c-]> >gv
+  vnoremap <c-[> <gv
 
 
 " Clearing search highlighting should be super easy.
