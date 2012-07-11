@@ -11,7 +11,7 @@
 # Enable syntax coloring and set my custom colors.
 
   export CLICOLOR=1
-  export LSCOLORS=Exfxbxdxcxegedabagacad
+  export LSCOLORS=exfxbxdxcxegedabagacad
 
 
 # My projects directory used for tab-completion.
