@@ -39,4 +39,4 @@
   alias gc='git commit'
   alias gb='git branch'
   alias gco='git checkout'
-  alias grbi='git rebase -i HEAD~10'
+  alias grbi='git rebase -i'
