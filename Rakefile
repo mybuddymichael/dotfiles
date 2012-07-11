@@ -40,10 +40,6 @@ task :install do
     `ln -s $PWD/#{linkable} #{target}`
   end
 
-  unless File.directory?("#{ENV["HOME"]}/.vim/undo")
-    Dir.mkdir("#{ENV["HOME"]}/.vim/undo")
-  end
-
   FileUtils.ln_sf("#{ENV['HOME']}/Dotfiles/Sublime_Text_2",
     "#{ENV["HOME"]}/Library/Application Support/Sublime Text 2/Packages/User")
 
