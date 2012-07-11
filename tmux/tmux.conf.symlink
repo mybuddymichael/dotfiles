@@ -11,3 +11,6 @@ bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
+
+unbind C-t
+bind C-t split-window -p 25
