@@ -23,33 +23,12 @@
   alias rake='noglob rake'
 
 
-# Establish some shortcuts for frequently-used programs.
-
-  function e() {
-    if [[ $1 == '-n' ]]; then
-      subl -n ${2:-'.'}
-    elif [[ $1 == '-a' ]]; then
-      subl -a ${2:-'.'}
-    else
-      subl ${1:-'.'}
-    fi
-  }
-  alias m=mvim
-  alias r=ruby
-  alias pow=powder
-  alias rv='rbenv version'
-  alias be='bundle exec'
-  alias beg='bundle exec guard'
-  alias md5='openssl md5'
-
-
 # Set several Git-related shortcuts.
 
   if hash hub &> /dev/null; then; function git() {hub "$@"}; fi
   alias gs='git status'
   alias gss='git status --short --branch'
   alias gl='git log --decorate --all'
-  # alias glo='git log --oneline --decorate --graph --all'
   alias glo="git log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
   alias ga='git add'
   alias gpo='git push origin'
@@ -60,5 +39,4 @@
   alias gc='git commit'
   alias gb='git branch'
   alias gco='git checkout'
-  alias gsub='git submodule'
   alias grbi='git rebase -i HEAD~10'
