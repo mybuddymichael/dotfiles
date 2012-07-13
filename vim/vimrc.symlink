@@ -36,40 +36,34 @@
   Bundle "kien/ctrlp.vim"
   Bundle "Lokaltog/vim-powerline"
   Bundle "sjl/gundo.vim"
-  Bundle "ervandew/supertab"
-  Bundle "mileszs/ack.vim"
   Bundle "Raimondi/delimitMate"
-
-  Bundle "VimClojure"
 
 
 " Enable syntax highlighting and filetype detection.
 
-  syntax enable
   filetype plugin indent on
+  syntax enable
 
 
-" Deal with speed issues.
-
-  set notimeout
-  set ttimeout
-  set timeoutlen=50
-
-
-" Set my custom leader key and make some simple remaps for quicker commands.
-
-  let mapleader=","
-  nnoremap <leader>q :q<cr>
-  nnoremap ; :
-  nnoremap \ ;
-
-
-" The colorscheme is Solarized, and I like things dark (like a submarine!).
-" Solarized can be toggled by hitting <F5>.
+" The colorscheme is Solarized, and I like things dark (like a
+" submarine!). Solarized can be toggled by hitting <F5>.
 
   set background=dark
   colorscheme solarized
   call togglebg#map("<F5>")
+
+
+" Set my custom leader key and make some simple remaps for quicker
+" commands.
+
+  let mapleader=","
+
+
+" Deal with key sequence speed issues.
+
+  set notimeout
+  set ttimeout
+  set timeoutlen=50
 
 
 " Set some sane and reasonable defaults.
@@ -86,16 +80,17 @@
   set hlsearch                       " Highlight matches.
   set incsearch                      " Highlight matches as you type.
   set ignorecase                     " Case-insensitive searching.
-  set smartcase                      " But case-sensitive if expression contains capitals.
+  set smartcase                      " But case-sensitive if expression
+                                     " contains capitals.
   set spelllang=en_us                " U.S. English is the default language.
-  set spellfile=$HOME/.vim/spell/en.utf-8.add    " Define where to store the spellfile
+  set spellfile=$HOME/.vim/spell/en.utf-8.add
+                                     " Define where to store the spellfile
   set numberwidth=5                  " Line numbers are at least 5 characters wide.
   set cursorline                     " Show the cursor's line.
-  set colorcolumn=72,79              " Show a column at 80 so I don't overtype.
-  set textwidth=72                   " Hard wrap lines at column 80.
+  set colorcolumn=72,79              " Show a column at 79 so I don't overtype.
+  set textwidth=72                   " Hard wrap lines at column 72.
   set scrolloff=3                    " Show 3 lines of context around the cursor.
   set laststatus=2                   " Show the status line all the time
-  set title                          " Set the terminal's title
   set visualbell                     " No beeping.
   set nobackup                       " Don't make a backup before overwriting a file.
   set noswapfile                     " No swap files.
@@ -106,37 +101,19 @@
   set ts=2 sts=2 sw=2 expandtab      " Default setting for tabs (2 spaces).
 
 
-" Make window switching super-easy by setting some simple key remaps.
-
-  nnoremap <c-h> <c-w>h
-  nnoremap <c-j> <c-w>j
-  nnoremap <c-k> <c-w>k
-  nnoremap <c-l> <c-w>l
-
-
-" Buffer switching is too tedious. Boom! Solved.
-
-  nnoremap <leader>p :bp<cr>
-
-
-" And let's make indentation super-easy as well.
-
-  nnoremap <c-]> >>
-  nnoremap <c-[> <<
-  vnoremap <c-]> >gv
-  vnoremap <c-[> <gv
-
-
-" Clearing search highlighting should be super easy.
-
-  nnoremap <leader><space> :noh<cr>
-  vnoremap <leader><space> :noh<cr>
-
-
-" Make a command to toggle showing invisible characters, and set what those are.
+" Make a command to toggle showing invisible characters, and set what
+" those are.
 
   nnoremap <leader>l :set list!<cr>
   set listchars=tab:▸\ ,trail:·,extends:…,precedes:…,eol:¬
+
+
+" Make window switching super-easy by setting some simple key remaps.
+
+  nnoremap <C-h> <C-w>h
+  nnoremap <C-j> <C-w>j
+  nnoremap <C-k> <C-w>k
+  nnoremap <C-l> <C-w>l
 
 
 " Create a ':Wrap' command, and set what the line-break symbol is.
@@ -144,29 +121,12 @@
   command! Wrap set wrap! linebreak nolist
 
 
-" Map <leader>w to hard-wrap the selected line(s).
+" Map <leader>w to hard-wrap the current paragraph, or if in visual
+" mode, the selected line(s).
 
+  nnoremap <leader>w gqq
   vnoremap <leader>w JVgq
 
-
-" CSS settings
-  augroup ft_css
-    au!
-
-    au BufNewFile,BufRead *.less setlocal filetype=less
-    au BufNewFile,BufRead *.scss setlocal filetype=scss
-    au BufNewFile,BufRead *.sass setlocal filetype=sass
-
-    au Filetype scss,less,css      setlocal foldmethod=marker
-    au Filetype sass               setlocal foldmethod=indent
-    au Filetype scss,less,css      setlocal foldmarker={,}
-    au Filetype scss,sass,less,css setlocal omnifunc=csscomplete#CompleteCSS
-    au Filetype scss,sass,less,css setlocal iskeyword+=-
-
-    " Make {<cr> insert a pair of brackets in such a way that the cursor is correctly
-    " positioned inside of them AND the following code doesn't get unfolded.
-    au BufNewFile,BufRead *.scss,*.less,*.css inoremap <buffer> {<cr> {}<left><cr><space><space>.<cr><esc>kA<bs>
-  augroup END
 
 " Some filetypes need some special settings.
 
@@ -189,76 +149,8 @@
   endif
 
 
-" Make it easy to call some commonly-used plugins.
+" Gundo is a plugin that allows for easy browsing of the undo history
+" tree. I find this so useful and I use it so often that I want to map
+" it to <leader>g for easy browsing.
 
-  " Powerline
-  let g:Powerline_symbols="fancy"
-
-  " Gundo
-  nmap <leader>g :GundoToggle<cr>
-
-  " Supertab
-  let g:SuperTabDefaultCompletionType = "context"
-  let g:SuperTabContextDefaultCompletionType = "<c-p>"
-  let g:SuperTabLongestEnhanced = 1
-
-
-" Make a command to easily switch from regular numbering to relative numbering.
-
-  command! Number call ToggleRelativeNumber()
-  nmap <leader>m :Number<cr>
-  vmap <leader>m :Number<cr>
-
-  let s:relativeNumber = 1
-
-  func! ToggleRelativeNumber()
-    if s:relativeNumber == 1
-      let s:relativeNumber = 0
-      set number
-    elseif s:relativeNumber == 0
-      let s:relativeNumber = 1
-      set relativenumber
-    endif
-  endfunc
-
-
-" Show syntax highlighting groups for word under cursor
-
-  nmap <C-S-T> :call <SID>SynStack()<CR>
-  func! <SID>SynStack()
-    if !exists("*synstack")
-      return
-    endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-  endfunc
-
-
-" Create a command to set tabstop, softtabstop and shiftwidth to the same value.
-
-  command! Stab call Stab()
-
-  func! Stab()
-    let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
-    if l:tabstop > 0
-      let &l:sts = l:tabstop
-      let &l:ts = l:tabstop
-      let &l:sw = l:tabstop
-    endif
-    call SummarizeTabs()
-  endfunc
-
-  func! SummarizeTabs()
-    try
-      echohl ModeMsg
-      echon 'tabstop='.&l:ts
-      echon ' shiftwidth='.&l:sw
-      echon ' softtabstop='.&l:sts
-      if &l:et
-        echon ' expandtab'
-      else
-        echon ' noexpandtab'
-      endif
-    finally
-      echohl None
-    endtry
-  endfunc
+nmap <leader>g :GundoToggle<cr>
