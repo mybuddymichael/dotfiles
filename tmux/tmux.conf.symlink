@@ -1,6 +1,6 @@
 set -g default-terminal "screen-256color"
 set -g history-limit 2000
-set -s escape-time 0
+set -sg escape-time 0
 set -g base-index 1
 
 unbind-key C-b
@@ -13,4 +13,4 @@ bind k select-pane -U
 bind l select-pane -R
 
 unbind C-t
-bind C-t split-window -p 25
+bind C-t split-window -p 75
