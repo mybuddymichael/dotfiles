@@ -37,6 +37,7 @@
   Bundle "Lokaltog/vim-powerline"
   Bundle "sjl/gundo.vim"
   Bundle "Raimondi/delimitMate"
+    let g:delimitMate_no_esc_mapping = 1
 
 
 " Enable syntax highlighting and filetype detection.
