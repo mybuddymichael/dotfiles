@@ -149,13 +149,6 @@
   vnoremap <leader>w JVgq
 
 
-" Automatically save all buffers when the GUI app loses focus.
-
-  if has("autocmd")
-    au FocusLost * :wa
-  endif
-
-
 " CSS settings
   augroup ft_css
     au!
