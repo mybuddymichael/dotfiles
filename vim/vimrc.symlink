@@ -127,13 +127,6 @@
   command! Wrap set wrap! linebreak nolist
 
 
-" Map <leader>w to hard-wrap the current paragraph, or if in visual
-" mode, the selected line(s).
-
-  nnoremap <leader>w gqq
-  vnoremap <leader>w JVgq
-
-
 " Some filetypes need some special settings.
 
   if has("autocmd")
