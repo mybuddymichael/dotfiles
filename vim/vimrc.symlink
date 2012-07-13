@@ -36,6 +36,7 @@
   Bundle "kien/ctrlp.vim"
   Bundle "Lokaltog/vim-powerline"
   Bundle "sjl/gundo.vim"
+  Bundle "ervandew/supertab"
   Bundle "Raimondi/delimitMate"
     " By default, delimitMate clobbers Vim's timeout settings. This
     " causes a huge delay when trying to exit insert or visual mode
