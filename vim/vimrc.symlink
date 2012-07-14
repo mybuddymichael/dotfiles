@@ -43,6 +43,8 @@
     " while in the terminal. Setting this option to "1" fixes that.
     let g:delimitMate_no_esc_mapping = 1
 
+  Bundle "VimClojure"
+
 
 " Enable syntax highlighting and filetype detection.
 
