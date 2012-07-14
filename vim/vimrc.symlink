@@ -166,4 +166,4 @@
 " tree. I find this so useful and I use it so often that I want to map
 " it to <leader>g for easy browsing.
 
-nmap <leader>g :GundoToggle<cr>
+  nmap <leader>g :GundoToggle<cr>
