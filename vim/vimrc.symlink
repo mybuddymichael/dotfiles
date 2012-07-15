@@ -104,18 +104,21 @@
   set incsearch                      " Highlight matches as you type.
   set ignorecase                     " Case-insensitive searching.
   set smartcase                      " But case-sensitive if expression
-                                     " contains capitals.
+                                     "   contains capitals.
   set spelllang=en_us                " U.S. English is the default language.
   set spellfile=$HOME/.vim/spell/en.utf-8.add
                                      " Define where to store the spellfile
-  set numberwidth=5                  " Line numbers are at least 5 characters wide.
+  set numberwidth=5                  " Line numbers are at least 5 characters
+                                     "   wide.
   set cursorline                     " Show the cursor's line.
   set colorcolumn=72,79              " Show a column at 79 so I don't overtype.
   set textwidth=72                   " Hard wrap lines at column 72.
-  set scrolloff=3                    " Show 3 lines of context around the cursor.
+  set scrolloff=3                    " Show 3 lines of context around the
+                                     "   cursor.
   set laststatus=2                   " Show the status line all the time
   set visualbell                     " No beeping.
-  set nobackup                       " Don't make a backup before overwriting a file.
+  set nobackup                       " Don't make a backup before overwriting
+                                     "   a file.
   set noswapfile                     " No swap files.
   set nowritebackup                  " And again.
   set undofile                       " Store persistent undo's.
