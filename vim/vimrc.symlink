@@ -111,6 +111,7 @@
   set numberwidth=5                  " Line numbers are at least 5 characters
                                      "   wide.
   set cursorline                     " Show the cursor's line.
+  set cursorcolumn                   " Show the cursor's column.
   set colorcolumn=72,79              " Show a column at 79 so I don't overtype.
   set textwidth=72                   " Hard wrap lines at column 72.
   set scrolloff=3                    " Show 3 lines of context around the
