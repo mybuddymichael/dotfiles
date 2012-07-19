@@ -3,12 +3,10 @@ set antialias                     " MacVim: smooth fonts.
 set encoding=utf-8                " Use UTF-8 everywhere.
 set guioptions=aAce               " Hide toolbar, disable scrollbars.
 set lines=82 columns=182          " Window dimensions.
-set transparency=3
 
 if has("gui_macvim")
-	macmenu &File.New\ Tab key=<nop>
-	map <D-t> :CommandT<CR>
-
+  macmenu &File.New\ Tab key=<nop>
   macmenu &Edit.Find.Find\ Next key=<nop>
   noremap <D-g> :Gstatus<CR>
+  set transparency=3
 endif
