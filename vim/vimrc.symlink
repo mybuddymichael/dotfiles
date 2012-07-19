@@ -126,6 +126,7 @@
   set nowritebackup                  " And again.
   set undofile                       " Store persistent undo's.
   set undodir=$HOME/.vim/undo        " Set where to store undo's.
+  set nofoldenable                   " Don't fold code by default.
   set nomodeline                     " No modelines for security reasons.
   set ts=2 sts=2 sw=2 expandtab      " Default setting for tabs (2 spaces).
 
@@ -155,6 +156,7 @@
   if has("autocmd")
     au BufNewFile,BufRead *.rss  setlocal filetype=xml
     au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
+    au Filetype clojure          setlocal foldmethod=indent
   endif
 
 
