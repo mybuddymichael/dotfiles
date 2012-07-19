@@ -100,6 +100,8 @@
   set backspace=indent,eol,start     " Intuitive backspacing.
   set wildmenu                       " Enhanced command line completion.
   set wildmode=list:longest          " Complete files like a shell.
+  set completeopt=menu,preview       " Show the completion menu along with
+                                     "   preview information.
   set hlsearch                       " Highlight matches.
   set incsearch                      " Highlight matches as you type.
   set ignorecase                     " Case-insensitive searching.
