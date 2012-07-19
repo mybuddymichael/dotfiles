@@ -180,7 +180,9 @@
   nmap <leader>g :GundoToggle<cr>
 
 
-" Show syntax highlighting groups for word under cursor
+" Make ctrl-shift-t show the syntax stack of the character underneath
+" the cursor. This is handy for debugging or examining how syntax
+" highlighting works for a colorscheme.
 
   nmap <C-S-T> :call <SID>SynStack()<CR>
   func! <SID>SynStack()
