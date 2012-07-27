@@ -61,6 +61,8 @@
           \ "8": "ctermfg=4",
           \ "9": "ctermfg=6" }
 
+  Bundle "kchmck/vim-coffee-script"
+
 
 " Enable syntax highlighting and filetype detection.
 
