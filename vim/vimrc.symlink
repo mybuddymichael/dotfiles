@@ -160,6 +160,7 @@
     au BufNewFile,BufRead *.rss  setlocal filetype=xml
     au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
     au Filetype clojure          setlocal foldmethod=indent
+    au Filetype gitcommit        setlocal spell
   endif
 
 
