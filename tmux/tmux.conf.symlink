@@ -15,8 +15,18 @@
 
   set -g default-terminal "screen-256color"
 
-  set -g history-limit 2000
+
+# Fix escape key issues.
   set -g escape-time 0
+
+
+# Set a history limit.
+
+  set -g history-limit 2000
+
+
+# Have window and pane numbers start at 1 instead of 0.
+
   set -g base-index 1
   set -g pane-base-index 1
 
@@ -39,3 +49,16 @@
 
   unbind C-t
   bind C-t split-window -p 75
+
+
+# Set up my custom status-bar.
+
+  set -g status-fg black
+  set -g status-bg cyan
+  set -g pane-border-fg black
+  set -g pane-active-border-fg cyan
+  set -g message-fg brightcyan
+  set -g message-bg black
+  set -g status-left "  #S  "
+  set -g window-status-format "#I #W"
+  set -g window-status-current-format "#[bold]//#I #W//"
