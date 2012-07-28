@@ -161,6 +161,7 @@
     au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
     au Filetype clojure          setlocal foldmethod=indent
     au Filetype gitcommit        setlocal spell
+    au BufWritePost *.coffee     silent CoffeeMake! | cwindow | redraw!
   endif
 
 
