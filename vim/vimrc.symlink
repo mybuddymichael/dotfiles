@@ -99,7 +99,6 @@
   set relativenumber                 " Show relative line numbers.
   set nowrap                         " Don't wrap lines.
   set showcmd                        " Display incomplete commands.
-  set showmode                       " Display the mode you're in.
   set backspace=indent,eol,start     " Intuitive backspacing.
   set wildmenu                       " Enhanced command line completion.
   set wildmode=list:longest          " Complete files like a shell.
