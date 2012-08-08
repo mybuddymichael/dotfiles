@@ -46,7 +46,7 @@
     let g:delimitMate_no_esc_mapping = 1
 
   Bundle "VimClojure"
-    " Since Clojure is a Lisp and uses parenthese to delimit forms,
+    " Since Clojure is a Lisp and uses parentheses to delimit forms,
     " VimClojure provides a mechanism to color each nested form as a
     " different color. Here we turn that on and specify the colors.
     let g:vimclojure#ParenRainbow = 1
