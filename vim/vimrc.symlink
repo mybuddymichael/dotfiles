@@ -81,8 +81,10 @@
 
 " Highlight extraneous whitespace and super-79 character lines as red.
 
-  match ErrorMsg /\s\+$/
-  2match ErrorMsg /\%>79v.\+/
+  if has("autocmd")
+    au BufWinEnter * let w:m1=matchadd("ErrorMsg", '\s\+$', -1)
+    au BufWinEnter * let w:m2=matchadd("ErrorMsg", '\%>79v.\+', -1)
+  endif
 
 
 " Change the leader key from "\" to ",". The leader key is used when
