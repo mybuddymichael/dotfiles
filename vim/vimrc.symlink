@@ -79,6 +79,12 @@
   call togglebg#map("<F5>")
 
 
+" Highlight extraneous whitespace and super-79 character lines as red.
+
+  match ErrorMsg /\s\+$/
+  2match ErrorMsg /\%>79v.\+/
+
+
 " Change the leader key from "\" to ",". The leader key is used when
 " defining custom shortcut keys to speed up some actions.
 
