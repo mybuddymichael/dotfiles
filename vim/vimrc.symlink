@@ -105,6 +105,7 @@
 
   set autoread                       " Don't ask me about loading files.
   set hidden                         " Handle multiple buffers better.
+  set noshowmode                     " Don't show the current mode.
   set relativenumber                 " Show relative line numbers.
   set nowrap                         " Don't wrap lines.
   set showcmd                        " Display incomplete commands.
