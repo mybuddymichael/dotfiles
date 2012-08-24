@@ -205,3 +205,19 @@
     endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
   endfunc
+
+
+" Create a command to set tabstop, softtabstop and shiftwidth to the
+" same value.
+
+  command! Stab call Stab()
+
+  func! Stab()
+    let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+    if l:tabstop > 0
+      let &l:sts = l:tabstop
+      let &l:ts = l:tabstop
+      let &l:sw = l:tabstop
+    endif
+    call SummarizeTabs()
+  endfunc
