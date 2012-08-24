@@ -21,6 +21,7 @@
   alias cp='nocorrect cp -iv'
   alias mkdir='nocorrect mkdir'
   alias rake='noglob rake'
+  alias tat='tmux attach -t'
 
 
 # Set several Git-related shortcuts.
