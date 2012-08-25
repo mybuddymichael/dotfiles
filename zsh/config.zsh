@@ -23,7 +23,11 @@
 
   export PATH="$HOME/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
   fpath=($ZSH/functions /usr/local/share/zsh/site-functions $fpath)
-  export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
+
+
+# Add npm to PATH.
+
+  export PATH="/usr/local/share/npm/bin:$PATH"
 
 
 # Add rbenv to PATH.
