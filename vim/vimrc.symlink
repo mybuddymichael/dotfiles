@@ -167,11 +167,13 @@
 " Some filetypes need some special settings.
 
   if has("autocmd")
-    au BufNewFile,BufRead *.rss  setlocal filetype=xml
-    au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
-    au Filetype clojure          setlocal foldmethod=indent
-    au Filetype gitcommit        setlocal spell
-    au BufWritePost *.coffee     silent CoffeeMake! | cwindow | redraw!
+    augroup filetypes
+      au!
+      au BufNewFile,BufRead *.rss  setlocal filetype=xml
+      au BufNewFile,BufRead *.md   setlocal filetype=markdown spell
+      au Filetype clojure          setlocal foldmethod=indent
+      au Filetype gitcommit        setlocal spell
+    augroup END
   endif
 
 
