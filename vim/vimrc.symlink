@@ -159,11 +159,6 @@
   nnoremap <C-l> <C-w>l
 
 
-" Create a ':Wrap' command, and set what the line-break symbol is.
-
-  command! Wrap set wrap! linebreak nolist
-
-
 " Some filetypes need some special settings.
 
   if has("autocmd")
@@ -190,6 +185,11 @@
       au FileType markdown   setlocal ts=4 sts=4 sw=4
     augroup END
   endif
+
+
+" Create a ':Wrap' command, and set what the line-break symbol is.
+
+  command! Wrap set wrap! linebreak nolist
 
 
 " Gundo is a plugin that allows for easy browsing of the undo history
