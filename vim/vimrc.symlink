@@ -192,6 +192,38 @@
   command! Wrap set wrap! linebreak nolist
 
 
+" Set CoffeeScript buffers to compile automatically into JavaScript, and
+" create a command to toggle this functionality.
+
+  let s:coffeescript_compiling_enabled = 0
+  if s:coffeescript_compiling_enabled == 1
+    augroup CoffeeScript
+      autocmd!
+      autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow | redraw!
+    augroup END
+  endif
+
+  func! ToggleCoffeeScriptCompiling__()
+    if s:coffeescript_compiling_enabled == 1
+      augroup CoffeeScript
+        autocmd!
+      augroup END
+      let s:coffeescript_compiling_enabled = 0
+      let l:message = "disabled"
+    else
+      augroup CoffeeScript
+        autocmd!
+        autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow | redraw!
+      augroup END
+      let s:coffeescript_compiling_enabled = 1
+      let l:message = "enabled"
+    endif
+    echo "CoffeeScript compiling " . l:message
+  endfunc
+
+  command! ToggleCoffee call ToggleCoffeeScriptCompiling__()
+
+
 " Gundo is a plugin that allows for easy browsing of the undo history
 " tree. I find this so useful and I use it so often that I want to map
 " it to <leader>g for easy browsing.
