@@ -180,13 +180,15 @@
 " Set some spaces vs. tabs settings for various filetypes.
 
   if has("autocmd")
-    " These filetypes are picky.
-    au FileType make       setlocal ts=8 sts=8 sw=8 noexpandtab
-    au FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
-
-    " These filetypes are not picky.
-    au FileType gitconfig  setlocal ts=4 sts=4 sw=4
-    au FileType markdown   setlocal ts=4 sts=4 sw=4
+    augroup tabstops
+      au!
+      " These filetypes are picky.
+      au FileType make       setlocal ts=8 sts=8 sw=8 noexpandtab
+      au FileType yaml       setlocal ts=2 sts=2 sw=2   expandtab
+      " These filetypes are not picky.
+      au FileType gitconfig  setlocal ts=4 sts=4 sw=4
+      au FileType markdown   setlocal ts=4 sts=4 sw=4
+    augroup END
   endif
 
 
