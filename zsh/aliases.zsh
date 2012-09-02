@@ -41,3 +41,4 @@
   alias gb='git branch'
   alias gco='git checkout'
   alias grbi='git rebase -i'
+  alias gundo='git reset --soft HEAD~; git reset'
