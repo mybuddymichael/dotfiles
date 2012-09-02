@@ -39,7 +39,15 @@
 
 
 # Add `.` and `bin` to the front of PATH.
+
   export PATH=".:bin:$PATH"
+
+
+# Source `z` if it's available.
+
+  if [ -s "`brew --prefix`/etc/profile.d/z.sh" &> /dev/null ]; then
+    source "`brew --prefix`/etc/profile.d/z.sh"
+  fi
 
 
 # Load custom functions and completions.
