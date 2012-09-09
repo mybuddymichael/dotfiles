@@ -36,6 +36,7 @@
   " Niceties
   Bundle "kien/ctrlp.vim"
   Bundle "Lokaltog/vim-powerline"
+  Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
   Bundle "paredit.vim"
