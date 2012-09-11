@@ -80,12 +80,11 @@
   call togglebg#map("<F5>")
 
 
-" Highlight extraneous whitespace and super-79 character lines as red.
+" Highlight extraneous whitespace as red.
 
   if has("autocmd")
     augroup whitespace
       au BufWinEnter * let w:m1=matchadd("ErrorMsg", '\s\+$', -1)
-      au BufWinEnter * let w:m2=matchadd("ErrorMsg", '\%>79v.\+', -1)
     augroup END
   endif
 
