@@ -32,7 +32,10 @@
   alias gl='git log --decorate --all'
   alias glo="git log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
   alias ga='git add'
-  alias gpo='git push origin'
+  function gpo() {
+    local branch="$(git symbolic-ref HEAD | sed 's/refs\/heads\///')"
+    git push origin $branch
+  }
   alias gpom='git push origin master'
   alias gd='git diff'
   alias gdc='git diff --cached'
