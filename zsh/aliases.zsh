@@ -33,7 +33,11 @@
   alias glo="git log --graph --all --pretty=format:'%C(yellow)%h%Creset%C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
   alias ga='git add'
   function gpo() {
-    local branch="$(git symbolic-ref HEAD | sed 's/refs\/heads\///')"
+    if [[ -n "$1" ]]; then
+      branch="$1"
+    else
+      local branch="$(git symbolic-ref HEAD | sed 's/refs\/heads\///')"
+    fi
     git push origin $branch
   }
   alias gpom='git push origin master'
