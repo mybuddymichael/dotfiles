@@ -516,49 +516,23 @@
 	<key>MinimumContrast</key>
 	<real>0.0</real>
 	<key>NSColorPanelMode</key>
-	<string>65535</string>
+	<string>1</string>
+	<key>NSColorPickerSlidersDefaults</key>
+	<string>1</string>
+	<key>NSFontPanelPreviewHeight</key>
+	<real>0.0</real>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/Dotfiles/iterm</string>
+	<string>~/Desktop</string>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
 	<string></string>
-	<key>NSTableView Columns KeyBingingTable</key>
-	<array>
-		<data>
-		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
-		hAErATCG
-		</data>
-		<string>198</string>
-		<data>
-		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
-		hAErATGG
-		</data>
-		<string>302</string>
-	</array>
-	<key>NSTableView Hidden Columns KeyBingingTable</key>
-	<array/>
-	<key>NSTableView Sort Ordering KeyBingingTable</key>
-	<array/>
-	<key>NSToolbar Configuration Terminal Toolbar</key>
-	<dict>
-		<key>TB Display Mode</key>
-		<integer>1</integer>
-		<key>TB Icon Size Mode</key>
-		<integer>1</integer>
-		<key>TB Is Shown</key>
-		<integer>0</integer>
-		<key>TB Size Mode</key>
-		<integer>1</integer>
-	</dict>
 	<key>NSWindow Frame NSColorPanel</key>
-	<string>142 186 227 341 0 0 1366 746 </string>
+	<string>289 192 253 341 0 0 1366 768 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>106 255 924 485 0 0 1366 768 </string>
+	<string>269 110 924 485 0 0 1366 768 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>44 0 717 746 0 0 1366 746 </string>
-	<key>NSWindow Frame iTerm Window 1</key>
-	<string>169 44 570 451 0 0 1366 746 </string>
+	<string>148 0 717 746 0 0 1366 746 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1976,7 +1950,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2012-08-31T22:53:55Z</date>
+	<date>2012-09-26T00:40:00Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>ShowBookmarkName</key>
