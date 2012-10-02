@@ -35,6 +35,7 @@
 
   " Niceties
   Bundle "kien/ctrlp.vim"
+    let g:ctrlp_custom_ignore = { "file": ".*target\/.*\.class$" }
   Bundle "Lokaltog/vim-powerline"
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
