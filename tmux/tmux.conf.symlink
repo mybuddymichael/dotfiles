@@ -17,6 +17,7 @@
 
 
 # Fix escape key issues.
+
   set -g escape-time 0
 
 
