@@ -14,9 +14,13 @@ git_prompt_renamed="%{$fg[blue]%}➜%{$reset_color%}"
 git_prompt_unmerged="%{$fg[red]%}═%{$reset_color%}"
 git_prompt_untracked="%{$fg_bold[cyan]%}?%{$reset_color%}"
 
+short_pwd() {
+  echo $PWD | sed -e "s|^$HOME|~|" -e 's|^/private||' -e 's-\([^/]\)[^/]*/-\1/-g'
+}
+
 rbenv_prompt=$'%{$fg[red]%}$(rbenv_prompt_info)%{$reset_color%} '
 git_prompt=$'%{$fg[magenta]%}$(git_prompt_info)%{$reset_color%}'
-dir_prompt=$'%{$fg[cyan]%}%~%{$reset_color%}'
+dir_prompt=$'%{$fg[cyan]%}$(short_pwd)%{$reset_color%}'
 prompt_prompt=$'\n${arrow} '
 
 PROMPT="$git_prompt$dir_prompt$prompt_prompt"
