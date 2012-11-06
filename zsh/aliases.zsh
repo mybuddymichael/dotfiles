@@ -40,6 +40,10 @@
     fi
     git push origin $branch
   }
+  function gff() {
+    local branch="$(git symbolic-ref HEAD | sed 's/refs\/heads\///')"
+    git merge --ff-only "origin/$branch"
+  }
   alias gpom='git push origin master'
   alias gd='git diff'
   alias gdc='git diff --cached'
