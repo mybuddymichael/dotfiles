@@ -40,6 +40,7 @@
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
+  Bundle "scrooloose/syntastic"
   Bundle "paredit.vim"
   Bundle "Raimondi/delimitMate"
     " By default, delimitMate clobbers Vim's timeout settings. This
