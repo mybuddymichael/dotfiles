@@ -144,6 +144,7 @@
   set nofoldenable                   " Don't fold code by default.
   set nomodeline                     " No modelines for security reasons.
   set ts=2 sts=2 sw=2 expandtab      " Default setting for tabs (2 spaces).
+  set iskeyword+=-
 
 
 " Make a command to toggle showing invisible characters, and set what
