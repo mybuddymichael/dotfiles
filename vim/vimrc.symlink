@@ -32,6 +32,8 @@
   Bundle "tpope/vim-commentary"
   Bundle "tpope/vim-surround"
   Bundle "tpope/vim-repeat"
+  Bundle "tpope/vim-endwise"
+  Bundle "tpope/vim-rails"
 
   " Niceties
   Bundle "kien/ctrlp.vim"
