@@ -54,7 +54,6 @@
     " causes a huge delay when trying to exit insert or visual mode
     " while in the terminal. Setting this option to "1" fixes that.
     let g:delimitMate_no_esc_mapping = 1
-
   Bundle "VimClojure"
     " Since Clojure is a Lisp and uses parentheses to delimit forms,
     " VimClojure provides a mechanism to color each nested form as a
