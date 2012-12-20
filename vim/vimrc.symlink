@@ -34,6 +34,7 @@
   Bundle "tpope/vim-repeat"
   Bundle "tpope/vim-endwise"
   Bundle "tpope/vim-rails"
+  Bundle "tpope/vim-foreplay"
 
   " Niceties
   Bundle "kien/ctrlp.vim"
