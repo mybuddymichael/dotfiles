@@ -35,6 +35,7 @@
   Bundle "tpope/vim-endwise"
   Bundle "tpope/vim-rails"
   Bundle "tpope/vim-foreplay"
+  Bundle "tpope/vim-rsi"
 
   " Niceties
   Bundle "kien/ctrlp.vim"
