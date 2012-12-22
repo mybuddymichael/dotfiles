@@ -40,8 +40,8 @@
   " Niceties
   Bundle "kien/ctrlp.vim"
     let g:ctrlp_custom_ignore = {
-          \ "file": ".*.class$",
-          \ "dir": ".*target$"  }
+          \ 'file': '\v\.(class|jar)$',
+          \ 'dir': '\vtarget$' }
   Bundle "Lokaltog/vim-powerline"
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
