@@ -49,6 +49,7 @@
   Bundle "scrooloose/syntastic"
     let g:syntastic_error_symbol = "!!"
     let g:syntastic_warning_symbol = "??"
+  Bundle "paredit.vim"
   Bundle "Raimondi/delimitMate"
     " By default, delimitMate clobbers Vim's timeout settings. This
     " causes a huge delay when trying to exit insert or visual mode
