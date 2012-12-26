@@ -38,24 +38,27 @@
   Bundle "tpope/vim-rsi"
 
   " Niceties
-  Bundle "kien/ctrlp.vim"
-    let g:ctrlp_custom_ignore = {
-          \ 'file': '\v\.(class|jar)$',
-          \ 'dir': '\vtarget$' }
   Bundle "Lokaltog/vim-powerline"
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
+
+  Bundle "kien/ctrlp.vim"
+    let g:ctrlp_custom_ignore = {
+          \ 'file': '\v\.(class|jar)$',
+          \ 'dir': '\vtarget$' }
+
   Bundle "scrooloose/syntastic"
     let g:syntastic_error_symbol = "!!"
     let g:syntastic_warning_symbol = "??"
-  Bundle "paredit.vim"
+
   Bundle "Raimondi/delimitMate"
     " By default, delimitMate clobbers Vim's timeout settings. This
     " causes a huge delay when trying to exit insert or visual mode
-    " while in the terminal. Setting this option to "1" fixes that.
+    " while in the terminal. Setting this option to 1 fixes that.
     let g:delimitMate_no_esc_mapping = 1
 
+  Bundle "paredit.vim"
   Bundle "guns/vim-clojure-static"
     let g:clojure_align_multiline_strings = 1
 
