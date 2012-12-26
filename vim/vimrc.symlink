@@ -206,6 +206,17 @@ augroup ft_css
 augroup END
 
 
+" Load rainbow_parentheses.
+
+augroup ft_rainbow_parentheses
+  au!
+  au VimEnter * RainbowParenthesesToggle
+  au Syntax * RainbowParenthesesLoadRound
+  au Syntax * RainbowParenthesesLoadSquare
+  au Syntax * RainbowParenthesesLoadBraces
+augroup END
+
+
 " Create a ':Wrap' command, and set what the line-break symbol is.
 
   command! Wrap set wrap! linebreak nolist
