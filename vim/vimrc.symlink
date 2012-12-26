@@ -55,22 +55,21 @@
     " causes a huge delay when trying to exit insert or visual mode
     " while in the terminal. Setting this option to "1" fixes that.
     let g:delimitMate_no_esc_mapping = 1
-  Bundle "VimClojure"
-    " Since Clojure is a Lisp and uses parentheses to delimit forms,
-    " VimClojure provides a mechanism to color each nested form as a
-    " different color. Here we turn that on and specify the colors.
-    let g:vimclojure#ParenRainbow = 1
-    let g:vimclojure#ParenRainbowColors = {
-          \ "0": "ctermfg=4",
-          \ "1": "ctermfg=5",
-          \ "2": "ctermfg=3",
-          \ "3": "ctermfg=6",
-          \ "4": "ctermfg=1",
-          \ "5": "ctermfg=2",
-          \ "6": "ctermfg=13",
-          \ "7": "ctermfg=9",
-          \ "8": "ctermfg=2",
-          \ "9": "ctermfg=1" }
+
+  Bundle "guns/vim-clojure-static"
+    let g:clojure_align_multiline_strings = 1
+
+  Bundle "kien/rainbow_parentheses.vim"
+    let g:rbpt_colorpairs = [
+          \ ['9', 'darkred'],
+          \ ['13', 'darkmagenta'],
+          \ ['2', 'green'],
+          \ ['1', 'red'],
+          \ ['6', 'cyan'],
+          \ ['3', 'yellow'],
+          \ ['5', 'magenta'],
+          \ ['4', 'blue'],
+          \ ]
 
   Bundle "kchmck/vim-coffee-script"
 
