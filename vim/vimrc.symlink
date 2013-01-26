@@ -36,6 +36,8 @@
   Bundle "tpope/vim-rails"
   Bundle "tpope/vim-foreplay"
   Bundle "tpope/vim-rsi"
+  Bundle "tpope/vim-markdown"
+  Bundle "tpope/vim-sleuth"
 
   " Niceties
   Bundle "Lokaltog/vim-powerline"
