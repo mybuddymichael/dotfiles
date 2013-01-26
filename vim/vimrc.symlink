@@ -86,6 +86,8 @@
 
   " Bundle "kchmck/vim-coffee-script"
 
+  Bundle "grails-vim"
+
 
 " Enable syntax highlighting and filetype detection.
 
