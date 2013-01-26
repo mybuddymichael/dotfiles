@@ -33,9 +33,7 @@
 # Add rbenv to PATH.
 
   export PATH="$HOME/.rbenv/bin:$PATH"
-  if hash rbenv &> /dev/null; then
-    eval "$(rbenv init -)"
-  fi
+  hash rbenv &> /dev/null && eval "$(rbenv init -)"
 
 
 # Add `.` and `bin` to the front of PATH.
