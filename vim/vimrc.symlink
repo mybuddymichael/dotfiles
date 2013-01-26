@@ -33,11 +33,12 @@
   Bundle "tpope/vim-surround"
   Bundle "tpope/vim-repeat"
   Bundle "tpope/vim-endwise"
-  Bundle "tpope/vim-rails"
   Bundle "tpope/vim-foreplay"
   Bundle "tpope/vim-rsi"
   Bundle "tpope/vim-markdown"
   Bundle "tpope/vim-sleuth"
+  " Bundle "tpope/vim-rails"
+  " Bundle "tpope/vim-haml"
 
   " Niceties
   Bundle "Lokaltog/vim-powerline"
@@ -83,7 +84,7 @@
           \ ['4', 'blue'],
           \ ]
 
-  Bundle "kchmck/vim-coffee-script"
+  " Bundle "kchmck/vim-coffee-script"
 
 
 " Enable syntax highlighting and filetype detection.
