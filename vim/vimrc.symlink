@@ -227,6 +227,13 @@
   augroup END
 
 
+" More Clojure stuff.
+  augroup ft_clojure
+    au!
+    au FileType clojure let b:delimitMate_quotes = '"'
+  augroup END
+
+
 " Create a ':Wrap' command, and set what the line-break symbol is.
 
   command! Wrap set wrap! linebreak nolist
