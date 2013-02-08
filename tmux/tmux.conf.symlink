@@ -26,6 +26,12 @@
   set -g history-limit 2000
 
 
+# Set custom window splitting commands.
+
+  bind | split-window -h
+  bind _ split-window -v
+
+
 # Have window and pane numbers start at 1 instead of 0.
 
   set -g base-index 1
