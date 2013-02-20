@@ -36,6 +36,11 @@
   hash rbenv &> /dev/null && eval "$(rbenv init -)"
 
 
+# Add cabal to PATH
+
+  hash cabal &> /dev/null  && export PATH="$HOME/.cabal/bin:$PATH"
+
+
 # Add `.` and `bin` to the front of PATH.
 
   export PATH=".:bin:$PATH"
