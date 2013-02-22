@@ -33,6 +33,7 @@
   Bundle "tpope/vim-surround"
   Bundle "tpope/vim-repeat"
   Bundle "tpope/vim-endwise"
+  Bundle "tpope/vim-classpath"
   Bundle "tpope/vim-foreplay"
   Bundle "tpope/vim-rsi"
   Bundle "tpope/vim-markdown"
