@@ -117,7 +117,7 @@
 " Change the leader key from "\" to ",". The leader key is used when
 " defining custom shortcut keys to speed up some actions.
 
-  let mapleader=","
+  let mapleader = ","
 
 
 " These settings make escaping insert and visual modes much faster when
