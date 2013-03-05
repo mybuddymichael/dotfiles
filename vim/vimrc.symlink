@@ -45,6 +45,7 @@
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
+  Bundle 'scrooloose/nerdtree'
   Bundle 'airblade/vim-gitgutter'
   Bundle "mattn/webapi-vim"
   Bundle "mattn/gist-vim"
@@ -281,6 +282,10 @@
 
   nmap <leader>g :GundoToggle<cr>
 
+
+" Map a shortcut for NERDTree.
+
+  nnoremap <leader>N :NERDTreeToggle<CR>
 
 " Make ctrl-shift-t show the syntax stack of the character underneath
 " the cursor. This is handy for debugging or examining how syntax
