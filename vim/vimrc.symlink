@@ -45,6 +45,7 @@
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
+  Bundle 'airblade/vim-gitgutter'
   Bundle "mattn/webapi-vim"
   Bundle "mattn/gist-vim"
     let g:gist_clip_command = "pbcopy"
