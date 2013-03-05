@@ -27,7 +27,6 @@
   Bundle "altercation/vim-colors-solarized"
 
   " Tim Pope
-  Bundle "tpope/vim-git"
   Bundle "tpope/vim-fugitive"
   Bundle "tpope/vim-commentary"
   Bundle "tpope/vim-surround"
