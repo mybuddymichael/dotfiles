@@ -103,6 +103,8 @@
   set background=dark
   colorscheme solarized
   call togglebg#map("<F5>")
+  " Modifications
+  highlight clear SignColumn
 
 
 " Highlight extraneous whitespace as red.
