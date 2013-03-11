@@ -186,6 +186,11 @@
   nnoremap <C-l> <C-w>l
 
 
+" Remap enter to trigger :w
+
+  nnoremap <cr> :w<cr>
+
+
 " Some filetypes need some special settings.
 
   if has("autocmd")
