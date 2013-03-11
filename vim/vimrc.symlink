@@ -104,7 +104,7 @@
   colorscheme solarized
   call togglebg#map("<F5>")
   " Modifications
-  highlight clear SignColumn
+  highlight SignColumn ctermbg=8
 
 
 " Highlight extraneous whitespace as red.
