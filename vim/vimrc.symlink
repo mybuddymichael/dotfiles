@@ -191,7 +191,7 @@
 
   nnoremap <cr> :w<cr>
   " Undo custom mapping in the command line window.
-  autocmd CmdwinEnter : nnoremap <buffer> <cr> <cr>
+  autocmd CmdwinEnter :,/,>,?,=,@,- nnoremap <buffer> <cr> <cr>
 
 
 " Some filetypes need some special settings.
