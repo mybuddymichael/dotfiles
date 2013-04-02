@@ -6,6 +6,16 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+(setq ido-decorations '("\n-> "
+                        ""
+                        "\n   "
+                        "\n   ..."
+                        "[" "]"
+                        " [No match]"
+                        " [Matched]"
+                        " [Not readable]"
+                        " [Too big]"
+                        " [Confirm]"))
 
 (if (display-graphic-p)
     (progn
