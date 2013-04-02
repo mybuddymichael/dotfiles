@@ -20,6 +20,9 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+(require 'rainbow-delimiters)
+(global-rainbow-delimiters-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
