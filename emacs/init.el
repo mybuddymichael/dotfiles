@@ -6,6 +6,8 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+(load-theme 'solarized-dark)
+
 (if (display-graphic-p)
     (progn
       (tool-bar-mode -1)
