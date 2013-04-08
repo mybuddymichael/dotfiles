@@ -49,6 +49,7 @@
   alias gdc='git diff --cached'
   alias gdw='git diff --color-words'
   alias gc='git commit'
+  alias gca='git commit --amend'
   alias gb='git branch'
   alias gco='git checkout'
   alias grbi='git rebase -i'
