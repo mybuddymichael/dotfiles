@@ -106,6 +106,8 @@
   call togglebg#map("<F5>")
   " Modifications
   highlight SignColumn ctermbg=8
+  noremap <F6> :hi Comment ctermfg=0<cr>
+  noremap <F7> :hi Comment ctermfg=10<cr>
 
 
 " Highlight extraneous whitespace as red.
