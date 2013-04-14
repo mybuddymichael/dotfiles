@@ -22,7 +22,7 @@
 (evil-mode 1)
 
 (load-theme 'solarized-dark t)
-(global-rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 (setq ido-decorations '("\n-> "
                         ""
