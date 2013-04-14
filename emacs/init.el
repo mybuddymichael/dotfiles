@@ -37,7 +37,6 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-(require 'rainbow-delimiters)
 (global-rainbow-delimiters-mode)
 
 (custom-set-variables
