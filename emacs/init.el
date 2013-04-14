@@ -14,6 +14,16 @@
                       clojure-mode)
   "A list of packages to ensure are installed at launch.")
 
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
+(setq evil-want-C-u-scroll t)
+(evil-mode 1)
+
+(load-theme 'solarized-dark t)
+(global-rainbow-delimiters-mode)
+
 (setq ido-decorations '("\n-> "
                         ""
                         "\n   "
@@ -29,15 +39,6 @@
     (progn
       (tool-bar-mode -1)
       (scroll-bar-mode -1)))
-
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-
-
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
-(global-rainbow-delimiters-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
