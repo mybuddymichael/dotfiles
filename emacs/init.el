@@ -6,6 +6,14 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+(defvar my-packages '(starter-kit
+                      starter-kit-lisp
+                      evil
+                      color-theme-solarized
+                      rainbow-delimiters
+                      clojure-mode)
+  "A list of packages to ensure are installed at launch.")
+
 (setq ido-decorations '("\n-> "
                         ""
                         "\n   "
@@ -24,8 +32,6 @@
 
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
-(defvar my-packages '(starter-kit starter-kit-lisp)
-  "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
