@@ -87,7 +87,7 @@
           \ ['4', 'blue'],
           \ ]
 
-  " Bundle "kchmck/vim-coffee-script"
+  Bundle "kchmck/vim-coffee-script"
 
   Bundle "grails-vim"
 
