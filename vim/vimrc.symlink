@@ -104,11 +104,22 @@
   set background=dark
   colorscheme solarized
   call togglebg#map("<F5>")
+
   " Modifications
   highlight SignColumn ctermbg=8
   highlight EasyMotionShade ctermfg=0
-  noremap <F6> :hi Comment ctermfg=0<cr>
-  noremap <F7> :hi Comment ctermfg=10<cr>
+
+  let s:comments_normal_contrast = 1
+  noremap <F7> :call ToggleCommentContrast()<cr>
+  function! ToggleCommentContrast()
+    if s:comments_normal_contrast == 1
+      hi Comment ctermfg=0
+      let s:comments_normal_contrast = 0
+    else
+      hi Comment ctermfg=10
+      let s:comments_normal_contrast = 1
+    endif
+  endfunction
 
 
 " Highlight extraneous whitespace as red.
