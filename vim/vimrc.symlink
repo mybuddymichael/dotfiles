@@ -110,8 +110,8 @@
   highlight EasyMotionShade ctermfg=0
 
   let s:comments_normal_contrast = 1
-  noremap <F7> :call ToggleCommentContrast()<cr>
-  function! ToggleCommentContrast()
+  noremap <F7> :call <SID>ToggleCommentContrast()<CR>
+  function <SID>ToggleCommentContrast()
     if s:comments_normal_contrast == 1
       hi Comment ctermfg=0
       let s:comments_normal_contrast = 0
