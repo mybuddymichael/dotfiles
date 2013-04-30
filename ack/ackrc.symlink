@@ -4,6 +4,8 @@ ruby=.erb,.slim,.haml,.builder,.rake
 css=.sass,.scss,.less
 --type-add
 js=.coffee
+--type-add
+groovy=.gsp
 --type-set
 markdown=.markdown,.md,.mdown
 --type-set
@@ -13,3 +15,4 @@ rdoc=.rdoc
 --js
 --markdown
 --objc
+--groovy
