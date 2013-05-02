@@ -66,6 +66,6 @@
   set -g pane-active-border-fg magenta
   set -g message-fg brightcyan
   set -g message-bg black
-  set -g status-left "#S  "
+  set -g status-left "#S "
   set -g window-status-format "(#I)#W"
   set -g window-status-current-format "#[bold]#[fg=magenta](#I)#W"
