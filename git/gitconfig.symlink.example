@@ -4,6 +4,8 @@
   autocrlf = input
 [github]
   user = mybuddymichael
+[tig]
+  show-date = relative
 [diff]
   wordRegex = [^[:space:]]
 [alias]
