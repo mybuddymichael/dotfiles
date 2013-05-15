@@ -1,6 +1,6 @@
 [core]
   excludesfile = ~/.gitignore_global
-  editor = subl -w
+  editor = vim
   autocrlf = input
 [url "https://github.com/"]
   insteadOf = "gh:"
