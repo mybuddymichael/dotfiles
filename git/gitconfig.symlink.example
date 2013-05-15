@@ -16,7 +16,6 @@
   co = checkout
   up = pull --tags origin master
   pu = push origin
-  # log = log --topo-order --decorate
   addp = add --patch
   mr = merge --no-ff
   unstage = reset HEAD
