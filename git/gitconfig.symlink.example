@@ -1,6 +1,3 @@
-[user]
-  name = Michael Hanson
-  email = Michael@Hal
 [core]
   excludesfile = ~/.gitignore_global
   editor = subl -w
