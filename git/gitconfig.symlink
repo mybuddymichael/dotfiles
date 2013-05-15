@@ -7,6 +7,8 @@
 [tig]
   show-date = relative
   commit-order = topo
+[push]
+  default = upstream
 [diff]
   wordRegex = [^[:space:]]
 [alias]
