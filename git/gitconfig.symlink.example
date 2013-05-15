@@ -2,8 +2,8 @@
   excludesfile = ~/.gitignore_global
   editor = vim
   autocrlf = input
-[url "https://github.com/"]
-  insteadOf = "gh:"
+[github]
+  user = mybuddymichael
 [diff]
   wordRegex = [^[:space:]]
 [alias]
