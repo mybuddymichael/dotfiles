@@ -47,6 +47,8 @@
   Bundle "ervandew/supertab"
   Bundle 'scrooloose/nerdtree'
   Bundle 'airblade/vim-gitgutter'
+  Bundle "nathanaelkane/vim-indent-guides"
+    let g:indent_guides_auto_colors = 0
   Bundle "mattn/webapi-vim"
   Bundle "mattn/gist-vim"
     let g:gist_clip_command = "pbcopy"
@@ -108,6 +110,8 @@
   " Modifications
   highlight SignColumn ctermbg=8
   highlight EasyMotionShade ctermfg=0
+  highlight IndentGuidesOdd ctermbg=8
+  highlight IndentGuidesEven ctermbg=0
 
   let s:comments_normal_contrast = 1
   noremap <F7> :call <SID>ToggleCommentContrast()<CR>
