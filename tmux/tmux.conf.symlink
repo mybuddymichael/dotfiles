@@ -1,7 +1,7 @@
 # By default, use the reattach-to-user-namespace command to launch zsh,
 # which enables copy and pasting again on Mac OS X.
 
-  set -g default-command "reattach-to-user-namespace -l zsh"
+  set -g default-command "reattach-to-user-namespace -l fish"
 
 
 # Use ctrl-space as tmux's prefix command.
