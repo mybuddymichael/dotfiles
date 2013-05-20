@@ -151,6 +151,7 @@
 
 " Set some sane and reasonable defaults.
 
+  set shell=/bin/sh
   set autoread                       " Don't ask me about loading files.
   set hidden                         " Handle multiple buffers better.
   set noshowmode                     " Don't show the current mode.
