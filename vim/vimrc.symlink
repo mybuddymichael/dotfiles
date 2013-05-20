@@ -190,6 +190,13 @@
   set ts=2 sts=2 sw=2 expandtab      " Default setting for tabs (2 spaces).
 
 
+" System clipboard interaction
+
+  nnoremap <leader>Y :.!pbcopy<CR>uk<CR>
+  vnoremap <leader>Y :!pbcopy<CR>uk<CR>
+  noremap <leader>P :set paste<CR>:r !pbpaste<CR>:set nopaste<CR>"
+
+
 " Make a command to toggle showing invisible characters, and set what
 " those are.
 
