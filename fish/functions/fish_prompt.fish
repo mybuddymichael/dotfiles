@@ -14,7 +14,12 @@ function fish_prompt --description 'Write out the prompt'
   z --add "$PWD"
 
   # Get the git branch, if any.
-  set -l ref (echo -n -s (set_color magenta) (git symbolic-ref HEAD ^ /dev/null | sed 's/refs\/heads\///g') (set_color normal) ' ')
+  set -g ref (git symbolic-ref HEAD ^ /dev/null | sed 's/refs\/heads\///g')
+
+  set -l git_branch
+  if test "$ref"
+    set git_branch (echo -n -s (set_color magenta) "$ref" (set_color normal) ' ')
+  end
 
   # Just calculate these once, to save a few cycles when displaying the prompt
   if not set -q __fish_prompt_hostname
@@ -45,7 +50,7 @@ function fish_prompt --description 'Write out the prompt'
       set -g __fish_prompt_cwd (set_color $fish_color_cwd)
     end
 
-    echo -n -s -e "$ref" "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" "\n$arrow "
+    echo -n -s -e "$git_branch" "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" "\n$arrow "
 
   end
 end
