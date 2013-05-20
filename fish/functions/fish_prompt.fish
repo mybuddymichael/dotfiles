@@ -13,9 +13,10 @@ function fish_prompt --description 'Write out the prompt'
   # Set up z.
   z --add "$PWD"
 
-  # Get the git branch, if any.
-  set -g ref (git symbolic-ref HEAD ^ /dev/null | sed 's/refs\/heads\///g')
+  # Get the current ref, if any.
+  set -l ref (git symbolic-ref HEAD ^ /dev/null | sed 's/refs\/heads\///g')
 
+  # Create a git_branch section for the prompt.
   set -l git_branch
   if test "$ref"
     set git_branch (echo -n -s (set_color magenta) "$ref" (set_color normal) ' ')
