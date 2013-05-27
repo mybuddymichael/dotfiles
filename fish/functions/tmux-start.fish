@@ -1,4 +1,5 @@
-function tmux-start
+function tmux-start --description 'Starts a new tmux session with three vertical panes, or it attaches a session if one named "main" already exists.'
+
   tmux has-session -t main > /dev/null ^&1
 
   if test $status -eq 0
