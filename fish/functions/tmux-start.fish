@@ -3,7 +3,7 @@ function tmux-start
 
   if test $status -eq 0
     tmux attach -t main
-    exit
+    return 0
   end
 
   tmux new-session -d -s main
