@@ -13,7 +13,7 @@
   wordRegex = [^[:space:]]
 [alias]
   st = status
-  ci = commit
+  cm = commit
   br = branch
   tag = tag -a
   co = checkout
