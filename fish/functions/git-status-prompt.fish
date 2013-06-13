@@ -1,5 +1,6 @@
 function git-status-prompt
 	
+  set -l symbol_clean (echo -n -s (set_color green) 'G' (set_color normal))
   set -l symbol_untracked (echo -n -s (set_color cyan) '?' (set_color normal))
   set -l symbol_added (echo -n -s (set_color green) '+' (set_color normal))
   set -l symbol_modified (echo -n -s (set_color yellow) '/' (set_color normal))
@@ -8,6 +9,10 @@ function git-status-prompt
 
   set -l index (git status --porcelain ^ /dev/null)
   set -l __status
+
+  if test -z "$index"
+    set __status (echo -n -s "$symbol_clean")
+  else
 
   set -l untracked (for l in $index; echo $l; end | grep '^?? ')
   if test "$untracked"
