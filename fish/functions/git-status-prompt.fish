@@ -6,11 +6,11 @@ function git-status-prompt
   set -l symbol_modified (echo -n -s (set_color yellow) '/' (set_color normal))
   set -l symbol_renamed (echo -n -s (set_color brown) '→' (set_color normal))
   set -l symbol_deleted (echo -n -s (set_color red) '-' (set_color normal))
-
-  set -l index (git status --porcelain ^ /dev/null)
   set -l __status
 
-  if test -z "$index"
+  set -l index (git status --porcelain ^ /dev/null)
+
+  if test -z "$index" -a "$status" -eq "0"
     set __status (echo -n -s "$symbol_clean")
   else
 
