@@ -22,6 +22,11 @@ function fish_prompt --description 'Write out the prompt'
     set git_branch (echo -n -s (set_color magenta) "$ref" (set_color normal) ' ')
   end
 
+  set -l git_status (git-status-prompt)
+  if test "$git_status"
+    set git_status (echo -n -s "$git_status ")
+  end
+
   switch $USER
 
     case root
@@ -42,7 +47,7 @@ function fish_prompt --description 'Write out the prompt'
       set -g __fish_prompt_cwd (set_color $fish_color_cwd)
     end
 
-    echo -n -s -e "$git_branch" "$__fish_prompt_cwd" (prompt_pwd) (set_color normal) "\n$arrow "
+    echo -n -s -e "$git_branch" "$git_status" "$__fish_prompt_cwd" (prompt_pwd) (set_color normal) "\n$arrow "
 
   end
 end
