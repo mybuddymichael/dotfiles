@@ -1,6 +1,6 @@
 # Set a custom PATH.
 
-  set -x PATH ~/.bin /usr/local/bin $PATH
+  set -x PATH ~/.bin /usr/local/bin ~/.rbenv/shims $PATH
 
 
 # Vim is my EDITOR.
