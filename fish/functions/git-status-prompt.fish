@@ -6,6 +6,7 @@ function git-status-prompt
   set -l symbol_modified (echo -n -s (set_color yellow) '/' (set_color normal))
   set -l symbol_renamed (echo -n -s (set_color brown) '→' (set_color normal))
   set -l symbol_deleted (echo -n -s (set_color red) '-' (set_color normal))
+  set -l symbol_deleted_unstaged (echo -n -s (set_color yellow) '-' (set_color normal))
   set -l __status
 
   set -l index (git status --porcelain ^ /dev/null)
@@ -32,6 +33,11 @@ function git-status-prompt
     set -l renamed (for l in $index; echo $l; end | grep '^R  \|^RM ')
     if test "$renamed"
       set __status (echo -n -s "$symbol_renamed$__status")
+    end
+
+    set -l deleted_unstaged (for l in $index; echo $l; end | grep '^ D ')
+    if test "$deleted_unstaged"
+      set __status (echo -n -s "$symbol_deleted_unstaged$__status")
     end
 
     set -l deleted (for l in $index; echo $l; end | grep '^D  \|^AD ')
