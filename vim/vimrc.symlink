@@ -41,7 +41,9 @@
   " Bundle "tpope/vim-haml"
 
   " Niceties
-  Bundle "Lokaltog/vim-powerline"
+  Bundle 'bling/vim-airline'
+    let g:airline_left_sep = ''
+    let g:airline_right_sep = ''
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
