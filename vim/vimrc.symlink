@@ -272,6 +272,8 @@
   augroup ft_clojure
     au!
     au FileType clojure let b:delimitMate_quotes = '"'
+    au BufNewFile,BufRead *.clj nmap <buffer> cpr :Eval (clojure.tools.namespace.repl/refresh)<cr>
+    au BufNewFile,BufRead *.clj nmap <buffer> cpR :Eval (clojure.tools.namespace.repl/refresh-all)<cr>
   augroup END
 
 
