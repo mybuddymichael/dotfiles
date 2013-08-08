@@ -49,6 +49,10 @@
   bind j select-pane -D
   bind k select-pane -U
   bind l select-pane -R
+  bind-key -t vi-copy 'v' begin-selection
+  bind-key -t vi-copy 'x' copy-selection
+  bind-key 'p' run-shell "reattach-to-user-namespace pbpaste | tmux load-buffer - && tmux paste-buffer"
+  bind-key 'y' send-keys x\; run-shell "tmux save-buffer - | reattach-to-user-namespace pbcopy"\; display-message "copied"
 
 
 # Ctrl-space ctrl-t is a shortcut to instantly split the current pane
