@@ -158,6 +158,8 @@
   set hidden                         " Handle multiple buffers better.
   set noshowmode                     " Don't show the current mode.
   set relativenumber                 " Show relative line numbers.
+  set number                         " Show the line number on the current
+                                     "   line.
   set nowrap                         " Don't wrap lines.
   set showcmd                        " Display incomplete commands.
   set backspace=indent,eol,start     " Intuitive backspacing.
