@@ -211,6 +211,11 @@
   vmap F <leader><leader>F
 
 
+" Create a command to easily redraw!
+
+  nnoremap <leader><leader>r :redraw!<CR>
+
+
 " Make a command to toggle showing invisible characters, and set what
 " those are.
 
