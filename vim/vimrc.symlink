@@ -203,6 +203,14 @@
   noremap <leader>P :set paste<CR>:r !pbpaste<CR>:set nopaste<CR>"
 
 
+" Use f for easymotion
+
+  nmap f <leader><leader>f
+  nmap F <leader><leader>F
+  vmap f <leader><leader>f
+  vmap F <leader><leader>F
+
+
 " Make a command to toggle showing invisible characters, and set what
 " those are.
 
