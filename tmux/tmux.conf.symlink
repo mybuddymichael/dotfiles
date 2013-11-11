@@ -30,6 +30,8 @@
 
   bind | split-window -h
   bind _ split-window -v
+  unbind =
+  bind = select-layout even-horizontal
 
 
 # Have window and pane numbers start at 1 instead of 0.
