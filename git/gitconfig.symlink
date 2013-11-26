@@ -21,6 +21,7 @@
   pu = push origin
   addp = add --patch
   mr = merge --no-ff
+  update = "! git fetch --tags; git fetch --prune"
   unstage = reset HEAD
   grep = grep -n
   stage = '!f () { if (( $# > 0 )); then git add -- "$@"; else git add -u; fi }; f'
