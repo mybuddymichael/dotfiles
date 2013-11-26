@@ -78,7 +78,7 @@
   Bundle "paredit.vim"
   Bundle "guns/vim-clojure-static"
     let g:clojure_align_multiline_strings = 1
-    let g:clojure_fuzzy_indent_patterns = ['^ann', '^do', '^def', '^try']
+    let g:clojure_fuzzy_indent_patterns = ['^ann', '^do', '^def', '^loop', '^try']
 
   Bundle "kien/rainbow_parentheses.vim"
     let g:rbpt_colorpairs = [
