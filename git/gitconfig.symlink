@@ -15,24 +15,19 @@
 [merge]
   defaultToUpstream = true
 [alias]
-  st = status
-  cm = commit
+  s = status
+  d = diff
+  dc = diff --cached
+  a = add
+  c = commit
   br = branch
   tag = tag -a
   co = checkout
-  up = pull --tags origin master
   pu = push origin
-  addp = add --patch
-  mr = merge --no-ff
+  ff = merge --ff-only
+  noff = merge --no-ff
   update = "! git fetch --tags; git fetch --prune"
-  unstage = reset HEAD
   grep = grep -n
-  stage = '!f () { if (( $# > 0 )); then git add -- "$@"; else git add -u; fi }; f'
-  unstage = reset --
-  switch = checkout
-  staged = diff --cached
-  unstaged = diff
-  both = diff HEAD
 [color]
   ui = auto
 [color "branch"]
