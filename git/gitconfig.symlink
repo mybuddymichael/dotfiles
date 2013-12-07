@@ -12,6 +12,8 @@
 [diff]
   wordRegex = [^[:space:]]
   algorithm = patience
+[merge]
+  defaultToUpstream = true
 [alias]
   st = status
   cm = commit
