@@ -35,6 +35,7 @@
   Bundle "tpope/vim-classpath"
   Bundle "tpope/vim-fireplace"
   Bundle "tpope/vim-rsi"
+  Bundle "tpope/vim-ragtag"
   Bundle "tpope/vim-markdown"
   Bundle "tpope/vim-sleuth"
   " Bundle "tpope/vim-rails"
