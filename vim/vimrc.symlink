@@ -38,8 +38,6 @@
   Bundle "tpope/vim-ragtag"
   Bundle "tpope/vim-markdown"
   Bundle "tpope/vim-sleuth"
-  " Bundle "tpope/vim-rails"
-  " Bundle "tpope/vim-haml"
 
   " Niceties
   Bundle 'bling/vim-airline'
