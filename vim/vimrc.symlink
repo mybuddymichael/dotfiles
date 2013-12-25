@@ -38,6 +38,7 @@
   Bundle "tpope/vim-ragtag"
   Bundle "tpope/vim-markdown"
   Bundle "tpope/vim-sleuth"
+  Bundle 'tpope/vim-sexp-mappings-for-regular-people'
 
   " Niceties
   Bundle 'bling/vim-airline'
@@ -74,10 +75,10 @@
     " while in the terminal. Setting this option to 1 fixes that.
     let g:delimitMate_no_esc_mapping = 1
 
-  Bundle "paredit.vim"
   Bundle "guns/vim-clojure-static"
     let g:clojure_align_multiline_strings = 1
     let g:clojure_fuzzy_indent_patterns = ['^ann', '^def', '^try']
+  Bundle 'guns/vim-sexp'
 
   Bundle "kien/rainbow_parentheses.vim"
     let g:rbpt_colorpairs = [
