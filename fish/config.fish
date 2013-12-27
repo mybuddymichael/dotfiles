@@ -138,7 +138,7 @@
 # Useful functions.
 
   function t; tree $argv; end
-  function serve-this; python -m SimpleHTTPServer; end
+  function serve-this; python -m SimpleHTTPServer 9000; end
   function tmux-start -d "Starts a new tmux session with three vertical panes, or it attaches a session if one named "main" already exists."
     tmux has-session -t main > /dev/null ^&1
 
