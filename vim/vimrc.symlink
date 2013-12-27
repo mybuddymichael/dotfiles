@@ -294,6 +294,14 @@
   augroup END
 
 
+" Groovy, you POS.
+
+  augroup ft_groovy
+    au!
+    au BufNewFile,BufRead *.groovy setlocal filetype=java
+  augroup END
+
+
 " Create a ':Wrap' command, and set what the line-break symbol is.
 
   command! Wrap set wrap! linebreak nolist
