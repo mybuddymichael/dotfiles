@@ -50,7 +50,6 @@
   Bundle "ervandew/supertab"
   Bundle 'scrooloose/nerdtree'
   Bundle 'airblade/vim-gitgutter'
-    let g:gitgutter_realtime = 0
   Bundle "mattn/webapi-vim"
   Bundle "mattn/gist-vim"
     let g:gist_clip_command = "pbcopy"
