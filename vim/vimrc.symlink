@@ -95,6 +95,8 @@
 
   Bundle "grails-vim"
 
+  Bundle 'groenewege/vim-less'
+
 
 " Enable syntax highlighting and filetype detection.
 
