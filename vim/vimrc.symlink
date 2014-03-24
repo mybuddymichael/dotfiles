@@ -200,6 +200,12 @@
                                      " Turn on omnicompletion.
 
 
+" Make movement work better with wrapped lines.
+
+  nmap j gj
+  nmap k gk
+
+
 " System clipboard interaction
 
   nnoremap <leader>Y :.!pbcopy<CR>uk<CR>
