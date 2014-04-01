@@ -51,7 +51,6 @@
     let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
   Bundle 'scrooloose/nerdtree'
   Bundle 'airblade/vim-gitgutter'
-    let g:gitgutter_realtime = 0
   Bundle "mattn/webapi-vim"
   Bundle "mattn/gist-vim"
     let g:gist_clip_command = "pbcopy"
@@ -199,6 +198,7 @@
   set ts=2 sts=2 sw=2 expandtab      " Default setting for tabs (2 spaces).
   set omnifunc=syntaxcomplete#Complete
                                      " Turn on omnicompletion.
+  set updatetime=750
 
 
 " Make movement work better with wrapped lines.
