@@ -98,6 +98,8 @@
 
   Bundle 'groenewege/vim-less'
 
+  Bundle 'dag/vim2hs'
+
 
 " Enable syntax highlighting and filetype detection.
 
