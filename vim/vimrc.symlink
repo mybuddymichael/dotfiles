@@ -48,7 +48,6 @@
   Bundle "Lokaltog/vim-easymotion"
   Bundle "sjl/gundo.vim"
   Bundle "ervandew/supertab"
-    let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
   Bundle 'scrooloose/nerdtree'
   Bundle 'airblade/vim-gitgutter'
   Bundle "mattn/webapi-vim"
