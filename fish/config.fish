@@ -16,7 +16,9 @@
 
 # Set JAVA_HOME.
 
-  set -x JAVA_HOME (/usr/libexec/java_home)
+  if test -d /usr/libexec/java_home
+    set -x JAVA_HOME (/usr/libexec/java_home)
+  end
 
 
 # Create my prompt.
