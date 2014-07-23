@@ -288,6 +288,14 @@
   augroup END
 
 
+" Fix HTML tw settings
+
+  augroup ft_html
+    au!
+    au Filetype html setlocal tw=0
+  augroup END
+
+
 " Load rainbow_parentheses.
 
   augroup rainbow_parentheses
