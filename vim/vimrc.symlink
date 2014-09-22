@@ -62,7 +62,7 @@
     let g:ctrlp_dont_split = 'NERD_tree_2'
     let g:ctrlp_custom_ignore = {
           \ 'file': '\v\.(class|jar)$',
-          \ 'dir': '\vtarget$' }
+          \ 'dir': '\v(target|build-output)$' }
 
   Plugin 'scrooloose/syntastic'
     let g:syntastic_error_symbol = '!!'
