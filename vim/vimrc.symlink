@@ -288,7 +288,7 @@
     au Filetype scss,less,css setlocal foldmethod=marker
     au Filetype scss,less,css setlocal foldmarker={,}
     au Filetype scss,less,css setlocal omnifunc=csscomplete#CompleteCSS
-    au BufNewFile,BufRead *.scss,*.less,*.css inoremap <buffer> {<cr> {}<left><cr><space><space>.<cr><esc>kA<bs>
+    au BufNewFile,BufRead *.scss,*.less,*.css inoremap <buffer> {<cr> {}<left><cr><space><space><space><space>.<cr><esc>kA<bs>
   augroup END
 
 
