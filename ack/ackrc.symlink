@@ -1,7 +1,7 @@
 --type-add
 ruby=.erb,.slim,.haml,.builder,.rake
 --type-add
-css=.sass,.scss,.less
+sass=.sass,.scss
 --type-set
 coffee=.coffee
 --type-add
