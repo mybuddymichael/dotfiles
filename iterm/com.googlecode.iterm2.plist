@@ -521,10 +521,6 @@
 	<false/>
 	<key>MinimumContrast</key>
 	<real>0.0</real>
-	<key>NSColorPanelMode</key>
-	<string>1</string>
-	<key>NSColorPickerSlidersDefaults</key>
-	<string>1</string>
 	<key>NSNavLastRootDirectory</key>
 	<string>~/Dotfiles/iterm</string>
 	<key>NSQuotedKeystrokeBinding</key>
@@ -534,13 +530,9 @@
 	<key>NSScrollAnimationEnabled</key>
 	<false/>
 	<key>NSWindow Frame Preferences</key>
-	<string>105 650 924 485 0 0 1920 1200 </string>
-	<key>NSWindow Frame SUStatusFrame</key>
-	<string>766 787 384 129 0 0 1920 1178 </string>
+	<string>390 217 924 485 0 0 1440 878 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 1920 1200 0 0 1920 1178 </string>
-	<key>NSWindow Frame iTerm Window 1</key>
-	<string>932 394 570 451 0 0 1920 1178 </string>
+	<string>1280 2 633 1174 0 0 1920 1177 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1948,7 +1940,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/michael/Dotfiles/iterm</string>
+	<string>/Users/michaelhanson/Dotfiles/iterm</string>
 	<key>PromptOnClose</key>
 	<false/>
 	<key>PromptOnQuit</key>
@@ -1966,7 +1958,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2014-01-16T16:23:19Z</date>
+	<date>2014-10-23T17:21:10Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -2002,7 +1994,7 @@
 	<key>WebKitDefaultFontSize</key>
 	<integer>11</integer>
 	<key>WebKitStandardFont</key>
-	<string>Lucida Grande</string>
+	<string>.Helvetica Neue DeskInterface</string>
 	<key>Window Arrangements</key>
 	<dict>
 		<key>Default</key>
@@ -2619,6 +2611,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20140112</string>
+	<string>1.0.0.20140629</string>
 </dict>
 </plist>
