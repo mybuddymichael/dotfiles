@@ -50,3 +50,6 @@
   untracked = cyan
 [hub]
   protocol = https
+[user]
+  name = Michael Hanson
+  email = michael.hanson@hudl.com
