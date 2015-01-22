@@ -43,10 +43,20 @@
     # Create a git_branch section for the prompt.
     set -l git_branch
     if test "$ref"
-      set -l git_behind (git status | grep '^Your branch is behind')
+      set -l git_status
+      git status ^ /dev/null | pipeset git_status
+      set -l git_behind (echo -e "$git_status" | grep '^Your branch is behind')
+      set -l git_ahead (echo -e "$git_status" | grep '^Your branch is ahead')
+      set -l git_diverged (echo -e "$git_status" | grep 'have diverged,$')
       set -l git_branch_color (set_color magenta)
       if test "$git_behind"
         set git_branch_color (set_color yellow)
+      end
+      if test "$git_diverged"
+        set git_branch_color (set_color yellow)
+      end
+      if test "$git_ahead"
+        set git_branch_color (set_color green)
       end
       set git_branch (echo -n -s "$git_branch_color" "$ref" (set_color normal) ' ')
     end
