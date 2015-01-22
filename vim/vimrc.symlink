@@ -61,6 +61,7 @@
     let g:gist_show_privates = 1
 
   Plugin 'kien/ctrlp.vim'
+    let g:ctrlp_match_window = 'max:30'
     let g:ctrlp_dont_split = 'NERD_tree_2'
     let g:ctrlp_custom_ignore = {
           \ 'file': '\v\.(class|jar)$',
