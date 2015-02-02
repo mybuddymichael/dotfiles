@@ -375,7 +375,7 @@
 
 " Map a shortcut for NERDTree.
 
-  nnoremap <leader>N :NERDTreeToggle<CR>
+  nnoremap <leader>N :NERDTreeFind<CR>
 
 " Make ctrl-shift-t show the syntax stack of the character underneath
 " the cursor. This is handy for debugging or examining how syntax
