@@ -172,6 +172,17 @@
     tmux select-layout -t main even-horizontal
     tmux attach -t main
   end
+  function gifit -d "Creates a gif of the provided screen recording."
+    set -l temp_dir (mktemp -d ./frames.XXXX)
+    set -l current_dir (pwd)
+    cd "$temp_dir"
+    ffmpeg -i "../$argv" -r 24 frame-%03d.png
+    convert frame-001.png pallete.gif
+    convert -dither none -remap pallete.gif frame-*.png recording-uncompressed.gif
+    gifsicle --optimize=3 --delay=4 < recording-uncompressed.gif > ../gif.gif
+    cd "$current_dir"
+    rm -r "$temp_dir"
+  end
   function pipeset --no-scope-shadowing -d "Correctly sets multi-line text to a variable. Use like `| set ...`."
       set -l _options
       set -l _variables
