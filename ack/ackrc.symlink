@@ -2,6 +2,8 @@
 ruby=.erb,.slim,.haml,.builder,.rake
 --type-add
 sass=.sass,.scss
+--type-add
+xml=.xib
 --type-set
 coffee=.coffee
 --type-add
@@ -10,6 +12,10 @@ groovy=.gsp
 markdown=.markdown,.md,.mdown
 --type-set
 rdoc=.rdoc
+--type-set
+jsx=.jsx
+--type-add
+js=.jsx
 --ruby
 --css
 --js
@@ -17,3 +23,4 @@ rdoc=.rdoc
 --markdown
 --objc
 --groovy
+--xml
