@@ -23,7 +23,7 @@
 
 # Set a history limit.
 
-  set -g history-limit 2000
+  set -g history-limit 5000
 
 
 # Set custom window splitting commands.
