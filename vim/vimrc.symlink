@@ -46,7 +46,6 @@
     let g:airline_left_sep = ''
     let g:airline_right_sep = ''
   Plugin 'Lokaltog/vim-easymotion'
-  Plugin 'sjl/gundo.vim'
   Plugin 'ervandew/supertab'
   Plugin 'scrooloose/nerdtree'
   Plugin 'airblade/vim-gitgutter'
@@ -59,17 +58,20 @@
     let g:gist_detect_filetype = 1
     let g:gist_open_browser_after_post = 1
     let g:gist_show_privates = 1
+  Plugin 'simnalamburt/vim-mundo'
 
   Plugin 'kien/ctrlp.vim'
     let g:ctrlp_match_window = 'max:30'
+    let g:ctrlp_root_markers = ['package.json']
     let g:ctrlp_dont_split = 'NERD_tree_2'
     let g:ctrlp_custom_ignore = {
           \ 'file': '\v\.(class|jar)$',
-          \ 'dir': '\v(target|build-output)$' }
+          \ 'dir': '\v(target|build-output|node_modules)$' }
 
   Plugin 'scrooloose/syntastic'
     let g:syntastic_error_symbol = '!!'
     let g:syntastic_warning_symbol = '??'
+    let g:syntastic_javascript_checkers = ['eslint']
 
   Plugin 'Raimondi/delimitMate'
     " By default, delimitMate clobbers Vim's timeout settings. This
@@ -79,10 +81,13 @@
 
   Plugin 'guns/vim-clojure-static'
     let g:clojure_align_multiline_strings = 1
-    let g:clojure_fuzzy_indent = 1
-    let g:clojure_fuzzy_indent_patterns = ['^ann', '^def', '^try']
+    let g:clojure_fuzzy_indent_patterns = ['^.*']
   Plugin 'guns/vim-sexp'
   Plugin 'guns/vim-clojure-highlight'
+
+  Plugin 'bhurlow/vim-parinfer'
+
+  Plugin 'lambdatoast/elm.vim'
 
   Plugin 'kien/rainbow_parentheses.vim'
     let g:rbpt_colorpairs = [
@@ -96,12 +101,12 @@
           \ ]
 
   Plugin 'kchmck/vim-coffee-script'
-
-  Plugin 'grails-vim'
-
   Plugin 'groenewege/vim-less'
-
   Plugin 'dag/vim2hs'
+  Plugin 'pangloss/vim-javascript'
+  Plugin 'mxw/vim-jsx'
+    let g:jsx_ext_required = 0
+  Plugin 'wavded/vim-stylus'
 
   call vundle#end()
 
@@ -289,7 +294,7 @@
     au Filetype scss,less,css setlocal foldmethod=marker
     au Filetype scss,less,css setlocal foldmarker={,}
     au Filetype scss,less,css setlocal omnifunc=csscomplete#CompleteCSS
-    au BufNewFile,BufRead *.scss,*.less,*.css inoremap <buffer> {<cr> {}<left><cr><space><space><space><space>.<cr><esc>kA<bs>
+    au BufNewFile,BufRead *.scss,*.less,*.css inoremap <buffer> {<cr> {}<left><cr><space><space>.<cr><esc>kA<bs>
   augroup END
 
 
