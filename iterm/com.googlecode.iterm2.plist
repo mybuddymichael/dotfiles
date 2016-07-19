@@ -462,7 +462,7 @@
 	<key>Default Arrangement Name</key>
 	<string>Default</string>
 	<key>Default Bookmark Guid</key>
-	<string>1B831F1A-280E-4561-B8D7-407C8D039EFC</string>
+	<string>B9413629-7A05-4DCA-9B88-79682E6B1189</string>
 	<key>DeleteSendsCtrlH</key>
 	<false/>
 	<key>DimBackgroundWindows</key>
@@ -554,11 +554,11 @@
 		<integer>1</integer>
 	</dict>
 	<key>NSWindow Frame Preferences</key>
-	<string>754 572 606 456 0 0 1920 1177 </string>
+	<string>572 551 606 456 0 0 1680 1027 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>648 588 620 392 0 0 1920 1177 </string>
+	<string>528 476 620 392 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1280 1 633 1175 0 0 1920 1177 </string>
+	<string>840 0 836 1027 0 0 1680 1027 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1918,6 +1918,10 @@
 			<string>/Users/michael</string>
 		</dict>
 	</array>
+	<key>NoSyncConfirmBeta</key>
+	<true/>
+	<key>NoSyncInstallationId</key>
+	<string>C746CCF2-B01E-43EB-8664-D4FA7AAF914C</string>
 	<key>NoSyncLastTipTime</key>
 	<real>479111893.683716</real>
 	<key>NoSyncPermissionToShowTip</key>
@@ -2012,11 +2016,11 @@
 	<key>SUFeedAlternateAppNameKey</key>
 	<string>iTerm</string>
 	<key>SUFeedURL</key>
-	<string>https://iterm2.com/appcasts/testing3.xml</string>
+	<string>https://iterm2.com/appcasts/testing3.xml?shard=32</string>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-03-31T01:13:23Z</date>
+	<date>2016-07-05T05:38:31Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -2669,6 +2673,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>2.9.20160206</string>
+	<string>3.0.2</string>
 </dict>
 </plist>
