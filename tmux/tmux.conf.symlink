@@ -66,12 +66,12 @@
 
 # Set up my custom status-bar.
 
-  set -g status-fg cyan
-  set -g status-bg black
+  set -g status-fg white
+  set -g status-bg cyan
   set -g pane-border-fg black
-  set -g pane-active-border-fg magenta
+  set -g pane-active-border-fg cyan
   set -g message-fg brightcyan
   set -g message-bg black
   set -g status-left "#S "
   set -g window-status-format "(#I)#W"
-  set -g window-status-current-format "#[bold]#[fg=magenta](#I)#W"
+  set -g window-status-current-format "#[bold]#[fg=black](#I)#W"
