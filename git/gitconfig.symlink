@@ -2,7 +2,9 @@
   excludesfile = ~/.gitignore_global
   editor = vim
   autocrlf = input
-	pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
+  pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
+[commit]
+  verbose = true
 [github]
   user = mybuddymichael
 [tig]
