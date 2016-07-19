@@ -1,3 +1,8 @@
+# Set a LANG.
+
+  set -gx LANG en_US.UTF-8
+
+
 # Set a custom PATH.
 
   set -x PATH ~/.bin /usr/local/bin ~/.rbenv/shims $PATH
