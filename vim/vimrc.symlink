@@ -26,6 +26,8 @@
   " Solarized
   Plugin 'altercation/vim-colors-solarized'
 
+  Plugin 'pbrisbin/vim-colors-off'
+
   " Tim Pope
   Plugin 'tpope/vim-fugitive'
   Plugin 'tpope/vim-commentary'
@@ -115,14 +117,9 @@
 
   filetype plugin indent on
   syntax enable
+  set background=light
+  colorscheme off
 
-
-" The colorscheme is Solarized, and I like things dark (like a
-" submarine!). Solarized can be toggled by hitting <F5>.
-
-  set background=dark
-  colorscheme solarized
-  call togglebg#map("<F5>")
 
   " Modifications
   highlight SignColumn ctermbg=8
