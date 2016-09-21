@@ -7,7 +7,9 @@ module.exports = {
     fontFamily: 'Menlo, "DejaVu Sans Mono", "Lucida Console", monospace',
 
     // terminal cursor background color (hex)
-    cursorColor: '#2aa198',
+    cursorColor: 'rgba(42, 161, 152, 0.6)',
+
+    cursorShape: 'BLOCK',
 
     // color of the text
     foregroundColor: '#073642',
