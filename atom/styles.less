@@ -1,0 +1,32 @@
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed.
+ *
+ * If you are unfamiliar with LESS, you can read more about it here:
+ * http://www.lesscss.org
+ */
+@gray: #4E5D6C;
+
+atom-text-editor::shadow {
+  .relative.current-line {
+    color: @gray !important;
+  }
+}
+
+@color-error-lighten: lighten(@background-color-error, 30%);
+atom-text-editor, atom-text-editor::shadow {
+  .smalls-label {
+    background-color: @app-background-color;
+  }
+}
+
+.theme-atom-material-ui linter-message {
+  display: flex;
+  line-height: 1.1rem;
+
+  .linter-message-item {
+    margin-top: 0.5rem;
+  }
+}

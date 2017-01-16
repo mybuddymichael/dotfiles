@@ -12,3 +12,13 @@
 
 fish_history
 fish/fishd*
+
+atom/storage
+atom/compile-cache
+atom/dev
+atom/.npm
+atom/.node-gyp
+atom/.apm
+atom/packages
+atom/atom-shell
+atom/blob-store
