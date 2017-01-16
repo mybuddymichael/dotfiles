@@ -40,7 +40,6 @@
     invisibles: {}
     showIndentGuide: true
     showInvisibles: true
-    showLineNumbers: false
   "elm-format":
     formatOnSave: true
   elmjutsu:
@@ -93,6 +92,9 @@
   "one-dark-ui": {}
   "one-light-ui":
     layoutMode: "Compact"
+  "package-sync":
+    createOnChange: true
+    forceOverwrite: true
   pigments: {}
   react: {}
   "relative-line-numbers":
