@@ -16,7 +16,26 @@
 
 # Colors.
 
+  set -x fish_color_normal normal
+  set -x fish_color_command --bold
+  set -x fish_color_quote brown
+  set -x fish_color_redirection normal
+  set -x fish_color_end normal
+  set -x fish_color_error red --bold
+  set -x fish_color_param blue
+  set -x fish_color_comment red
+  set -x fish_color_match cyan
+  set -x fish_color_search_match --background=white
+  set -x fish_color_operator cyan
+  set -x fish_color_escape cyan
   set -x fish_color_cwd cyan
+  set -x fish_color_autosuggestion 555 yellow
+  set -x fish_color_user -o green
+  set -x fish_color_host -o green
+
+  set -x fish_pager_color_prefix cyan
+  set -x fish_pager_color_completion normal
+  set -x fish_pager_color_description brblue
 
 
 # Set JAVA_HOME.
