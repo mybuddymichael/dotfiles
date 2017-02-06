@@ -5,7 +5,7 @@
 
 # Set a custom PATH.
 
-  set -x PATH ~/.bin /usr/local/bin ~/.rbenv/shims (yarn global bin) $PATH
+  set -x PATH /usr/local/bin (yarn global bin) $PATH
 
 
 # Vim is my EDITOR.
