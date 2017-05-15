@@ -5,6 +5,7 @@
   pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 [commit]
   verbose = true
+  gpgsign = true
 [github]
   user = mybuddymichael
 [tig]
@@ -56,4 +57,4 @@
 [user]
   name = Michael Hanson
   email = michael.b.hanson@gmail.com
-  signingkey = BDB6CB09
+  signingkey = E125B45C4511CB25
