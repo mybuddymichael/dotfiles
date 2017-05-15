@@ -45,6 +45,11 @@
   end
 
 
+# Fix gpg.
+
+  set -x GPG_TTY (tty)
+
+
 # Create my prompt.
 
   function fish_prompt -d "Write out the prompt"
