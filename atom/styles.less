@@ -9,24 +9,6 @@
  */
 @gray: #4E5D6C;
 
-atom-text-editor::shadow {
-  .relative.current-line {
-    color: @gray !important;
-  }
-}
+.linter-row { .absolute, .relative { display:none !important; } }
 
-@color-error-lighten: lighten(@background-color-error, 30%);
-atom-text-editor, atom-text-editor::shadow {
-  .smalls-label {
-    background-color: @app-background-color;
-  }
-}
-
-.theme-atom-material-ui linter-message {
-  display: flex;
-  line-height: 1.1rem;
-
-  .linter-message-item {
-    margin-top: 0.5rem;
-  }
-}
+.sb-table.linter tbody { background-color: rgb(249, 249, 250); }

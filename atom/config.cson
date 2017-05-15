@@ -32,7 +32,7 @@
       "atom-material-ui"
       "spartan-syntax"
     ]
-    useCustomTitleBar: true
+    titleBar: "custom"
   "easy-motion-redux": {}
   editor:
     fontFamily: "Menlo"
@@ -64,8 +64,7 @@
     autocompleteEnabled: false
     elmOraclePath: "/usr/local/bin/elm-oracle"
   "lazy-motion": {}
-  linter:
-    errorPanelHeight: 255
+  linter: {}
   "linter-elm-make":
     alwaysCompileMain: true
     onlyLintOnSave: true
@@ -74,6 +73,8 @@
     globalNodePath: "/usr/local"
   "linter-flow": {}
   "linter-swiftc": {}
+  "linter-ui-default":
+    showPanel: true
   "lisp-paredit":
     strict: false
   metrics:
