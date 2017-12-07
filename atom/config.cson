@@ -74,6 +74,7 @@
   "linter-flow": {}
   "linter-swiftc": {}
   "linter-ui-default":
+    panelHeight: 130
     showPanel: true
   "lisp-paredit":
     strict: false
@@ -97,6 +98,15 @@
     createOnChange: true
     forceOverwrite: true
   pigments: {}
+  "prettier-atom":
+    formatOnSaveOptions:
+      enabled: true
+    prettierEslintOptions:
+      prettierLast: true
+    prettierOptions:
+      parser: "flow"
+      singleQuote: true
+      trailingComma: "all"
   react: {}
   "relative-line-numbers":
     showNormalLineNumbers: false

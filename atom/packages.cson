@@ -18,6 +18,7 @@ packages: [
   "minimap"
   "package-sync"
   "Parinfer"
+  "prettier-atom"
   "pretty-json"
   "react"
   "relative-numbers"
