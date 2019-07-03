@@ -56,5 +56,5 @@
   protocol = https
 [user]
   name = Michael Hanson
-  email = michael.b.hanson@gmail.com
-  signingkey = E125B45C4511CB25
+  email = 186724+mybuddymichael@users.noreply.github.com
+  signingkey = 7AA8AC1E0B41E444
