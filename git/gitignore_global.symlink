@@ -37,3 +37,6 @@ profile
 
 ## Pow
 .powenv
+
+##
+node_modules
