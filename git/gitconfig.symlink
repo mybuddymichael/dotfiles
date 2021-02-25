@@ -60,3 +60,8 @@
   name = Michael Hanson
   email = 186724+mybuddymichael@users.noreply.github.com
   signingkey = 7AA8AC1E0B41E444
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
