@@ -16,6 +16,8 @@
 [diff]
   wordRegex = [^[:space:]]
   algorithm = patience
+[interactive]
+  diffFilter = "diff-so-fancy --patch"
 [merge]
   defaultToUpstream = true
 [alias]
