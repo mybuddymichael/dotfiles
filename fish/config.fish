@@ -73,7 +73,7 @@ function fish_prompt -d "Write out the prompt"
     set -l git_branch
     if test "$ref"
         set -l git_status
-        git status ^/dev/null | pipeset git_status
+        git status 2>/dev/null | pipeset git_status
         set -l git_behind (echo -e "$git_status" | grep '^Your branch is behind')
         set -l git_ahead (echo -e "$git_status" | grep '^Your branch is ahead')
         set -l git_diverged (echo -e "$git_status" | grep 'have diverged,$')
@@ -130,9 +130,9 @@ function git-status-prompt -d "Returns a string of symbols indicating the status
     set -l symbol_deleted_unstaged (echo -n -s (set_color yellow) '-' (set_color normal))
     set -l __status
 
-    set -l index (git status --porcelain ^ /dev/null)
+    set -l index (git status --porcelain 2> /dev/null)
 
-    if test -z "$index" -a "$status" -eq "0"
+    if test -z "$index" -a "$status" -eq 0
         set __status (echo -n -s "$symbol_clean")
     else
 
@@ -177,7 +177,7 @@ function git-status-prompt -d "Returns a string of symbols indicating the status
 end
 
 function git-current-branch -d "Returns the simplified current branch."
-    echo -n -s (git symbolic-ref HEAD ^ /dev/null | sed 's/refs\/heads\///g')
+    echo -n -s (git symbolic-ref HEAD 2> /dev/null | sed 's/refs\/heads\///g')
 end
 
 
