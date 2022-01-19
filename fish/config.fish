@@ -63,9 +63,6 @@ function fish_prompt -d "Write out the prompt"
     # Create a prompt arrow.
     set -l arrow (echo -n -s "$arrow_color" '›' (set_color normal))
 
-    # Set up z.
-    z --add "$PWD"
-
     # Get the current ref, if any.
     set -l ref (git-current-branch)
 
