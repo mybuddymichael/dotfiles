@@ -5,7 +5,8 @@ set -gx LANG en_US.UTF-8
 
 # Set a custom PATH.
 
-set -x PATH /usr/local/bin (yarn global bin) $PATH
+set -x PATH /opt/n/bin $PATH # This has to be set first for yarn to work
+set -x PATH (yarn global bin) $PATH
 
 
 # Vim is my EDITOR.
@@ -43,6 +44,11 @@ set -x fish_pager_color_description brblue
 if test -d /usr/libexec/java_home
     set -x JAVA_HOME (/usr/libexec/java_home)
 end
+
+
+# Set up n (node)
+
+set -x N_PREFIX /opt/n
 
 
 # Fix gpg.
