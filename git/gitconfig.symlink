@@ -59,7 +59,7 @@
 [user]
   name = Michael Hanson
   email = 186724+mybuddymichael@users.noreply.github.com
-  signingkey = 7AA8AC1E0B41E444
+  signingkey = 07D6422147F0EA6E
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
