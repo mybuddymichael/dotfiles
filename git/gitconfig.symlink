@@ -25,8 +25,10 @@
   ss = status --short
   d = diff
   dc = diff --cached
-  l = log --graph --pretty=format:'%C(yellow)%h%Creset %Cgreen%cr %C(blue)%an%Creset%C(red)%d%Creset %s' --abbrev-commit
+  l = log --graph --pretty=format:'%C(yellow)%h%Creset %Cgreen%ar %C(blue)%an%Creset%C(red)%d%Creset %s' --date=format:"%m-%d" --abbrev-commit
+  lc = log --graph --pretty=format:'%C(yellow)%h%Creset %Cgreen%ar %C(magenta)%cr %C(blue)%an%Creset%C(red)%d%Creset %s' --date=format:"%m-%d" --abbrev-commit
   la = "!f() { git l --all; }; f"
+  lac = "!f() { git lc --all; }; f"
   a = add
   c = commit
   br = branch
@@ -38,6 +40,7 @@
   update = "! git fetch --tags; git fetch --prune"
   grep = grep -n
   ignored = "! git ls-files -v | ack \"^[a-z]\""
+  submit = "!f() { git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD); }; f"
 [color]
   ui = auto
 [color "branch"]
@@ -65,3 +68,5 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+[fetch]
+	prune = true
