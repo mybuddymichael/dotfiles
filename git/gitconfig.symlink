@@ -41,6 +41,7 @@
   grep = grep -n
   ignored = "! git ls-files -v | ack \"^[a-z]\""
   submit = "!f() { git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD); }; f"
+  cn = "!git commit -m 'More notes' && git push"
 [color]
   ui = auto
 [color "branch"]
