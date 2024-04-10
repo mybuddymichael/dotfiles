@@ -62,7 +62,7 @@
 [user]
   name = Michael Hanson
   email = 186724+mybuddymichael@users.noreply.github.com
-  signingkey = 07D6422147F0EA6E
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJe7nonDPCIbdcv5hXNLmekIoIYjiP7fq1C9aZFKYuOU
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -70,3 +70,7 @@
 	smudge = git-lfs smudge -- %f
 [fetch]
 	prune = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
