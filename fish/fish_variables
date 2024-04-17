@@ -39,4 +39,4 @@ SETUVAR --export fish_pager_color_description:brblue
 SETUVAR --export fish_pager_color_prefix:cyan
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_pager_color_selected_background:\x2dr
-SETUVAR fish_user_paths:/usr/local/bin\x1e\x2e\x1e/Users/michael/\x2eyarn/bin\x1e/opt/homebrew/bin\x1e/opt/homebrew/sbin\x1e/opt/n/bin
+SETUVAR fish_user_paths:/opt/homebrew/opt/node\x4020/bin\x1e/usr/local/bin\x1e\x2e\x1e/Users/michael/\x2eyarn/bin\x1e/opt/homebrew/bin\x1e/opt/homebrew/sbin\x1e/opt/n/bin
