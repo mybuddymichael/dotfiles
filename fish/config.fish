@@ -6,7 +6,6 @@ set -gx LANG en_US.UTF-8
 # Set a custom PATH.
 
 fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin
-fish_add_path (yarn global bin)
 
 
 # Vim is my EDITOR.
