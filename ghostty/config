@@ -1,0 +1,20 @@
+window-padding-x = 20
+window-padding-y = 20
+
+font-family = JetBrains Mono
+
+theme = light:rose-pine-dawn,dark:rose-pine-moon
+selection-invert-fg-bg = true
+
+cursor-style = block
+cursor-style-blink = true
+shell-integration-features = no-cursor
+
+macos-icon = custom-style
+macos-icon-frame = beige
+macos-icon-screen-color = #ffffff
+
+keybind = cmd+d>h=new_split:left
+keybind = cmd+d>l=new_split:right
+keybind = cmd+d>j=new_split:down
+keybind = cmd+d>k=new_split:up
