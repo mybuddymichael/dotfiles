@@ -7,9 +7,14 @@ set -gx LANG en_US.UTF-8
 
 fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin
 
+# Set up homebrew.
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Set up atuin.
+atuin init fish | source
 
 # Vim is my EDITOR.
-
 
 set -x EDITOR vim
 
@@ -57,12 +62,24 @@ set -x GPG_TTY (tty)
 
 # Create my prompt.
 
+# Initialize first_prompt variable if not set
+if not set -q __fish_prompt_first
+    set -g __fish_prompt_first 1
+end
+
 function fish_prompt -d "Write out the prompt"
     set -l arrow_color
     if test $status -eq 0
         set arrow_color (set_color green)
     else
         set arrow_color (set_color red)
+    end
+
+    # Add newline only if this is not the first prompt
+    if test $__fish_prompt_first -eq 1
+        set -g __fish_prompt_first 0
+    else
+        echo
     end
 
     # Create a prompt arrow.
@@ -239,5 +256,3 @@ function pipeset --no-scope-shadowing -d "Correctly sets multi-line text to a va
     end
     return 0
 end
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
