@@ -9,7 +9,9 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = [
+    'exec-and-forget borders'
+]
 
 # Start AeroSpace at login
 start-at-login = false
@@ -59,10 +61,10 @@ automatically-unhide-macos-hidden-apps = false
 [gaps]
     inner.horizontal = 12
     inner.vertical =   12
-    outer.left =       12
-    outer.bottom =     12
-    outer.top =        12
-    outer.right =      12
+    outer.left =       8
+    outer.bottom =     8
+    outer.top =        8
+    outer.right =      8
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -212,3 +214,12 @@ automatically-unhide-macos-hidden-apps = false
     down = 'volume down'
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
+
+# [[on-window-detected]]
+#     check-further-callbacks = true
+#     run = 'layout floating'
+
+[[on-window-detected]]
+    check-further-callbacks = true
+    if.app-name-regex-substring = 'Factorio'
+    run = ['move-node-to-workspace F']
