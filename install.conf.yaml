@@ -2,6 +2,9 @@
     link:
       create: true
       relink: true
+    shell:
+      quiet: true
+      stderr: true
 
 - clean:
     ~/:
@@ -18,14 +21,19 @@
 
 - shell:
     - [
-        'grep -q "/opt/homebrew/bin/fish" /etc/shells || (echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells)',
+        'bash -c "grep -q \"/opt/homebrew/bin/fish\" /etc/shells || (echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells)"',
         "Adding fish if not present",
       ]
     - [
-        'test "$SHELL" != "/opt/homebrew/bin/fish" && chsh -s /opt/homebrew/bin/fish || true',
+        'bash -c "test \"$SHELL\" != \"/opt/homebrew/bin/fish\" && chsh -s /opt/homebrew/bin/fish || true"',
         "Changing shell only if needed",
       ]
+    - command: 'mkdir -p "$HOME/Library/Application Support/factorio"'
+      description: "Creating Factorio directory"
+    - command: 'ln -sf "$HOME/Documents/factorio/config" "$HOME/Library/Application Support/factorio/"'
+      description: "Linking Factorio config"
+    - command: 'ln -sf "$HOME/Documents/factorio/saves" "$HOME/Library/Application Support/factorio/"'
+      description: "Linking Factorio saves"
     - command: "brew bundle"
-      description: "Installing missing packages"
+      description: "Installing packages"
       stdout: true
-      stderr: true
