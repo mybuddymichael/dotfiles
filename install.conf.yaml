@@ -1,0 +1,31 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean:
+    ~/:
+    ~/.config:
+      recursive: true
+
+- link:
+    ~/.config/aerospace: aerospace
+    ~/.config/borders: borders
+    ~/.config/fish: fish
+    ~/.config/ghostty: ghostty
+    ~/.gitconfig: git/gitconfig
+    ~/.gitignore_global: git/gitignore_global
+
+- shell:
+    - [
+        'grep -q "/opt/homebrew/bin/fish" /etc/shells || (echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells)',
+        "Adding fish if not present",
+      ]
+    - [
+        'test "$SHELL" != "/opt/homebrew/bin/fish" && chsh -s /opt/homebrew/bin/fish || true',
+        "Changing shell only if needed",
+      ]
+    - command: "brew bundle"
+      description: "Installing missing packages"
+      stdout: true
+      stderr: true
