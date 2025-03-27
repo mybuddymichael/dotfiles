@@ -12,7 +12,7 @@
       recursive: true
 
 - link:
-    ~/.config/aerospace: aerospace
+    ~/.aerospace.toml: aerospace/aerospace.toml
     ~/.config/borders: borders
     ~/.config/fish: fish
     ~/.config/ghostty: ghostty
