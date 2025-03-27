@@ -20,6 +20,12 @@
     ~/.gitignore_global: git/gitignore_global
 
 - shell:
+    - command: "install_homebrew"
+      description: "Installing Homebrew if not present"
+      stdout: true
+    - command: "brew bundle"
+      description: "Installing packages"
+      stdout: true
     - [
         'bash -c "grep -q \"/opt/homebrew/bin/fish\" /etc/shells || (echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells)"',
         "Adding fish if not present",
@@ -28,12 +34,10 @@
         'bash -c "test \"$SHELL\" != \"/opt/homebrew/bin/fish\" && chsh -s /opt/homebrew/bin/fish || true"',
         "Changing shell only if needed",
       ]
+    - ["brew services start borders", "Starting borders"]
     - command: 'mkdir -p "$HOME/Library/Application Support/factorio"'
       description: "Creating Factorio directory"
     - command: 'ln -sf "$HOME/Documents/factorio/config" "$HOME/Library/Application Support/factorio/"'
       description: "Linking Factorio config"
     - command: 'ln -sf "$HOME/Documents/factorio/saves" "$HOME/Library/Application Support/factorio/"'
       description: "Linking Factorio saves"
-    - command: "brew bundle"
-      description: "Installing packages"
-      stdout: true
