@@ -9,8 +9,6 @@ set -euo pipefail
 # Assumes the script is in the root of the dotfiles directory.
 DOTFILES_DIR=$(cd "$(dirname "$0")" && pwd)
 
-echo "Linking configuration files..."
-
 # Function to safely link files and directories
 link() {
   local source="$1"
@@ -82,7 +80,8 @@ link() {
   return 0
 }
 
-# Link files defined in the config
+echo "Linking dotfiles..."
+
 link "$DOTFILES_DIR/aerospace/aerospace.toml" "$HOME/.aerospace.toml"
 link "$DOTFILES_DIR/borders" "$HOME/.config/borders"
 link "$DOTFILES_DIR/fish" "$HOME/.config/fish"
@@ -132,7 +131,7 @@ else
 fi
 
 # Factorio configuration linking
-echo "Setting up Factorio configuration..."
+echo "Linking Factorio configuration..."
 FACTORIO_SUPPORT_DIR="$HOME/Library/Application Support/factorio"
 FACTORIO_DOCS_DIR="$HOME/Documents/factorio"
 
