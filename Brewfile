@@ -59,6 +59,7 @@ mas "AdGuard for Safari", id: 1440147259
 mas "Day Progress", id: 6450280202
 mas "DeskMinder", id: 6740942938
 mas "Framous", id: 6636520519
+mas "Gifski", id: 1351639930
 mas "Horo", id: 1437226581
 mas "Keynote", id: 409183694
 mas "Klack", id: 6446206067
