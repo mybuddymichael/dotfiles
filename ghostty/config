@@ -10,9 +10,7 @@ cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor
 
-macos-icon = custom-style
-macos-icon-frame = beige
-macos-icon-screen-color = #ffffff
+macos-icon = xray
 
 keybind = cmd+d>h=new_split:left
 keybind = cmd+d>l=new_split:right
