@@ -94,6 +94,7 @@ link "$HOME/Documents/color profiles" "$HOME/Library/ColorSync/Profiles"
 echo "Changing macOS default settings..."
 # Make it so that displays don't have their own spaces. (https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces)
 defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
+
 # Group windows in mission control by application. (https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control)
 defaults write com.apple.dock expose-group-apps -bool true
 # Set the dock to the right side of the screen.
