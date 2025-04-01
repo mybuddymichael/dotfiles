@@ -81,7 +81,6 @@ link() {
 }
 
 echo "Linking dotfiles..."
-
 link "$DOTFILES_DIR/aerospace/aerospace.toml" "$HOME/.aerospace.toml"
 link "$DOTFILES_DIR/borders" "$HOME/.config/borders"
 link "$DOTFILES_DIR/fish" "$HOME/.config/fish"
@@ -90,12 +89,38 @@ link "$DOTFILES_DIR/git/gitconfig" "$HOME/.gitconfig"
 link "$DOTFILES_DIR/git/gitignore_global" "$HOME/.gitignore_global"
 
 echo "Linking color profiles..."
-
 link "$HOME/Documents/color profiles" "$HOME/Library/ColorSync/Profiles"
 
-echo "Running setup scripts..."
+echo "Changing macOS default settings..."
+# Make it so that displays don't have their own spaces. (https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces)
+defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
+# Group windows in mission control by application. (https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control)
+defaults write com.apple.dock expose-group-apps -bool true
+# Set the dock to the right side of the screen.
+defaults write com.apple.dock orientation right
+# Auto hide the dock.
+defaults write com.apple.dock autohide -bool true
+# Make the dock as large as possible.
+defaults write com.apple.dock tilesize -int 256
+# Don't show recent applications in the dock.
+defaults write com.apple.dock show-recents -bool false
+# Make the dock appear instantly.
+defaults write com.apple.dock autohide-time-modifier -float "0.0"
+killall Dock
 
-# Install Homebrew using official method
+# Enable full keyboard navigation
+defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
+
+echo "Checking for Xcode Command Line Tools..."
+if ! xcode-select -p &>/dev/null; then
+  echo "Xcode Command Line Tools not found. Attempting to install..."
+  # This command might prompt for user interaction if not run with sudo
+  # and might require manual confirmation in a GUI dialog.
+  xcode-select --install
+else
+  echo "Xcode Command Line Tools already installed."
+fi
+
 echo "Installing Homebrew if not present..."
 if ! command -v brew &>/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -103,7 +128,6 @@ else
   echo "Homebrew is already installed."
 fi
 
-# Install packages via Brewfile
 echo "Installing packages via Brewfile..."
 if command -v brew &>/dev/null; then
   brew bundle --force --file="$DOTFILES_DIR/Brewfile"
@@ -111,7 +135,6 @@ else
   echo "Warning: brew command not found. Skipping brew bundle."
 fi
 
-# Add fish shell to /etc/shells if not present
 echo "Adding fish shell to /etc/shells if needed..."
 FISH_PATH="/opt/homebrew/bin/fish"
 if ! grep -qFx "$FISH_PATH" /etc/shells; then
@@ -121,7 +144,6 @@ else
   echo "$FISH_PATH already in /etc/shells."
 fi
 
-# Change default shell to fish if not already set
 echo "Changing default shell to fish if needed..."
 if [ "$SHELL" != "$FISH_PATH" ]; then
   echo "Changing shell to $FISH_PATH. Sudo password may be required."
@@ -130,7 +152,6 @@ else
   echo "Default shell is already $FISH_PATH."
 fi
 
-# Factorio configuration linking
 echo "Linking Factorio configuration..."
 FACTORIO_SUPPORT_DIR="$HOME/Library/Application Support/factorio"
 FACTORIO_DOCS_DIR="$HOME/Documents/factorio"
