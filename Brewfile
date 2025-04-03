@@ -8,11 +8,11 @@ tap "oven-sh/bun"
 # brew "yt-dlp"
 
 # brew "go"
-# brew "btop"
 # brew "hyperfine"
 # brew "rustup"
 
 brew "atuin"
+brew "btop"
 brew "diff-so-fancy"
 brew "fish"
 brew "gh"
