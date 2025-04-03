@@ -146,6 +146,7 @@ defaults write com.apple.dock tilesize -int 256
 defaults write com.apple.dock show-recents -bool false
 # Make the dock appear instantly.
 defaults write com.apple.dock autohide-time-modifier -float "0.0"
+# defaults write com.apple.dock autohide-delay -float "0.0"
 killall Dock
 # Enable full keyboard navigation
 defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
