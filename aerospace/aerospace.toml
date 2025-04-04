@@ -58,12 +58,12 @@ preset = 'qwerty'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 12
-inner.vertical = 12
-outer.left = 8
-outer.bottom = 8
-outer.top = 8
-outer.right = 8
+inner.horizontal = [{ monitor."dell" = 32 }, 12]
+inner.vertical = [{ monitor."dell" = 32 }, 12]
+outer.left = [{ monitor."dell" = 24 }, 8]
+outer.bottom = [{ monitor."dell" = 24 }, 8]
+outer.top = [{ monitor."dell" = 24 }, 8]
+outer.right = [{ monitor."dell" = 24 }, 8]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
