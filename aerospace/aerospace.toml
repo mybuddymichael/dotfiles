@@ -185,9 +185,21 @@ u = 'secondary'
 i = 'secondary'
 o = 'secondary'
 
-# [[on-window-detected]]
-#     check-further-callbacks = true
-#     run = 'layout floating'
+[[on-window-detected]]
+check-further-callbacks = true
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = ['move-node-to-workspace 3']
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = ['move-node-to-workspace 3']
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'shared content'
+run = ['move-node-to-workspace 4']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
@@ -195,8 +207,8 @@ run = ['move-node-to-workspace u']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Factorio'
-run = ['layout floating', 'move-node-to-workspace 3']
+run = ['layout floating', 'move-node-to-workspace 4']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Fusion'
-run = ['layout floating', 'move-node-to-workspace 3']
+run = ['layout floating', 'move-node-to-workspace 4']
