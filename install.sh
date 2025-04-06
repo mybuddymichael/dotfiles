@@ -150,6 +150,8 @@ defaults write com.apple.dock autohide-time-modifier -float "0.0"
 killall Dock
 # Enable full keyboard navigation
 defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
+# Disable the key repeat popup.
+defaults write -g ApplePressAndHoldEnabled -bool false
 
 echo "Checking for Xcode Command Line Tools..."
 if ! xcode-select -p &>/dev/null; then
