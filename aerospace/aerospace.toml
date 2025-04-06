@@ -185,9 +185,9 @@ u = 'secondary'
 i = 'secondary'
 o = 'secondary'
 
-[[on-window-detected]]
-check-further-callbacks = true
-run = 'layout floating'
+# [[on-window-detected]]
+# check-further-callbacks = true
+# run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
