@@ -205,36 +205,7 @@ end
 function t
     tree $argv
 end
-function serve-this
-    python -m SimpleHTTPServer 9000
-end
-# function tmux-start -d "Starts a new tmux session with three vertical panes, or it attaches a session if one named "main" already exists."
-#     tmux has-session -t main >/dev/null ^&1
 
-#     if test $status -eq 0
-#         tmux attach -t main
-#         return 0
-#     end
-
-#     tmux new-session -d -s main
-#     tmux new-window -t main:2
-#     tmux new-window -t main:3
-#     tmux join-pane -s main:2 -t main:1
-#     tmux join-pane -s main:3 -t main:1
-#     tmux select-layout -t main even-horizontal
-#     tmux attach -t main
-# end
-function gifit -d "Creates a gif of the provided screen recording."
-    set -l temp_dir (mktemp -d ./frames.XXXX)
-    set -l current_dir (pwd)
-    cd "$temp_dir"
-    ffmpeg -i "../$argv" -r 24 frame-%03d.png
-    convert frame-001.png pallete.gif
-    convert -dither none -remap pallete.gif frame-*.png recording-uncompressed.gif
-    gifsicle --optimize=3 --delay=4 <recording-uncompressed.gif >../gif.gif
-    cd "$current_dir"
-    rm -r "$temp_dir"
-end
 function pipeset --no-scope-shadowing -d "Correctly sets multi-line text to a variable. Use like `| set ...`."
     set -l _options
     set -l _variables
