@@ -61,6 +61,7 @@ cask "screen-studio"
 cask "signal"
 cask "spotify"
 cask "visual-studio-code"
+cask "zoom"
 
 mas "1Password for Safari", id: 1569813296
 mas "AdGuard for Safari", id: 1440147259
