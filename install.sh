@@ -209,5 +209,7 @@ FACTORIO_DOCS_DIR="$HOME/Documents/factorio"
 
 link "$FACTORIO_DOCS_DIR/config" "$FACTORIO_SUPPORT_DIR/config"
 link "$FACTORIO_DOCS_DIR/saves" "$FACTORIO_SUPPORT_DIR/saves"
+link "$FACTORIO_DOCS_DIR/blueprint-storage-2.dat" "$FACTORIO_SUPPORT_DIR/blueprint-storage-2.dat"
+link "$FACTORIO_DOCS_DIR/player-data.json" "$FACTORIO_SUPPORT_DIR/player-data.json"
 
 echo "Dotfiles setup script completed."
