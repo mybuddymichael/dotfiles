@@ -133,7 +133,9 @@ copy_dir_contents "$HOME/Documents/color profiles" "$HOME/Library/ColorSync/Prof
 
 echo "Changing macOS default settings..."
 # Make it so that displays don't have their own spaces. (https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces)
-defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
+defaults write com.apple.spaces spans-displays -bool true
+# Show the seconds in the menu bar clock. (Doesn't work on modern macOS?)
+# defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d HH:mm:ss"
 # Group windows in mission control by application. (https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control)
 defaults write com.apple.dock expose-group-apps -bool true
 # Set the dock to the right side of the screen.
@@ -147,11 +149,18 @@ defaults write com.apple.dock show-recents -bool false
 # Make the dock appear instantly.
 defaults write com.apple.dock autohide-time-modifier -float "0.0"
 # defaults write com.apple.dock autohide-delay -float "0.0"
-killall Dock
+
 # Enable full keyboard navigation
 defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
 # Disable the key repeat popup.
 defaults write -g ApplePressAndHoldEnabled -bool false
+# Only show scrollbars when scrolling.
+defaults write -g AppleShowScrollBars -string WhenScrolling
+
+# Restart services.
+# Note that the Mac will still require a restart for some changes to take effect.
+killall Dock
+killall SystemUIServer
 
 echo "Checking for Xcode Command Line Tools..."
 if ! xcode-select -p &>/dev/null; then
