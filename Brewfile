@@ -20,6 +20,7 @@ brew "gh"
 brew "git"
 brew "mas"
 brew "prettyping"
+brew "rustup"
 brew "tree"
 brew "vercel-cli"
 brew "felixkratz/formulae/borders", restart_service: :changed
