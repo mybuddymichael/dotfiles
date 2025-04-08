@@ -212,3 +212,7 @@ run = ['layout floating', 'move-node-to-workspace 4']
 [[on-window-detected]]
 if.app-name-regex-substring = 'Fusion'
 run = ['layout floating', 'move-node-to-workspace 4']
+
+[[on-window-detected]]
+if.app-id = 'com.figma.Desktop'
+run = ['move-node-to-workspace 2']
