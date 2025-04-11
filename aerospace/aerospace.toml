@@ -170,12 +170,12 @@ alt-shift-l = ['join-with right', 'mode main']
 
 [mode.resize.binding]
 h = 'resize smart -70'
-j = 'resize smart +70'
-k = 'resize smart -70'
+j = 'resize smart +20'
+k = 'resize smart -20'
 l = 'resize smart +70'
 shift-h = 'resize smart -210'
-shift-j = 'resize smart +210'
-shift-k = 'resize smart -210'
+shift-j = 'resize smart +60'
+shift-k = 'resize smart -60'
 shift-l = 'resize smart +210'
 esc = 'mode main'
 enter = 'mode main'
