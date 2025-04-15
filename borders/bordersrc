@@ -5,7 +5,7 @@ options=(
 	width=16.0
 	hidpi=on
 	# rose
-	active_color=0xffeb6f92
+	active_color=0xddeb6f92
 	# gold
 	# active_color=0xffea9d34
 	inactive_color=0x00ffffff
