@@ -27,6 +27,7 @@ brew "felixkratz/formulae/borders", restart_service: :changed
 brew "oven-sh/bun/bun"
 
 # cask "appcleaner"
+# cask "chatgpt"
 # cask "dockdoor"
 # cask "leader-key"
 # cask "linear-linear"
@@ -62,6 +63,7 @@ cask "screen-studio"
 cask "signal"
 cask "spotify"
 cask "visual-studio-code"
+cask "zed@preview"
 cask "zoom"
 
 mas "1Password for Safari", id: 1569813296
