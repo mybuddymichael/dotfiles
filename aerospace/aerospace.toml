@@ -219,3 +219,11 @@ run = ['layout floating', 'move-node-to-workspace 4']
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
 run = ['move-node-to-workspace 2']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.2119B734-B99E-4375-BF30-82C0A4F8776B' # Focusmate
+run = ['move-node-to-workspace i']
+
+[[on-window-detected]]
+if.app-id = 'com.obsproject.obs-studio'
+run = ['move-node-to-workspace 4']
