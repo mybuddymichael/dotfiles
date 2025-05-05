@@ -10,6 +10,7 @@ tap "oven-sh/bun"
 # brew "go"
 # brew "hyperfine"
 # brew "rustup"
+# brew "vercel-cli"
 
 brew "atuin"
 brew "btop"
@@ -24,7 +25,6 @@ brew "mas"
 brew "prettyping"
 brew "rustup"
 brew "tree"
-brew "vercel-cli"
 brew "felixkratz/formulae/borders", restart_service: :changed
 brew "oven-sh/bun/bun"
 
