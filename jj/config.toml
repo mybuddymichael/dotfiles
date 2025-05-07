@@ -24,6 +24,24 @@ if(signature.name() == "Michael Hanson",
 )
 '''
 'format_timestamp(timestamp)' = 'timestamp.local().ago()'
+builtin_log_node = '''
+coalesce(
+  if(!self, label("elided", "~")),
+  label(
+    separate(" ",
+      if(current_working_copy, "working_copy"),
+      if(immutable, "immutable"),
+      if(conflict, "conflict"),
+    ),
+    coalesce(
+      if(current_working_copy, "→"),
+      if(immutable, "◆"),
+      if(conflict, "×"),
+      "○",
+    )
+  )
+)
+'''
 
 # log_oneline_simple = '''
 # if(root,
