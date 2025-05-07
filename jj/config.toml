@@ -43,6 +43,8 @@ coalesce(
 )
 '''
 
+description_placeholder = 'label("description placeholder", "(no desc)")'
+
 # log_oneline_simple = '''
 # if(root,
 #   format_root_commit(self),
