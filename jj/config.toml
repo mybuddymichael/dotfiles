@@ -16,9 +16,13 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 log = 'builtin_log_oneline'
 
 [template-aliases]
-# Username part of the email address
 'format_short_signature(signature)' = 'signature.name()'
-'format_short_signature_oneline(signature)' = 'signature.name()'
+'format_short_signature_oneline(signature)' = '''
+if(signature.name() == "Michael Hanson",
+  label("author me",  "👋 Me"),
+  signature.name()
+)
+'''
 'format_timestamp(timestamp)' = 'timestamp.local().ago()'
 
 # log_oneline_simple = '''
@@ -51,6 +55,8 @@ log = 'builtin_log_oneline'
 prefix = { bold = true, underline = true }
 
 author = 'bright black'
+'author me' = { fg = 'magenta' }
+'working_copy author me' = 'green'
 'working_copy author' = 'green'
 
 bookmark = 'red'
