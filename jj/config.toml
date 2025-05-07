@@ -13,10 +13,61 @@ key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJe7nonDPCIbdcv5hXNLmekIoIYjiP7fq1C9a
 backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [templates]
-log = "builtin_log_oneline"
+log = 'builtin_log_oneline'
 
 [template-aliases]
 # Username part of the email address
 'format_short_signature(signature)' = 'signature.name()'
 'format_short_signature_oneline(signature)' = 'signature.name()'
 'format_timestamp(timestamp)' = 'timestamp.local().ago()'
+
+# log_oneline_simple = '''
+# if(root,
+#   format_root_commit(self),
+#   label(if(current_working_copy, "working_copy"),
+#     concat(
+#       separate(" ",
+#         format_short_change_id_with_hidden_and_divergent_info(self),
+#         tags,
+#         working_copies,
+#         bookmarks,
+#         if(conflict, label("conflict", "conflict")),
+#         if(config("ui.show-cryptographic-signatures").as_boolean(),
+#           format_short_cryptographic_signature(signature)),
+#         if(empty, label("empty", "(empty)")),
+#         if(description,
+#           description.first_line(),
+#           label(if(empty, "empty"), description_placeholder),
+#         ),
+#         author.name(),
+#         format_timestamp(commit_timestamp(self)),
+#       ) ++ "\n",
+#     ),
+#   )
+# )
+# '''
+
+[colors]
+prefix = { bold = true, underline = true }
+
+author = 'bright black'
+'working_copy author' = 'green'
+
+bookmark = 'red'
+bookmarks = 'red'
+git_head = 'blue'
+
+change_id = 'white'
+'working_copy change_id' = 'green'
+
+timestamp = 'bright black'
+'working_copy timestamp' = 'white'
+
+'description placeholder' = 'yellow'
+
+empty = "cyan"
+'working_copy empty' = { fg = "cyan", bold = true }
+
+'working_copy empty description placeholder' = 'yellow'
+
+'node working_copy' = { fg = 'green', bold = true }
