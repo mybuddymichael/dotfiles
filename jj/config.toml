@@ -1,6 +1,6 @@
 [ui]
 default-command = "log"
-diff.tool = ["difft", "--color=always", "$left", "$right"]
+diff.tool = ["difft", "--color=always", "--display=inline", "$left", "$right"]
 
 [user]
 name = "Michael Hanson"
