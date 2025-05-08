@@ -2,7 +2,6 @@
 
 set -gx LANG en_US.UTF-8
 
-
 # Set a custom PATH.
 
 fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin
@@ -12,132 +11,37 @@ fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Set up atuin.
+
 atuin init fish | source
 
 # Vim is my EDITOR.
 
-set -x EDITOR vim
+set -gx EDITOR vim
 
 
 # Colors.
 
-set -x fish_color_normal normal
-set -x fish_color_command --bold
-set -x fish_color_quote brown
-set -x fish_color_redirection normal
-set -x fish_color_end normal
-set -x fish_color_error red --bold
-set -x fish_color_param blue
-set -x fish_color_comment red
-set -x fish_color_match cyan
-set -x fish_color_search_match --background=white
-set -x fish_color_operator cyan
-set -x fish_color_escape cyan
-set -x fish_color_cwd cyan
-set -x fish_color_autosuggestion 555 yellow
-set -x fish_color_user -o green
-set -x fish_color_host -o green
+set fish_color_normal normal
+set fish_color_command --bold
+set fish_color_quote brown
+set fish_color_redirection normal
+set fish_color_end normal
+set fish_color_error red --bold
+set fish_color_param blue
+set fish_color_comment red
+set fish_color_match cyan
+set fish_color_search_match --background=white
+set fish_color_operator cyan
+set fish_color_escape cyan
+set fish_color_cwd cyan
+set fish_color_autosuggestion 555 yellow
+set fish_color_user -o green
+set fish_color_host -o green
 
-set -x fish_pager_color_prefix cyan
-set -x fish_pager_color_completion normal
-set -x fish_pager_color_description brblue
+set fish_pager_color_prefix cyan
+set fish_pager_color_completion normal
+set fish_pager_color_description brblue
 
-
-# Set JAVA_HOME.
-
-if test -d /usr/libexec/java_home
-    set -x JAVA_HOME (/usr/libexec/java_home)
-end
-
-
-# Set up n (node)
-
-set -x N_PREFIX /opt/n
-
-
-# Fix gpg.
-
-set -x GPG_TTY (tty)
-
-
-# Create my prompt.
-
-# Initialize first_prompt variable if not set
-if not set -q __fish_prompt_first
-    set -g __fish_prompt_first 1
-end
-
-function fish_prompt -d "Write out the prompt"
-    set -l arrow_color
-    if test $status -eq 0
-        set arrow_color (set_color green)
-    else
-        set arrow_color (set_color red)
-    end
-
-    # Add newline only if this is not the first prompt
-    if test $__fish_prompt_first -eq 1
-        set -g __fish_prompt_first 0
-    else
-        echo
-    end
-
-    # Create a prompt arrow.
-    set -l arrow (echo -n -s "$arrow_color" '›' (set_color normal))
-
-    # Get the current ref, if any.
-    set -l ref (git-current-branch)
-
-    # Create a git_branch section for the prompt.
-    set -l git_branch
-    if test "$ref"
-        set -l git_status
-        git status 2>/dev/null | pipeset git_status
-        set -l git_behind (echo -e "$git_status" | grep '^Your branch is behind')
-        set -l git_ahead (echo -e "$git_status" | grep '^Your branch is ahead')
-        set -l git_diverged (echo -e "$git_status" | grep 'have diverged,$')
-        set -l git_branch_color (set_color magenta)
-        if test "$git_behind"
-            set git_branch_color (set_color yellow)
-        end
-        if test "$git_diverged"
-            set git_branch_color (set_color yellow)
-        end
-        if test "$git_ahead"
-            set git_branch_color (set_color green)
-        end
-        set git_branch (echo -n -s "$git_branch_color" "$ref" (set_color normal) ' ')
-    end
-
-    set -l git_status (git-status-prompt)
-    if test "$git_status"
-        set git_status (echo -n -s "$git_status ")
-    end
-
-    switch $USER
-
-        case root
-
-            if not set -q __fish_prompt_cwd
-                if set -q fish_color_cwd_root
-                    set -g __fish_prompt_cwd (set_color $fish_color_cwd_root)
-                else
-                    set -g __fish_prompt_cwd (set_color $fish_color_cwd)
-                end
-            end
-
-            echo -n -s "$__fish_prompt_cwd" (prompt_pwd) (set_color normal) '# '
-
-        case '*'
-
-            if not set -q __fish_prompt_cwd
-                set -g __fish_prompt_cwd (set_color $fish_color_cwd)
-            end
-
-            echo -n -s -e "$git_branch" "$git_status" "$__fish_prompt_cwd" (prompt_pwd) (set_color normal) "\n$arrow "
-
-    end
-end
 
 function git-status-prompt -d "Returns a string of symbols indicating the status of the current git directory."
     set -l symbol_clean (echo -n -s (set_color green) 'G' (set_color normal))
