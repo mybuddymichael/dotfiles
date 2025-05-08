@@ -1,6 +1,7 @@
 [ui]
+diff.format = "git"
 default-command = "log"
-diff.tool = ["difft", "--color=always", "--display=inline", "$left", "$right"]
+pager = ["sh", "-c", "diff-so-fancy | less --tabs=2 -RFX"]
 
 [user]
 name = "Michael Hanson"
@@ -100,3 +101,7 @@ empty = "cyan"
 'working_copy empty description placeholder' = 'yellow'
 
 'node working_copy' = { fg = 'green', bold = true }
+
+'diff removed token' = { underline = false }
+'diff added token' = { underline = false }
+'diff token' = { underline = false }
