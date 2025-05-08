@@ -36,8 +36,8 @@ function fish_prompt -d "Write out the prompt"
 			set jj_info (string trim (jj log --color always --no-graph -r '@' -T "$template" 2>/dev/null))
 		end
 		set -l base_prompt (string join '' "$root_pre_character" "$cwd_color" (prompt_pwd) (set_color normal) " $jj_info")
-		if test (string length --visible $base_prompt) -gt (expr $COLUMNS)
-			set base_prompt (string shorten -m (expr $COLUMNS) $base_prompt)
+		if test (string length --visible $base_prompt) -gt $COLUMNS
+			set base_prompt (string shorten -m $COLUMNS $base_prompt)
 		end
 		echo -n -s -e "$base_prompt\n$arrow"
 	end
