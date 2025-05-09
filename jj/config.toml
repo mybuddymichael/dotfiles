@@ -16,6 +16,11 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [git]
 sign-on-push = true
 
+# The `trunk().. &` bit is an optimization to scan for non-`mine()` commits
+# only among commits that are not in `trunk()`.
+[revset-aliases]
+'immutable_heads()' = 'builtin_immutable_heads() | (trunk().. & ~mine())'
+
 [templates]
 log = 'builtin_log_oneline'
 
