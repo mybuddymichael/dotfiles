@@ -1,4 +1,5 @@
 [ui]
+editor = "zed-preview --wait"
 diff.format = "git"
 default-command = "log"
 pager = ["sh", "-c", "diff-so-fancy | less --tabs=2 -RFX"]
