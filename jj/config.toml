@@ -21,6 +21,7 @@ sign-on-push = true
 log = 'builtin_log_oneline'
 
 [template-aliases]
+'format_short_id(id)' = 'id.shortest(3)'
 'format_short_signature(signature)' = 'signature.name()'
 'format_short_signature_oneline(signature)' = '''
 if(signature.name() == "Michael Hanson",
