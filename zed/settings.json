@@ -31,7 +31,7 @@
 	"features": {
 		"edit_prediction_provider": "supermaven"
 	},
-	"autosave": { "after_delay": { "milliseconds": 1000 } },
+	"autosave": { "after_delay": { "milliseconds": 5000 } },
 	"base_keymap": "VSCode",
 	"vim_mode": true,
 	"ui_font_size": 16,
