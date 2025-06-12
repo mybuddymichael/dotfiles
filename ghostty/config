@@ -17,3 +17,4 @@ keybind = cmd+d>h=new_split:left
 keybind = cmd+d>l=new_split:right
 keybind = cmd+d>j=new_split:down
 keybind = cmd+d>k=new_split:up
+keybind = shift+enter=text:\n
