@@ -13,6 +13,9 @@ backend = "ssh"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJe7nonDPCIbdcv5hXNLmekIoIYjiP7fq1C9aZFKYuOU"
 backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
+[aliases]
+t = ["log", "-r", "heads(::trunk() & ::@)::@"]
+
 [git]
 sign-on-push = true
 
