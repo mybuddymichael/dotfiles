@@ -14,7 +14,10 @@ key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJe7nonDPCIbdcv5hXNLmekIoIYjiP7fq1C9a
 backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [aliases]
+# From the current commit to the commit that is in trunk that we branched from.
 t = ["log", "-r", "heads(::trunk() & ::@)::@"]
+# Everything that is a descendent of the commit that we branched off of trunk.
+ta = ["log", "-r", "heads(::trunk() & ::@)::"]
 
 [git]
 sign-on-push = true
