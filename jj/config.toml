@@ -17,7 +17,13 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 # From the current commit to the commit that is in trunk that we branched from.
 t = ["log", "-r", "heads(::trunk() & ::@)::@"]
 # Everything that is a descendent of the commit that we branched off of trunk.
-ta = ["log", "-r", "heads(::trunk() & ::@)::"]
+ta = [
+  "log",
+  "-r",
+  "heads(::trunk() & ::@):: ~ heads(::trunk() & ::@)..untracked_remote_bookmarks()",
+]
+# Everything that is a descendent of the commit that we branched off of trunk, including remote bookmarks.
+tar = ["log", "-r", "heads(::trunk() & ::@)::"]
 
 [git]
 sign-on-push = true
