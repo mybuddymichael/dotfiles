@@ -20,7 +20,7 @@ t = ["log", "-r", "heads(::trunk() & ::@)::@"]
 ta = [
   "log",
   "-r",
-  "heads(::trunk() & ::@):: ~ heads(::trunk() & ::@)..untracked_remote_bookmarks()",
+  "heads(::trunk() & ::@):: ~ (heads(::trunk() & ::@)..untracked_remote_bookmarks() ~ ::tracked_remote_bookmarks())",
 ]
 # Everything that is a descendent of the commit that we branched off of trunk, including remote bookmarks.
 tar = ["log", "-r", "heads(::trunk() & ::@)::"]
