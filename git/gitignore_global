@@ -35,9 +35,9 @@ xcuserdata
 profile
 *.moved-aside
 
-## Pow
-.powenv
-
 ##
 node_modules
 .zed/settings.json
+
+## Claude Code
+.claude/settings.local.json
