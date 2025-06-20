@@ -1,6 +1,6 @@
 [ui]
 diff-formatter = ":git"
-default-command = "log"
+default-command = "ta"
 pager = ["sh", "-c", "diff-so-fancy | less --tabs=2 -RFX"]
 
 [user]
