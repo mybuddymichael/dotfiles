@@ -16,7 +16,7 @@ atuin init fish | source
 
 # Vim is my EDITOR.
 
-set -gx EDITOR vim
+set -gx EDITOR nvim
 
 
 # Colors.

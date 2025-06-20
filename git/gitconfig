@@ -1,6 +1,6 @@
 [core]
   excludesfile = ~/.gitignore_global
-  editor = vim
+  editor = nvim
   autocrlf = input
   pager = "diff-so-fancy | less --tabs=2 -RFX"
 [commit]
