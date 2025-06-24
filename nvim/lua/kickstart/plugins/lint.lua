@@ -5,9 +5,36 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+
+      -- Dynamically choose linter based on project setup
+      local function get_js_linter()
+        local ok, package_json = pcall(vim.fn.readfile, 'package.json')
+        if ok then
+          local content = table.concat(package_json, '\n')
+          local parsed = vim.fn.json_decode(content)
+          if parsed and parsed.scripts and parsed.scripts.oxlint then
+            return 'oxlint'
+          elseif parsed and parsed.scripts and parsed.scripts.eslint then
+            return 'eslint'
+          end
+        end
+        return 'oxlint' -- default fallback
+      end
+
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        typescript = { get_js_linter() },
       }
+
+      -- Configure oxlint to use bun run
+      local oxlint = lint.linters.oxlint
+      oxlint.cmd = 'bun'
+      oxlint.args = vim.list_extend({ 'run', 'oxlint' }, oxlint.args or {})
+
+      -- Configure eslint to use bun run
+      local eslint = lint.linters.eslint
+      eslint.cmd = 'bun'
+      eslint.args = vim.list_extend({ 'run', 'eslint' }, eslint.args or {})
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
