@@ -22,7 +22,6 @@ return {
       end
 
       lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
         typescript = { get_js_linter() },
       }
 
