@@ -40,4 +40,4 @@ node_modules
 .zed/settings.json
 
 ## Claude Code
-.claude/settings.local.json
+**/.claude/settings.local.json
