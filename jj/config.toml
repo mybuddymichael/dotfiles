@@ -92,3 +92,6 @@ empty = "cyan"
 'diff removed token' = { underline = false }
 'diff added token' = { underline = false }
 'diff token' = { underline = false }
+
+[lazyjj.keybinds.log_tab]
+save = "Enter"
