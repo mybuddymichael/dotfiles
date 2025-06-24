@@ -28,7 +28,7 @@ vim.o.breakindent = true
 
 -- Set tab display width to 2 characters
 vim.o.tabstop = 2
-vim.o.shiftwidth = 0
+vim.o.shiftwidth = 2
 -- Enable smart indentation
 vim.o.smartindent = true
 -- Enable auto-indentation
