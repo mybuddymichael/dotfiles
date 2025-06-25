@@ -212,9 +212,9 @@ run = ['move-node-to-workspace 3']
 if.window-title-regex-substring = 'shared content'
 run = ['move-node-to-workspace 4']
 
-[[on-window-detected]]
-if.app-id = 'com.microsoft.teams2'
-run = ['move-node-to-workspace u']
+# [[on-window-detected]]
+# if.app-id = 'com.microsoft.teams2'
+# run = ['move-node-to-workspace u']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Factorio'
