@@ -39,5 +39,7 @@ profile
 node_modules
 .zed/settings.json
 
-## Claude Code
+## AI and agents
 **/.claude/settings.local.json
+**/docs.local/
+
