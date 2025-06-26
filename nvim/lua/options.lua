@@ -63,24 +63,8 @@ vim.o.splitbelow = true
 --  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
 --   See `:help lua-options`
 --   and `:help lua-options-guide`
-vim.o.list = true
-local default_listchars = { tab = '  ', trail = '·', nbsp = '␣' }
-local visual_listchars = { tab = '» ', space = '·', trail = '·', nbsp = '␣' }
-vim.opt.listchars = default_listchars
-
--- Show tabs and spaces only in visual mode
-vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = '*:v*',
-  callback = function()
-    vim.opt.listchars = visual_listchars
-  end,
-})
-vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = 'v*:*',
-  callback = function()
-    vim.opt.listchars = default_listchars
-  end,
-})
+-- vim.o.list = true
+-- vim.opt.listchars = { tab = '  ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
