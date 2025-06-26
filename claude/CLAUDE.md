@@ -20,11 +20,17 @@
 - Jujutsu primarily operates on revision IDs and revsets.
 - `jj help -k revsets` will show the documentation for the revset language.
 - `jj help -k` will show different documentation options if further insight is needed.
-- `jj show -r <revision>` to view a commit.
+- `jj show -r <revision_id>` to view a commit.
 - `jj log -r <revset>` to view the commit history.
+- `jj log -n <number>` to view the last n commits.
+- `jj log -T 'description'` to view the commits with their full descriptions.
 - `jj commit -m "<message>"` saves the current commit with the message and starts a new commit on top of it.
 - `jj new -r <revision>` creates a new commit based on the given revision.
-- `jj desc -m "<message>"` describes the current commit.
+- `jj desc -m "<message>"` updates the description of the current commit.
+
+- When describing commits, use a short, succinct summary, and then descriptive detail below. Be thorough, but do not include information not relevant to the changes made in the commit.
+- In commit descriptions, never hard-wrap lines.
+- By default, jj's log will only show commits that are "mutable" (e.g., not on the trunk branch and pushed to a remote). To log all commits, use the `..` revset, e.g. `jj log -r ..`. This is especially useful when reviewing recent commits.
 
 - Log items are in this format:
 
