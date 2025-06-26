@@ -21,8 +21,33 @@ return {
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      statusline.setup {
+        -- set use_icons to true if you have a Nerd Font
+        use_icons = vim.g.have_nerd_font,
+        content = {
+          active = function()
+            local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
+            local git = statusline.section_git { trunc_width = 40 }
+            local diff = statusline.section_diff { trunc_width = 75 }
+            local diagnostics = statusline.section_diagnostics { trunc_width = 75 }
+            local lsp = statusline.section_lsp { trunc_width = 75 }
+            local filename = statusline.section_filename { trunc_width = 140 }
+            local fileinfo = statusline.section_fileinfo { trunc_width = 120 }
+            local location = statusline.section_location { trunc_width = 75 }
+            local formatter = statusline.section_formatter()
+
+            return statusline.combine_groups {
+              { hl = mode_hl, strings = { mode } },
+              { hl = 'MiniStatuslineFilename', strings = { filename } },
+              '%<', -- Mark general truncate point
+              { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+              '%=', -- End left alignment
+              { hl = 'MiniStatuslineDevinfo', strings = { formatter, git, diff, diagnostics, lsp } },
+              { hl = mode_hl, strings = { location } },
+            }
+          end,
+        },
+      }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
@@ -30,6 +55,34 @@ return {
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
         return '%2l:%-2v'
+      end
+
+      -- Add formatter section to show active formatters
+      statusline.section_formatter = function()
+        local icon = vim.g.have_nerd_font and '󰉼 ' or '🔧 '
+
+        local conform_ok, conform = pcall(require, 'conform')
+        if conform_ok then
+          local formatters = conform.list_formatters(0)
+          if #formatters > 0 then
+            local names = {}
+            for _, formatter in ipairs(formatters) do
+              table.insert(names, formatter.name)
+            end
+            return icon .. table.concat(names, ',')
+          end
+        end
+
+        -- Check for LSP formatting capability
+        local bufnr = vim.api.nvim_get_current_buf()
+        local clients = vim.lsp.get_clients { bufnr = bufnr }
+        for _, client in ipairs(clients) do
+          if client.server_capabilities.documentFormattingProvider then
+            return icon .. client.name
+          end
+        end
+
+        return ''
       end
 
       -- ... and there is more!
