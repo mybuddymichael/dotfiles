@@ -28,8 +28,11 @@
 - `jj new -r <revision>` creates a new commit based on the given revision.
 - `jj desc -m "<message>"` updates the description of the current commit.
 
-- When describing commits, use a short, succinct summary, and then descriptive detail below. Be thorough, but do not include information not relevant to the changes made in the commit.
-- In commit descriptions, never hard-wrap lines.
+- When describing commits, use a short, succinct summary, and then descriptive detail below.
+  - Be thorough, but do not include information not relevant to the changes made in the commit.
+  - Do not be self-congratulatory.
+  - Don't mention line numbers. They are in the diff.
+  - Never hard-wrap lines.
 - By default, jj's log will only show commits that are "mutable" (e.g., not on the trunk branch and pushed to a remote). To log all commits, use the `..` revset, e.g. `jj log -r ..`. This is especially useful when reviewing recent commits.
 
 - Log items are in this format:
