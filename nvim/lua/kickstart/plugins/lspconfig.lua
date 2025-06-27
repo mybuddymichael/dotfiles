@@ -160,7 +160,7 @@ return {
             end, '[T]oggle Inlay [H]ints')
 
             -- Enable inlay hints by default
-            vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+            -- vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
             -- Disable hints in insert mode, restore previous state when exiting
             local hint_group = vim.api.nvim_create_augroup('inlay-hint-toggle', { clear = false })
