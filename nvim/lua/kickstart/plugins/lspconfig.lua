@@ -162,12 +162,15 @@ return {
             -- Enable inlay hints by default
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
-            -- Disable hints in insert mode, enable in normal mode
+            -- Disable hints in insert mode, restore previous state when exiting
             local hint_group = vim.api.nvim_create_augroup('inlay-hint-toggle', { clear = false })
+            local hints_enabled_before_insert = {}
+            
             vim.api.nvim_create_autocmd('InsertEnter', {
               buffer = event.buf,
               group = hint_group,
               callback = function()
+                hints_enabled_before_insert[event.buf] = vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }
                 vim.lsp.inlay_hint.enable(false, { bufnr = event.buf })
               end,
             })
@@ -175,7 +178,10 @@ return {
               buffer = event.buf,
               group = hint_group,
               callback = function()
-                vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+                local was_enabled = hints_enabled_before_insert[event.buf]
+                if was_enabled ~= nil then
+                  vim.lsp.inlay_hint.enable(was_enabled, { bufnr = event.buf })
+                end
               end,
             })
           end
