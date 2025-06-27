@@ -12,8 +12,10 @@ after-login-command = []
 after-startup-command = []
 
 # REMOVE THIS if I'm no longer using Aqua Voice.
-exec-on-workspace-change = ['/bin/bash', '-c',
-    "aerospace move-node-to-workspace --window-id $(aerospace list-windows --all | grep \"Aqua Voice\" | awk '{print $1}') $AEROSPACE_FOCUSED_WORKSPACE"
+exec-on-workspace-change = [
+	'/bin/bash',
+	'-c',
+	"aerospace move-node-to-workspace --window-id $(aerospace list-windows --all | grep \"Aqua Voice\" | awk '{print $1}') $AEROSPACE_FOCUSED_WORKSPACE",
 ]
 
 # Start AeroSpace at login
@@ -110,6 +112,7 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 alt-shift-enter = 'fullscreen'
+alt-ctrl-enter = 'fullscreen --no-outer-gaps'
 alt-shift-backspace = 'balance-sizes'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
@@ -166,8 +169,8 @@ esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 b = ['balance-sizes', 'mode main']
 f = [
-    'layout floating tiling',
-    'mode main',
+	'layout floating tiling',
+	'mode main',
 ] # Toggle between floating and tiling layout
 n = ['close-all-windows-but-current', 'mode main']
 
