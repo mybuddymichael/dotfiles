@@ -8,7 +8,8 @@
 return {
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
+    -- event = 'VimEnter',
+    keys = { '<leader>f', '<leader>s', '<leader>/', '<leader>\\', '<leader><space>' },
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -56,13 +57,13 @@ return {
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
-          layout_strategy = "horizontal",
+          layout_strategy = 'horizontal',
           layout_config = {
             horizontal = {
-              prompt_position = "top",
+              prompt_position = 'top',
             },
           },
-          sorting_strategy = "ascending",
+          sorting_strategy = 'ascending',
           -- mappings = {
           --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
           -- },

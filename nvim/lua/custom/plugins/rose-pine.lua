@@ -1,11 +1,12 @@
 return {
   'rose-pine/neovim',
+  lazy = false,
   priority = 1000,
   name = 'rose-pine',
   config = function()
     -- Detect system appearance first
-    local appearance = vim.fn.system('defaults read -g AppleInterfaceStyle 2>/dev/null'):match 'Dark' and 'dark' or 'light'
-    vim.o.background = appearance
+    -- local appearance = vim.fn.system('defaults read -g AppleInterfaceStyle 2>/dev/null'):match 'Dark' and 'dark' or 'light'
+    -- vim.o.background = appearance
     require('rose-pine').setup {
       variant = 'auto', -- auto, main, moon, or dawn
       dark_variant = 'moon', -- main, moon, or dawn
