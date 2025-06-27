@@ -1,4 +1,3 @@
--- LSP Plugins
 return {
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -159,6 +158,26 @@ return {
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
+            
+            -- Enable inlay hints by default
+            vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+            
+            -- Disable hints in insert mode, enable in normal mode
+            local hint_group = vim.api.nvim_create_augroup('inlay-hint-toggle', { clear = false })
+            vim.api.nvim_create_autocmd('InsertEnter', {
+              buffer = event.buf,
+              group = hint_group,
+              callback = function()
+                vim.lsp.inlay_hint.enable(false, { bufnr = event.buf })
+              end,
+            })
+            vim.api.nvim_create_autocmd('InsertLeave', {
+              buffer = event.buf,
+              group = hint_group,
+              callback = function()
+                vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+              end,
+            })
           end
         end,
       })
@@ -192,12 +211,6 @@ return {
         },
       }
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -210,9 +223,42 @@ return {
       local servers = {
         -- clangd = {},
         gopls = {
-          gofumpt = true,
+          settings = {
+            gopls = {
+              gofumpt = true,
+              codelenses = {
+                gc_details = false,
+                generate = true,
+                regenerate_cgo = true,
+                run_govulncheck = true,
+                test = true,
+                tidy = true,
+                upgrade_dependency = true,
+                vendor = true,
+              },
+              hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
+              },
+              analyses = {
+                nilness = true,
+                unusedparams = true,
+                unusedwrite = true,
+                useany = true,
+              },
+              usePlaceholders = true,
+              completeUnimported = true,
+              staticcheck = true,
+              directoryFilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules' },
+              semanticTokens = true,
+            },
+          },
         },
-        fish_lsp = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -222,7 +268,6 @@ return {
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
-        jsonls = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -232,11 +277,19 @@ return {
               completion = {
                 callSnippet = 'Replace',
               },
+              hint = {
+                enable = true,
+              },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
+      }
+      ---@type MasonLspconfigSettings
+      ---@diagnostic disable-next-line: missing-fields
+      require('mason-lspconfig').setup {
+        automatic_enable = vim.tbl_keys(servers or {}),
       }
 
       -- Ensure the servers and tools above are installed
@@ -258,21 +311,14 @@ return {
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      -- Installed LSPs are configured and enabled automatically with mason-lspconfig
+      -- The loop below is for overriding the default configuration of LSPs with the ones in the servers table
+      for server_name, config in pairs(servers) do
+        vim.lsp.config(server_name, config)
+      end
+
+      -- NOTE: Some servers may require an old setup until they are updated. For the full list refer here: https://github.com/neovim/nvim-lspconfig/issues/3705
+      -- These servers will have to be manually set up with require("lspconfig").server_name.setup{}
     end,
   },
 }
--- vim: ts=2 sts=2 sw=2 et
