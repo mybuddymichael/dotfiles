@@ -5,7 +5,8 @@
 - Only add what is absolutely necessary.
 - Keep it simple.
 - Don't over-engineer solutions.
-- In Typescript, use functions instead of classes.
+- Reuse as much code as possible.
+- Make changes as small as possible.
 
 ## Misc
 

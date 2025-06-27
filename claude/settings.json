@@ -1,17 +1,18 @@
 {
-	"includeCoAuthoredBy": false,
-	"permissions": {
-		"allow": [
-			"Bash(cat:*)",
-			"Bash(find:*)",
-			"Bash(grep:*)",
-			"Bash(ls:*)",
-			"Bash(rg:*)",
-			"Bash(jj diff:*)",
-			"Bash(jj log:*)",
-			"Bash(jj show:*)",
-			"Bash(jj status:*)"
-		],
-		"deny": []
-	}
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(rg:*)",
+      "Bash(jj diff:*)",
+      "Bash(jj log:*)",
+      "Bash(jj show:*)",
+      "Bash(jj status:*)"
+    ],
+    "deny": []
+  },
+  "model": "sonnet"
 }
