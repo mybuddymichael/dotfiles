@@ -72,6 +72,11 @@ return {
         -- StatusLine = { fg = "love", bg = "love", blend = 15 },
         -- VertSplit = { fg = "muted", bg = "muted" },
         -- Visual = { fg = "base", bg = "text", inherit = false },
+
+        -- Cursor colors
+        Cursor = { fg = 'base', bg = 'rose' },
+        CursorIM = { fg = 'base', bg = 'rose' },
+        TermCursor = { fg = 'base', bg = 'rose' },
       },
 
       before_highlight = function(group, highlight, palette)
