@@ -165,7 +165,7 @@ return {
             -- Disable hints in insert mode, restore previous state when exiting
             local hint_group = vim.api.nvim_create_augroup('inlay-hint-toggle', { clear = false })
             local hints_enabled_before_insert = {}
-            
+
             vim.api.nvim_create_autocmd('InsertEnter', {
               buffer = event.buf,
               group = hint_group,
@@ -227,7 +227,7 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        fish_lsp = {},
         gopls = {
           settings = {
             gopls = {
@@ -265,14 +265,6 @@ return {
             },
           },
         },
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {
           settings = {
             typescript = {
@@ -318,6 +310,14 @@ return {
             },
           },
         },
+        -- pyright = {},
+        -- rust_analyzer = {},
+        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+        --
+        -- Some languages (like typescript) have entire language plugins that can be useful:
+        --    https://github.com/pmizio/typescript-tools.nvim
+        --
+        -- But for many setups, the LSP (`ts_ls`) will work just fine
       }
       ---@type MasonLspconfigSettings
       ---@diagnostic disable-next-line: missing-fields
