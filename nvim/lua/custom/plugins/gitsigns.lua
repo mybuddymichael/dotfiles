@@ -42,23 +42,23 @@ return {
 
         -- map('n', '<leader>hS', gitsigns.stage_buffer)
         -- map('n', '<leader>hR', gitsigns.reset_buffer)
-        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'Preview hunk' })
-        map('n', '<leader>hi', gitsigns.preview_hunk_inline, { desc = 'Preview hunk inline' })
+        map('n', '<leader>Hp', gitsigns.preview_hunk, { desc = 'Preview hunk' })
+        map('n', '<leader>Hi', gitsigns.preview_hunk_inline, { desc = 'Preview hunk inline' })
 
-        map('n', '<leader>hb', function()
+        map('n', '<leader>Hb', function()
           gitsigns.blame_line { full = true }
         end, { desc = 'Blame line' })
 
-        map('n', '<leader>hd', gitsigns.diffthis, { desc = 'Diff this' })
+        map('n', '<leader>Hd', gitsigns.diffthis, { desc = 'Diff this' })
 
-        map('n', '<leader>hD', function()
+        map('n', '<leader>HD', function()
           gitsigns.diffthis '~'
         end, { desc = 'Diff this ~' })
 
-        map('n', '<leader>hQ', function()
+        map('n', '<leader>HQ', function()
           gitsigns.setqflist 'all'
         end, { desc = 'Set quickfix list all' })
-        map('n', '<leader>hq', gitsigns.setqflist, { desc = 'Set quickfix list' })
+        map('n', '<leader>Hq', gitsigns.setqflist, { desc = 'Set quickfix list' })
 
         -- Toggles
         map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = 'Toggle current line blame' })
