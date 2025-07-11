@@ -131,3 +131,4 @@ function pipeset --no-scope-shadowing -d "Correctly sets multi-line text to a va
     end
     return 0
 end
+zoxide init fish | source
