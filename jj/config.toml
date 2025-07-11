@@ -2,6 +2,7 @@
 diff-formatter = ":git"
 default-command = "ta"
 pager = ["sh", "-c", "diff-so-fancy | less --tabs=2 -RFX"]
+diff-editor = ":builtin"
 
 [user]
 name = "Michael Hanson"
