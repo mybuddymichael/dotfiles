@@ -1,0 +1,87 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = "$directory$custom$bun$golang$git_metrics\n$character"
+
+# Inserts a blank line between shell prompts
+add_newline = false
+
+# Replace the '❯' symbol in the prompt with '➜'
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[→](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+error_symbol = '[→](bold red)'
+
+[bun]
+format = '[$symbol($version)]($style)'
+style = 'purple'
+symbol = '🥟'
+
+[directory]
+style = 'cyan'
+truncation_length = 1
+fish_style_pwd_dir_length = 1
+
+[git_metrics]
+disabled = false
+
+[golang]
+symbol = '🐹'
+style = 'blue'
+format = '[$symbol($version)]($style)'
+
+[custom.jj]
+description = "The status of jujutsu"
+detect_folders = ['.jj']
+format = '[$output]($style) '
+style = 'bold'
+shell = 'bash'
+command = '''
+output=""
+status=$(jj st --no-pager 2>/dev/null)
+
+# Check if working copy is clean
+if echo "$status" | grep -q "The working copy has no changes"; then
+  output="G"
+else
+  # Parse the working copy changes section
+  changes=$(echo "$status" | sed -n '/Working copy changes:/,/Working copy/p' | grep "^[AMDR] ")
+  
+  # Check for added files
+  if echo "$changes" | grep -q "^A "; then
+    output="${output}+"
+  fi
+  
+  # Check for modified files
+  if echo "$changes" | grep -q "^M "; then
+    output="${output}/"
+  fi
+  
+  # Check for deleted files
+  if echo "$changes" | grep -q "^D "; then
+    output="${output}-"
+  fi
+  
+  # Check for renamed files
+  if echo "$changes" | grep -q "^R "; then
+    output="${output}→"
+  fi
+fi
+
+# Output with colors using ANSI escape codes
+if [ "$output" = "G" ]; then
+  printf "\033[32mG\033[0m"  # Green for clean
+else
+  # Build colored output
+  colored=""
+  for (( i=0; i<${#output}; i++ )); do
+    char="${output:$i:1}"
+    case "$char" in
+      "+") colored="$colored\033[32m+\033[0m" ;;  # Green for added
+      "/") colored="$colored\033[33m/\033[0m" ;;  # Yellow for modified
+      "→") colored="$colored\033[33m→\033[0m" ;;  # Brown/Yellow for renamed
+      "-") colored="$colored\033[31m-\033[0m" ;;  # Red for deleted
+    esac
+  done
+  printf "$colored"
+fi
+'''
