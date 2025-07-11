@@ -29,8 +29,13 @@
 - `jj new -r <revision>` creates a new commit based on the given revision.
 - `jj desc -m "<message>"` updates the description of the current commit.
 
+- When asked to commit changes, always run `jj show` to see what will be committed.
+- You can also view full descriptions of recent commits to place the current commit in context.
+
 - When describing commits, use the "conventional commit" format.
+  - Choose the right type of change (e.g., `feat`, `fix`, `docs`, `refactor`, etc.) based on your review of the changes and history.
   - Use a short, succinct summary, and then descriptive detail below.
+  - Always capitalize the first letter of the summary (e.g., `build: Add...`, not `build: add...`).
   - Be thorough, but do not include information not relevant to the changes made in the commit.
   - Do not be self-congratulatory.
   - Don't mention line numbers. They are in the diff.
