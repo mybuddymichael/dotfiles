@@ -31,6 +31,8 @@ local function get_js_formatters()
   end
 end
 
+
+
 return { -- Autoformat
   'stevearc/conform.nvim',
   event = { 'BufWritePre' },
@@ -70,6 +72,7 @@ return { -- Autoformat
       typescriptreact = get_js_formatters,
       json = get_js_formatters,
       jsonc = get_js_formatters,
+      toml = { 'taplo' },
     },
   },
 }
