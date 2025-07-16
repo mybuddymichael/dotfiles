@@ -35,6 +35,7 @@ detect_folders = ['.jj']
 format = '[$output]($style) '
 style = 'bold'
 shell = 'bash'
+ignore_timeout = true
 command = '''
 output=""
 status=$(jj st --no-pager 2>/dev/null)
