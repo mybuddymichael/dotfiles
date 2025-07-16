@@ -12,9 +12,9 @@ success_symbol = '[→](bold green)' # The 'success_symbol' segment is being set
 error_symbol = '[→](bold red)'
 
 [bun]
-format = '[$symbol($version)]($style)'
+format = '[$symbol($version)]($style) '
 style = 'purple'
-symbol = '🥟'
+symbol = '🥟 '
 
 [directory]
 style = 'cyan'
@@ -25,9 +25,9 @@ fish_style_pwd_dir_length = 1
 disabled = false
 
 [golang]
-symbol = '🐹'
+symbol = '🐹 '
 style = 'blue'
-format = '[$symbol($version)]($style)'
+format = '[$symbol($version)]($style) '
 
 [custom.jj]
 description = "The status of jujutsu"
