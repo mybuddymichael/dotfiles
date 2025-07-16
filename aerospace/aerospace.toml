@@ -13,9 +13,9 @@ after-startup-command = []
 
 # REMOVE THIS if I'm no longer using Aqua Voice.
 exec-on-workspace-change = [
-	'/bin/bash',
-	'-c',
-	"aerospace move-node-to-workspace --window-id $(aerospace list-windows --all | grep \"Aqua Voice\" | awk '{print $1}') $AEROSPACE_FOCUSED_WORKSPACE",
+  '/bin/bash',
+  '-c',
+  "aerospace move-node-to-workspace --window-id $(aerospace list-windows --all | grep \"Aqua Voice\" | awk '{print $1}') $AEROSPACE_FOCUSED_WORKSPACE",
 ]
 
 # Start AeroSpace at login
@@ -66,11 +66,11 @@ preset = 'qwerty'
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
 inner.horizontal = [{ monitor."dell" = 24 }, 16]
-inner.vertical =   [{ monitor."dell" = 24 }, 16]
-outer.left =       [{ monitor."dell" = 16 }, 12]
-outer.bottom =     [{ monitor."dell" = 16 }, 12]
-outer.top =        [{ monitor."dell" = 16 }, 12]
-outer.right =      [{ monitor."dell" = 16 }, 12]
+inner.vertical = [{ monitor."dell" = 24 }, 16]
+outer.left = [{ monitor."dell" = 16 }, 12]
+outer.bottom = [{ monitor."dell" = 16 }, 12]
+outer.top = [{ monitor."dell" = 16 }, 12]
+outer.right = [{ monitor."dell" = 16 }, 12]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -138,7 +138,6 @@ alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
-alt-f = 'workspace f'
 alt-u = 'workspace u'
 alt-i = 'workspace i'
 alt-o = 'workspace o'
@@ -148,7 +147,6 @@ alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
 alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
 alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
 alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
-alt-shift-f = ['move-node-to-workspace f', 'workspace f']
 alt-shift-u = ['move-node-to-workspace u', 'workspace u']
 alt-shift-i = ['move-node-to-workspace i', 'workspace i']
 alt-shift-o = ['move-node-to-workspace o', 'workspace o']
@@ -169,8 +167,8 @@ esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 b = ['balance-sizes', 'mode main']
 f = [
-	'layout floating tiling',
-	'mode main',
+  'layout floating tiling',
+  'mode main',
 ] # Toggle between floating and tiling layout
 n = ['close-all-windows-but-current', 'mode main']
 
@@ -207,9 +205,9 @@ o = 'secondary'
 if.app-id = 'com.microsoft.VSCode'
 run = ['move-node-to-workspace 3']
 
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = ['move-node-to-workspace 3']
+# [[on-window-detected]]
+# if.app-id = 'com.mitchellh.ghostty'
+# run = ['move-node-to-workspace 3']
 
 [[on-window-detected]]
 if.window-title-regex-substring = 'shared content'
@@ -239,6 +237,6 @@ run = ['move-node-to-workspace i']
 if.app-id = 'com.obsproject.obs-studio'
 run = ['move-node-to-workspace 4']
 
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = ['move-node-to-workspace f']
+# [[on-window-detected]]
+# if.app-id = 'org.mozilla.firefox'
+# run = ['move-node-to-workspace f']
