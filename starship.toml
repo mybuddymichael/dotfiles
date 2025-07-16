@@ -1,7 +1,7 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = "$directory$custom$bun$golang$git_metrics\n$character"
+format = "$directory${custom.jj}$git_metrics$bun$golang\n$character"
 
 # Inserts a blank line between shell prompts
 add_newline = false
