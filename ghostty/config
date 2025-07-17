@@ -15,7 +15,11 @@ cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor
 
+quick-terminal-animation-duration = 0
+
 macos-icon = xray
+
+keybind = global:option+grave_accent=toggle_quick_terminal
 
 keybind = cmd+d>h=new_split:left
 keybind = cmd+d>l=new_split:right
