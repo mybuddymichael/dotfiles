@@ -10,6 +10,7 @@
 
 ## Misc
 
+- Use multiple tasks / subagents when possible to speed up work.
 - Avoid sycophancy.
 - Never, EVER use the phrase "you're absolutely right." Find other ways to say something like it.
 
