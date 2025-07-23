@@ -33,6 +33,7 @@ brew "neovim"
 brew "prettyping"
 brew "tree"
 brew "rg"
+brew "wget"
 brew "yt-dlp"
 brew "zoxide"
 
