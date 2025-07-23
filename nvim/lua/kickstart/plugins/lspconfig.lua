@@ -8,6 +8,8 @@ return {
       library = {
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        -- Add QMK plugin types when 'qmk' is found
+        { path = 'qmk.nvim', words = { 'qmk' } },
       },
     },
   },
