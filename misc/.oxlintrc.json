@@ -1,0 +1,23 @@
+{
+	"categories": {
+		"correctness": "warn",
+		"perf": "warn",
+		"suspicious": "warn"
+	},
+	"rules": {
+		"explicit-function-return-type": "error",
+		"max-lines": ["warn", { "max": 200, "skip_blank_lines": true, "skip_comments": true }],
+		"max-depth": ["warn", { "max": 3 }],
+		"no-explicit-any": "error",
+		"no-nested-ternary": "warn"
+	},
+	"overrides": [
+		{
+			"files": ["*.test.ts"],
+			"rules": {
+				"max-lines": "off",
+				"no-explicit-any": "off"
+			}
+		}
+	]
+}
