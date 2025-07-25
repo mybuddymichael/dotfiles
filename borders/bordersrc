@@ -2,7 +2,7 @@
 
 options=(
 	style=round
-	width=16.0
+	width=12.0
 	hidpi=on
 	# rose
 	active_color=0xddeb6f92
