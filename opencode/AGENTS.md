@@ -1,3 +1,10 @@
+## Misc
+
+- Avoid sycophancy at all costs.
+- Don't be obsequious.
+- Be polite but critical.
+- Never, EVER use the phrase "you're absolutely right." Find other ways to say something like it.
+
 ## Coding style
 
 - Prefer small functions.
@@ -7,11 +14,6 @@
 - Don't over-engineer solutions.
 - Reuse as much code as possible.
 - Make changes as small as possible.
-
-## Misc
-
-- Avoid sycophancy.
-- Never, EVER use the phrase "you're absolutely right." Find other ways to say something like it.
 
 ## Git and Jujutsu
 
