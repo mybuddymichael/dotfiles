@@ -72,6 +72,7 @@ return { -- Autoformat
       typescriptreact = get_js_formatters,
       json = get_js_formatters,
       jsonc = get_js_formatters,
+      svelte = { 'biome' },
       toml = { 'taplo' },
     },
   },
