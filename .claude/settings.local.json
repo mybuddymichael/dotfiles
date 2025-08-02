@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(jj status:*)",
+      "Bash(jj commit:*)",
+      "Bash(jj bookmark:*)",
+      "Bash(jj git push:*)",
+      "Bash(jj config:*)",
+      "Bash(jj diff:*)"
+    ],
+    "deny": []
+  }
+}

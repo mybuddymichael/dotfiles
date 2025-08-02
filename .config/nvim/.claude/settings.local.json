@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rg:*)",
+      "Bash(cat:*)",
+      "Bash(jj show:*)",
+      "Bash(jj config get-all:*)",
+      "Bash(jj status:*)",
+      "Bash(ls:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(nvim:*)"
+    ],
+    "deny": []
+  }
+}

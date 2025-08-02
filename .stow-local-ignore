@@ -1,0 +1,41 @@
+# Stow ignore file
+# Files and directories listed here will be ignored by stow
+
+# Git files
+\.git
+\.gitignore
+\.gitmodules
+
+# Jujutsu files
+\.jj
+
+# Documentation and meta files
+README.*
+LICENSE.*
+COPYING
+\.md$
+
+# Installation and build files
+install\.sh
+Brewfile
+
+# IDE and editor files
+\.vscode
+\.idea
+\.claude
+
+# OS files
+\.DS_Store
+Thumbs\.db
+
+# Temporary files
+.*~
+\.tmp
+\.temp
+
+# Directories that should be handled separately or ignored
+vim
+zed
+tmux
+misc
+gnupg
