@@ -18,6 +18,7 @@ cursor-style-blink = true
 shell-integration-features = no-cursor
 
 quick-terminal-animation-duration = 0
+quick-terminal-position = center
 
 macos-icon = xray
 
