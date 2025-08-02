@@ -34,8 +34,5 @@ Thumbs\.db
 \.temp
 
 # Directories that should be handled separately or ignored
-vim
-zed
 tmux
 misc
-gnupg
