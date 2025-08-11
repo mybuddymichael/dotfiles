@@ -22,7 +22,6 @@ Brewfile
 # IDE and editor files
 \.vscode
 \.idea
-\.claude
 
 # OS files
 \.DS_Store
