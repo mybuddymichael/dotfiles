@@ -32,6 +32,7 @@ description: >-
   bump annotations.
   </commentary>
   </example>
+mode: subagent
 tools:
   write: false
   edit: false
