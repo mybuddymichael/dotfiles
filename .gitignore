@@ -5,3 +5,4 @@ fish/fishd*
 .claude/shell-snapshots
 .claude/statsig
 .claude/todos
+.claude/.update.lock
