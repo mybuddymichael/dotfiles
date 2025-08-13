@@ -68,9 +68,13 @@ preset = 'qwerty'
 inner.horizontal = [{ monitor."dell" = 24 }, 16]
 inner.vertical = [{ monitor."dell" = 24 }, 16]
 outer.left = [{ monitor."dell" = 16 }, 12]
+outer.right = [{ monitor."dell" = 16 }, 12]
+# The below values are enabled by the `pad` fish function.
+# It's used in conjunction with fullscreen mode, or when the window is the only window in the workspace.
+# outer.left = [{ monitor."dell" = 680 }, 12]
+# outer.right = [{ monitor."dell" = 680 }, 12]
 outer.bottom = [{ monitor."dell" = 16 }, 12]
 outer.top = [{ monitor."dell" = 16 }, 12]
-outer.right = [{ monitor."dell" = 16 }, 12]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -112,7 +116,7 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 alt-shift-enter = 'fullscreen'
-alt-ctrl-enter = 'fullscreen --no-outer-gaps'
+alt-ctrl-enter = 'exec-and-forget fish -c pad'
 alt-shift-backspace = 'balance-sizes'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
