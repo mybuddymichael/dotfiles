@@ -1,30 +1,45 @@
-local function has_prettier_dependency()
-  local package_json = vim.fn.findfile('package.json', '.;')
-  if package_json == '' then
-    return false
+local function has_prettier_dependency(bufnr)
+  -- Get the directory of the current buffer, fallback to cwd
+  local current_dir
+  if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    if bufname ~= '' then
+      current_dir = vim.fn.fnamemodify(bufname, ':p:h')
+    else
+      current_dir = vim.fn.getcwd()
+    end
+  else
+    current_dir = vim.fn.getcwd()
   end
-
-  local file = io.open(package_json, 'r')
-  if not file then
-    return false
+  
+  while current_dir ~= '/' do
+    local package_json = current_dir .. '/package.json'
+    local file = io.open(package_json, 'r')
+    
+    if file then
+      local content = file:read '*all'
+      file:close()
+      
+      local ok, json = pcall(vim.fn.json_decode, content)
+      if ok then
+        local deps = json.dependencies or {}
+        local devDeps = json.devDependencies or {}
+        
+        if deps.prettier or devDeps.prettier or deps['@prettier/plugin-xml'] or devDeps['@prettier/plugin-xml'] then
+          return true
+        end
+      end
+    end
+    
+    -- Move up one directory
+    current_dir = vim.fn.fnamemodify(current_dir, ':h')
   end
-
-  local content = file:read '*all'
-  file:close()
-
-  local ok, json = pcall(vim.fn.json_decode, content)
-  if not ok then
-    return false
-  end
-
-  local deps = json.dependencies or {}
-  local devDeps = json.devDependencies or {}
-
-  return deps.prettier or devDeps.prettier or deps['@prettier/plugin-xml'] or devDeps['@prettier/plugin-xml']
+  
+  return false
 end
 
-local function get_js_formatters()
-  if has_prettier_dependency() then
+local function get_js_formatters(bufnr)
+  if has_prettier_dependency(bufnr) then
     return { 'prettierd', 'prettier', stop_after_first = true }
   else
     return { 'biome' }
@@ -66,13 +81,13 @@ return { -- Autoformat
     formatters_by_ft = {
       lua = { 'stylua' },
       go = { 'gofumpt' },
-      javascript = get_js_formatters,
-      javascriptreact = get_js_formatters,
-      typescript = get_js_formatters,
-      typescriptreact = get_js_formatters,
-      json = get_js_formatters,
-      jsonc = get_js_formatters,
-      svelte = { 'biome' },
+      javascript = function(bufnr) return get_js_formatters(bufnr) end,
+      javascriptreact = function(bufnr) return get_js_formatters(bufnr) end,
+      typescript = function(bufnr) return get_js_formatters(bufnr) end,
+      typescriptreact = function(bufnr) return get_js_formatters(bufnr) end,
+      json = function(bufnr) return get_js_formatters(bufnr) end,
+      jsonc = function(bufnr) return get_js_formatters(bufnr) end,
+      svelte = function(bufnr) return get_js_formatters(bufnr) end,
       toml = { 'taplo' },
     },
   },
