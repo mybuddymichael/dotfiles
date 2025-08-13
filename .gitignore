@@ -6,3 +6,5 @@ fish/fishd*
 .claude/statsig
 .claude/todos
 .claude/.update.lock
+
+.config/crush/anthropic
