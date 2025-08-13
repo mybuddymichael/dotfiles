@@ -31,6 +31,9 @@
 - `jj new -r <revision>` creates a new commit based on the given revision.
 - `jj desc -m "<message>"` updates the description of the current commit.
 
+- If asked to look at the current change, use `@` as the revset.
+- If asked to look at the most recent change, use `@-` as the revset.
+
 - When asked to commit changes, always run `jj show` to see what will be committed.
 - You can also view full descriptions of recent commits to place the current commit in context.
 
