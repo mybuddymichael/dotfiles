@@ -42,7 +42,7 @@
 	submit = !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
   cn = "!git commit -m 'More notes' && git push"
 [color]
-  ui = auto
+  ui = true
 [color "branch"]
   current = cyan
   local = yellow
@@ -53,6 +53,7 @@
   old = red
   new = green
   whitespace = red reverse
+  context = 8
 [color "status"]
   added = green
   changed = yellow

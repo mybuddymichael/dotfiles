@@ -98,6 +98,7 @@ modified = "yellow"
 'diff modified' = "yellow"
 
 'diff renamed' = "ansi-color-5"
+'diff context' = "ansi-color-8"
 
 [lazyjj.keybinds.log_tab]
 save = "Enter"
