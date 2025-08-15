@@ -35,56 +35,41 @@ format = '[$symbol($version)]($style) '
 description = "The status of jujutsu"
 detect_folders = ['.jj']
 format = '[$output]($style) '
-style = 'bold'
+style = ''
 shell = 'bash'
 ignore_timeout = true
 command = '''
-output=""
 status=$(jj st --no-pager 2>/dev/null)
 
 # Check if working copy is clean
 if echo "$status" | grep -q "The working copy has no changes"; then
-  output="G"
+  printf "\033[37mG\033[0m"  # Green for clean
 else
   # Parse the working copy changes section
   changes=$(echo "$status" | sed -n '/Working copy changes:/,/Working copy/p' | grep "^[AMDR] ")
   
-  # Check for added files
-  if echo "$changes" | grep -q "^A "; then
-    output="${output}+"
-  fi
+  # Count files for each status in single pass
+  counts=$(echo "$changes" | awk '/^A / {a++} /^M / {m++} /^D / {d++} /^R / {r++} END {print (a+0)" "(m+0)" "(d+0)" "(r+0)}')
+  read added_count modified_count deleted_count renamed_count <<< "$counts"
   
-  # Check for modified files
-  if echo "$changes" | grep -q "^M "; then
-    output="${output}/"
-  fi
-  
-  # Check for deleted files
-  if echo "$changes" | grep -q "^D "; then
-    output="${output}-"
-  fi
-  
-  # Check for renamed files
-  if echo "$changes" | grep -q "^R "; then
-    output="${output}→"
-  fi
-fi
-
-# Output with colors using ANSI escape codes
-if [ "$output" = "G" ]; then
-  printf "\033[37mG\033[0m"  # Green for clean
-else
-  # Build colored output with underline for dirty state
+  # Build colored output
   colored=""
-  for (( i=0; i<${#output}; i++ )); do
-    char="${output:$i:1}"
-    case "$char" in
-      "+") colored="$colored\033[4;32m+\033[0m" ;;  # Green underlined for added
-      "/") colored="$colored\033[4;33mM\033[0m" ;;  # Yellow underlined for modified
-      "→") colored="$colored\033[4;33m→\033[0m" ;;  # Brown/Yellow underlined for renamed
-      "-") colored="$colored\033[4;31m-\033[0m" ;;  # Red underlined for deleted
-    esac
-  done
+  if [ "$added_count" -gt 0 ]; then
+    colored="${colored}\033[4;32mA${added_count}\033[0m"
+  fi
+  
+  if [ "$modified_count" -gt 0 ]; then
+    colored="${colored} \033[4;33mM${modified_count}\033[0m"
+  fi
+  
+  if [ "$deleted_count" -gt 0 ]; then
+    colored="${colored} \033[4;31m-${deleted_count}\033[0m"
+  fi
+  
+  if [ "$renamed_count" -gt 0 ]; then
+    colored="${colored} \033[4;35m→${renamed_count}\033[0m"
+  fi
+  
   printf "$colored"
 fi
 '''
