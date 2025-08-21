@@ -33,7 +33,17 @@ format = '[$symbol($version)]($style) '
 
 [custom.jj]
 description = "The status of jujutsu"
-detect_folders = ['.jj']
+when = '''
+# Check if we're in a jj repository by looking for .jj folder in current or parent directories
+dir="$PWD"
+while [ "$dir" != "/" ]; do
+  if [ -d "$dir/.jj" ]; then
+    exit 0
+  fi
+  dir=$(dirname "$dir")
+done
+exit 1
+'''
 format = '[$output]($style) '
 style = ''
 shell = 'bash'
