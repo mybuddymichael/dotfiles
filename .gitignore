@@ -5,6 +5,7 @@ fish/fishd*
 .claude/shell-snapshots
 .claude/statsig
 .claude/todos
+.claude/plugins/config.json
 .claude/.update.lock
 
 .config/crush/anthropic
