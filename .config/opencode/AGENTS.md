@@ -15,6 +15,11 @@
 - Reuse as much code as possible.
 - Make changes as small as possible.
 
+## Misc tools
+
+- ast-grep (`sg`) is available
+    - Whenever a search requires syntax-aware or structural matching, default to `sg --lang typescript -p'<pattern>'` (or set --lang appropriately) and avoid falling back to text-only tools like `grep` unless I explicitly request a plain-text search.
+
 ## Git and Jujutsu
 
 - Use jujutsu and the `jj` command for all git-related work.
