@@ -21,7 +21,6 @@ abbr -a jjc jj commit
 abbr -a jjd jj diff
 abbr -a n nvim
 abbr -a bxb bunx --bun
-abbr -a la eza --all --long --octal-permissions --no-permissions --no-user --tree --icons --group-directories-first --level=1
 abbr -a oc opencode
 
 # Colors.
