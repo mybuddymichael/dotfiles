@@ -1,5 +1,5 @@
 [tools]
-bun = "1.2.18"
+bun = "latest"
 deno = "latest"
 go = "latest"
 node = "latest"
