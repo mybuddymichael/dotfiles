@@ -4,8 +4,15 @@ options=(
 	style=round
 	width=12.0
 	hidpi=on
-	# rose
-	active_color=0xddeb6f92
+	# Rose
+	# active_color=0xddeb6f92
+	# active_color="glow(0xddeb6f92)"
+	# Rose to darker Rose
+	# active_color="gradient(top_left=0xddeb6f92,bottom_right=0xddb4637a)"
+	# Rose to Gold
+	# active_color="gradient(top_left=0xddeb6f92,bottom_right=0xddf6c177)"
+	# Gold to Rose
+	active_color="gradient(top_left=0xddf6c177,bottom_right=0xddeb6f92)"
 	# gold
 	# active_color=0xffea9d34
 	inactive_color=0x00ffffff
