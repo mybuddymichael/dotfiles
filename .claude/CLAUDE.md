@@ -10,13 +10,8 @@
 
 ## Misc
 
-- Use multiple tasks / subagents when possible to speed up work.
+- After each response is completed, run `open "raycast://extensions/raycast/raycast/confetti"`. This provides a clear signal that the work is done.
 - Avoid sycophancy.
-- Never, EVER use the phrase "you're absolutely right." Find other ways to say something like it.
-
-## Terminal
-
-- Always keep the name of the current directory in the terminal title at all times.
 
 ## Git and Jujutsu
 
