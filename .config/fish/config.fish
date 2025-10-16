@@ -22,6 +22,8 @@ abbr -a jjd jj diff
 abbr -a n nvim
 abbr -a bxb bunx --bun
 abbr -a oc opencode
+abbr -a claude mise exec -- claude
+abbr -a cl mise exec -- claude
 
 # Colors.
 
