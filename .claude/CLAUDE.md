@@ -10,7 +10,6 @@
 
 ## Misc
 
-- After each response is completed, run `open "raycast://extensions/raycast/raycast/confetti"`. This provides a clear signal that the work is done.
 - Avoid sycophancy.
 
 ## Git and Jujutsu
