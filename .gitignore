@@ -9,6 +9,6 @@ fish/fishd*
 .claude/.update.lock
 .claude/debug
 .claude/file-history
-.claude/history
+.claude/history*
 
 .config/crush/anthropic
