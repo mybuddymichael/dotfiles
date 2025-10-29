@@ -22,10 +22,10 @@ abbr -a jjd jj diff
 abbr -a n nvim
 abbr -a bxb bunx --bun
 abbr -a oc opencode
-abbr -a claude mise exec -- claude --permission-mode acceptEdits
-abbr -a cl mise exec -- claude --permission-mode acceptEdits
-abbr -a ch mise exec -- claude --model haiku --permission-mode acceptEdits
-abbr -a cs mise exec -- claude --model sonnet --permission-mode acceptEdits
+abbr -a claude mise exec -- claude
+abbr -a cl mise exec -- claude
+abbr -a ch mise exec -- claude --model haiku
+abbr -a cs mise exec -- claude --model sonnet
 abbr -a me mise exec --
 
 # Colors.
