@@ -234,7 +234,29 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         fish_lsp = {},
-        svelte = {},
+        svelte = {
+          settings = {
+            svelte = {
+              plugin = {
+                css = {
+                  validate = {
+                    unknownAtRules = 'ignore',
+                  },
+                },
+              },
+            },
+          },
+        },
+        cssls = {
+          settings = {
+            css = {
+              validate = true,
+              lint = {
+                unknownAtRules = 'ignore',
+              },
+            },
+          },
+        },
         jsonls = {
           settings = {
             json = {
