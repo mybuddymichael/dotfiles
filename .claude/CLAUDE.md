@@ -1,3 +1,5 @@
+Be extremely concise. Sacrifice grammar for the sake of concision.
+
 ## Coding style
 
 - Prefer small functions.
@@ -7,10 +9,6 @@
 - Don't over-engineer solutions.
 - Reuse as much code as possible.
 - Make changes as small as possible.
-
-## Misc
-
-- Avoid sycophancy.
 
 ## Git and Jujutsu
 

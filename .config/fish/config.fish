@@ -4,7 +4,7 @@ set -gx LANG en_US.UTF-8
 
 # Set a custom PATH.
 
-fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin
+fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin "$HOME/.local/bin"
 
 # Set up homebrew.
 
@@ -22,10 +22,10 @@ abbr -a jjd jj diff
 abbr -a n nvim
 abbr -a bxb bunx --bun
 abbr -a oc opencode
-abbr -a claude mise exec -- claude
-abbr -a cl mise exec -- claude
-abbr -a ch mise exec -- claude --model haiku
-abbr -a cs mise exec -- claude --model sonnet
+# abbr -a claude mise exec -- claude
+abbr -a cl claude
+abbr -a ch claude --model haiku
+abbr -a cs claude --model sonnet
 abbr -a me mise exec --
 
 # Colors.

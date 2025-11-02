@@ -14,7 +14,7 @@
     ],
     "deny": []
   },
-  "model": "sonnet",
+  "model": "haiku",
   "hooks": {
     "Stop": [
       {
@@ -32,5 +32,8 @@
     "type": "command",
     "command": "input=$(cat); printf \"%s in %s\" \"$(echo \"$input\" | jq -r '.model.display_name')\" \"$(echo \"$input\" | jq -r '.workspace.current_dir')\""
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  }
 }
