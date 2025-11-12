@@ -2,13 +2,13 @@
 
 set -gx LANG en_US.UTF-8
 
-# Set a custom PATH.
-
-fish_add_path /opt/homebrew/bin /opt/homebrew/sbin /opt/n/bin "$HOME/.local/bin"
-
 # Set up homebrew.
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Set a custom PATH.
+
+fish_add_path -g "$HOME/.local/bin"
 
 # Vim is my EDITOR.
 
