@@ -10,5 +10,6 @@ fish/fishd*
 .claude/debug
 .claude/file-history
 .claude/history*
+.claude/plans
 
 .config/crush/anthropic
