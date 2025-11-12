@@ -1,4 +1,7 @@
 {
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
@@ -14,7 +17,6 @@
     ],
     "deny": []
   },
-  "model": "haiku",
   "hooks": {
     "Stop": [
       {
@@ -32,8 +34,5 @@
     "type": "command",
     "command": "input=$(cat); printf \"%s in %s\" \"$(echo \"$input\" | jq -r '.model.display_name')\" \"$(echo \"$input\" | jq -r '.workspace.current_dir')\""
   },
-  "alwaysThinkingEnabled": true,
-  "env": {
-    "DISABLE_AUTOUPDATER": "1"
-  }
+  "alwaysThinkingEnabled": true
 }
