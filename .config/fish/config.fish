@@ -1,3 +1,7 @@
+# Disable fish greeting.
+
+set -g fish_greeting
+
 # Set a LANG.
 
 set -gx LANG en_US.UTF-8
