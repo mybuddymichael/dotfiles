@@ -15,6 +15,10 @@ LICENSE.*
 COPYING
 \.md$
 
+# Agent instructions
+AGENTS.md
+CLAUDE.md
+
 # Installation and build files
 install\.sh
 Brewfile
