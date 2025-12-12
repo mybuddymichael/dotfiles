@@ -11,5 +11,7 @@ fish/fishd*
 .claude/file-history
 .claude/history*
 .claude/plans
+.claude/plugins/known_marketplaces.json
+.claude/stats-cache.json
 
 .config/crush/anthropic
