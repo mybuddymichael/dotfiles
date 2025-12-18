@@ -31,6 +31,7 @@ abbr -a cl claude
 abbr -a ch claude --model haiku
 abbr -a cs claude --model sonnet
 abbr -a me mise exec --
+abbr -a mepi mise exec node@latest -- pi
 
 # Colors.
 
