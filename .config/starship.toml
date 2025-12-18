@@ -1,7 +1,7 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = "$directory${custom.jj}$git_metrics$bun$golang\n$character"
+format = "$directory${custom.jj}$git_metrics$bun$nodejs$golang\n$character"
 
 # Inserts a blank line between shell prompts
 add_newline = false
@@ -10,6 +10,11 @@ add_newline = false
 [character] # The name of the module we are configuring is 'character'
 success_symbol = '[→](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
 error_symbol = '[→](bold red)'
+
+[nodejs]
+format = '[$symbol($version)]($style) '
+style = 'green'
+symbol = 'Node '
 
 [bun]
 format = '[$symbol($version)]($style) '
