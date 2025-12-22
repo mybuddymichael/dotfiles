@@ -30,6 +30,8 @@ abbr -a oc opencode
 abbr -a cl claude
 abbr -a ch claude --model haiku
 abbr -a cs claude --model sonnet
+abbr -a wch env CLAUDE_CONFIG_DIR=$HOME/.claude-work claude --model haiku
+abbr -a wcs env CLAUDE_CONFIG_DIR=$HOME/.claude-work claude --model sonnet
 abbr -a me mise exec --
 abbr -a mepi mise exec node@latest -- pi
 
