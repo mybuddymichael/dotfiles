@@ -22,7 +22,7 @@ exec-on-workspace-change = [
 start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
-enable-normalization-flatten-containers = false
+enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
@@ -143,6 +143,7 @@ alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
 alt-s = 'workspace s'
 alt-u = 'workspace u'
 alt-i = 'workspace i'
@@ -154,6 +155,7 @@ alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
 alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
 alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
 alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
+alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
 alt-shift-s = ['move-node-to-workspace s', 'workspace s']
 alt-shift-u = ['move-node-to-workspace u', 'workspace u']
 alt-shift-i = ['move-node-to-workspace i', 'workspace i']
