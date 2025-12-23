@@ -32,7 +32,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "input=$(cat); printf \"%s in %s\" \"$(echo \"$input\" | jq -r '.model.display_name')\" \"$(echo \"$input\" | jq -r '.workspace.current_dir')\""
+    "command": "~/.claude/statusline.sh"
   },
   "alwaysThinkingEnabled": true
 }
