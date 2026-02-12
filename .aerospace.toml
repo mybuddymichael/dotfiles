@@ -116,7 +116,7 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 alt-shift-enter = 'fullscreen'
-alt-ctrl-enter = 'exec-and-forget fish -c pad'
+alt-ctrl-enter = 'fullscreen --width 60'
 alt-shift-backspace = 'balance-sizes'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
