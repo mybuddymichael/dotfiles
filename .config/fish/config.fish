@@ -152,3 +152,10 @@ set -g fish_pager_color_description brblue
 atuin init fish | source
 zoxide init fish | source
 starship init fish | source
+
+# pnpm
+set -gx PNPM_HOME "/Users/michael/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
