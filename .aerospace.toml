@@ -144,6 +144,7 @@ alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
 alt-6 = 'workspace 6'
+alt-f = 'workspace f'
 alt-s = 'workspace s'
 alt-u = 'workspace u'
 alt-i = 'workspace i'
@@ -156,6 +157,7 @@ alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
 alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
 alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
 alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
+alt-shift-f = ['move-node-to-workspace f', 'workspace f']
 alt-shift-s = ['move-node-to-workspace s', 'workspace s']
 alt-shift-u = ['move-node-to-workspace u', 'workspace u']
 alt-shift-i = ['move-node-to-workspace i', 'workspace i']
@@ -203,6 +205,7 @@ esc = 'mode main'
 enter = 'mode main'
 
 [workspace-to-monitor-force-assignment]
+6 = 'DeskPad'
 u = 'secondary'
 i = 'secondary'
 o = 'secondary'
@@ -237,7 +240,7 @@ run = ['layout floating', 'move-node-to-workspace 4']
 
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace f']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari.WebApp.2119B734-B99E-4375-BF30-82C0A4F8776B' # Focusmate
