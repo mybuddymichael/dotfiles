@@ -13,16 +13,16 @@ after-startup-command = []
 
 # REMOVE THIS if I'm no longer using Aqua Voice.
 exec-on-workspace-change = [
-	'/bin/bash',
-	'-c',
-	"aerospace move-node-to-workspace --window-id $(aerospace list-windows --all | grep \"Aqua Voice\" | awk '{print $1}') $AEROSPACE_FOCUSED_WORKSPACE",
+  '/bin/bash',
+  '-c',
+  "aerospace move-node-to-workspace --window-id $(aerospace list-windows --all | grep \"Aqua Voice\" | awk '{print $1}') $AEROSPACE_FOCUSED_WORKSPACE",
 ]
 
 # Start AeroSpace at login
 start-at-login = false
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
-enable-normalization-flatten-containers = false
+enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
@@ -49,14 +49,7 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
-automatically-unhide-macos-hidden-apps = true
-
-single-window-max-width-percent = [
-	{ monitor."dell" = 60 },
-	100,                     # Default fallback
-]
-
-single-window-exclude-app-ids = ['com.figma.Desktop']
+# automatically-unhide-macos-hidden-apps = true
 
 # Possible values: (qwerty|dvorak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -73,11 +66,15 @@ preset = 'qwerty'
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
 inner.horizontal = [{ monitor."dell" = 24 }, 16]
-inner.vertical =   [{ monitor."dell" = 24 }, 16]
-outer.left =       [{ monitor."dell" = 16 }, 12]
-outer.bottom =     [{ monitor."dell" = 16 }, 12]
-outer.top =        [{ monitor."dell" = 16 }, 12]
-outer.right =      [{ monitor."dell" = 16 }, 12]
+inner.vertical = [{ monitor."dell" = 24 }, 16]
+outer.left = [{ monitor."dell" = 16 }, 12]
+outer.right = [{ monitor."dell" = 16 }, 12]
+# The below values are enabled by the `pad` fish function.
+# It's used in conjunction with fullscreen mode, or when the window is the only window in the workspace.
+# outer.left = [{ monitor."dell" = 680 }, 12]
+# outer.right = [{ monitor."dell" = 680 }, 12]
+outer.bottom = [{ monitor."dell" = 16 }, 12]
+outer.top = [{ monitor."dell" = 16 }, 12]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -85,7 +82,7 @@ outer.right =      [{ monitor."dell" = 16 }, 12]
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
-cmd-h = []     # Disable "hide application"
+# cmd-h = []     # Disable "hide application"
 cmd-alt-h = [] # Disable "hide others"
 
 # All possible keys:
@@ -119,7 +116,7 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 alt-shift-enter = 'fullscreen'
-alt-ctrl-enter = 'fullscreen --no-max-width'
+alt-ctrl-enter = 'fullscreen --width 70'
 alt-shift-backspace = 'balance-sizes'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
@@ -145,7 +142,10 @@ alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
 alt-f = 'workspace f'
+alt-s = 'workspace s'
 alt-u = 'workspace u'
 alt-i = 'workspace i'
 alt-o = 'workspace o'
@@ -155,7 +155,10 @@ alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
 alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
 alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
 alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
+alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
+alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
 alt-shift-f = ['move-node-to-workspace f', 'workspace f']
+alt-shift-s = ['move-node-to-workspace s', 'workspace s']
 alt-shift-u = ['move-node-to-workspace u', 'workspace u']
 alt-shift-i = ['move-node-to-workspace i', 'workspace i']
 alt-shift-o = ['move-node-to-workspace o', 'workspace o']
@@ -176,8 +179,8 @@ esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 b = ['balance-sizes', 'mode main']
 f = [
-	'layout floating tiling',
-	'mode main',
+  'layout floating tiling',
+  'mode main',
 ] # Toggle between floating and tiling layout
 n = ['close-all-windows-but-current', 'mode main']
 
@@ -191,17 +194,18 @@ alt-shift-l = ['join-with right', 'mode main']
 
 [mode.resize.binding]
 h = 'resize smart -70'
-j = 'resize smart +20'
-k = 'resize smart -20'
+j = 'resize smart -20'
+k = 'resize smart +20'
 l = 'resize smart +70'
 shift-h = 'resize smart -210'
-shift-j = 'resize smart +60'
-shift-k = 'resize smart -60'
+shift-j = 'resize smart -60'
+shift-k = 'resize smart +60'
 shift-l = 'resize smart +210'
 esc = 'mode main'
 enter = 'mode main'
 
 [workspace-to-monitor-force-assignment]
+6 = 'DeskPad'
 u = 'secondary'
 i = 'secondary'
 o = 'secondary'
@@ -214,9 +218,9 @@ o = 'secondary'
 if.app-id = 'com.microsoft.VSCode'
 run = ['move-node-to-workspace 3']
 
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = ['move-node-to-workspace 3']
+# [[on-window-detected]]
+# if.app-id = 'com.mitchellh.ghostty'
+# run = ['move-node-to-workspace 3']
 
 [[on-window-detected]]
 if.window-title-regex-substring = 'shared content'
@@ -236,7 +240,7 @@ run = ['layout floating', 'move-node-to-workspace 4']
 
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace f']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari.WebApp.2119B734-B99E-4375-BF30-82C0A4F8776B' # Focusmate
@@ -246,6 +250,6 @@ run = ['move-node-to-workspace i']
 if.app-id = 'com.obsproject.obs-studio'
 run = ['move-node-to-workspace 4']
 
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = ['move-node-to-workspace f']
+# [[on-window-detected]]
+# if.app-id = 'org.mozilla.firefox'
+# run = ['move-node-to-workspace f']
