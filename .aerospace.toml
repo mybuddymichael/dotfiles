@@ -84,7 +84,7 @@ outer.right = [{ monitor."dell" = 16 }, 12]
 # outer.left = [{ monitor."dell" = 680 }, 12]
 # outer.right = [{ monitor."dell" = 680 }, 12]
 outer.bottom = [{ monitor."dell" = 16 }, 12]
-outer.top = [{ monitor."dell" = 16 }, 12]
+outer.top = [{ monitor."dell" = 32 }, 28]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
