@@ -13,8 +13,10 @@ focused_workspace="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>
 apps=$(aerospace list-windows --workspace "$1" --format '%{app-name}' 2>/dev/null | sort -u)
 
 if [ -z "$apps" ]; then
-  sketchybar --set $NAME drawing=off label.drawing=off
-  exit 0
+  if [ "$1" != "$focused_workspace" ]; then
+    sketchybar --set $NAME drawing=off label.drawing=off
+    exit 0
+  fi
 fi
 
 sketchybar --set $NAME drawing=on
