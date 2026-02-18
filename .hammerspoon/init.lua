@@ -1,0 +1,129 @@
+hs.hotkey.bind({ "cmd", "ctrl" }, "r", function()
+	hs.reload()
+	hs.alert.show("Hammerspoon reloaded")
+end)
+
+require("mouse_four_five")
+
+-- hs.logger.defaultLogLevel = "debug"
+-- hs.window.animationDuration = 0
+--
+-- Helm = hs.loadSpoon("Helm")
+-- Helm:bindHotkeys({
+-- 	focusLeft = { { "alt" }, "h" },
+-- 	focusUp = { { "alt" }, "k" },
+-- 	focusDown = { { "alt" }, "j" },
+-- 	focusRight = { { "alt" }, "l" },
+-- 	moveWindowLeft = { { "alt", "shift" }, "h" },
+-- 	moveWindowUp = { { "alt", "shift" }, "k" },
+-- 	moveWindowDown = { { "alt", "shift" }, "j" },
+-- 	moveWindowRight = { { "alt", "shift" }, "l" },
+-- 	makeFullScreen = { { "alt", "shift" }, "return" },
+-- 	slurp = { { "alt" }, "i" },
+-- 	barf = { { "alt" }, "o" },
+-- 	activateSpace1 = { { "alt" }, "1" },
+-- 	activateSpace2 = { { "alt" }, "2" },
+-- 	activateSpace3 = { { "alt" }, "3" },
+-- 	activateSpace4 = { { "alt" }, "4" },
+-- 	activateSpace5 = { { "alt" }, "5" },
+-- 	moveWindowToSpace1 = { { "alt", "shift" }, "1" },
+-- 	moveWindowToSpace2 = { { "alt", "shift" }, "2" },
+-- 	moveWindowToSpace3 = { { "alt", "shift" }, "3" },
+-- 	moveWindowToSpace4 = { { "alt", "shift" }, "4" },
+-- 	moveWindowToSpace5 = { { "alt", "shift" }, "5" },
+-- 	logWindowDebugInfo = { { "alt", "shift" }, "w" },
+-- })
+-- Helm:start()
+--
+-- -- Performance benchmark hotkey (runs in console)
+-- hs.hotkey.bind({ "cmd", "ctrl" }, "b", function()
+-- 	print("\n=== Running Helm Benchmark ===")
+-- 	Helm.benchmark.run({ iterations = 100, windowCounts = { 5, 10, 20 } })
+-- 	Helm.benchmark.realWorldTest()
+-- end)
+
+-- PaperWM = hs.loadSpoon("PaperWM")
+-- PaperWM.window_gap = 24
+-- PaperWM.window_ratios = { 1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4 }
+-- PaperWM:bindHotkeys({
+-- 	-- switch to a new focused window in tiled grid
+-- 	focus_left = { { "alt" }, "h" },
+-- 	focus_right = { { "alt" }, "l" },
+-- 	focus_up = { { "alt" }, "k" },
+-- 	focus_down = { { "alt" }, "j" },
+--
+-- 	-- switch windows by cycling forward/backward
+-- 	-- (forward = down or right, backward = up or left)
+-- 	-- focus_prev = { { "alt", "cmd" }, "k" },
+-- 	-- focus_next = { { "alt", "cmd" }, "j" },
+--
+-- 	-- move windows around in tiled grid
+-- 	swap_left = { { "alt", "shift" }, "h" },
+-- 	swap_right = { { "alt", "shift" }, "l" },
+-- 	swap_up = { { "alt", "shift" }, "k" },
+-- 	swap_down = { { "alt", "shift" }, "j" },
+--
+-- 	-- position and resize focused window
+-- 	center_window = { { "alt" }, "space" },
+-- 	full_width = { { "alt", "shift" }, "return" },
+-- 	cycle_width = { { "alt" }, "return" },
+-- 	reverse_cycle_width = { { "ctrl", "alt", "cmd" }, "r" },
+-- 	cycle_height = { { "alt", "cmd", "shift" }, "r" },
+-- 	reverse_cycle_height = { { "ctrl", "alt", "cmd", "shift" }, "r" },
+--
+-- 	-- increase/decrease width
+-- 	increase_width = { { "alt", "cmd" }, "l" },
+-- 	decrease_width = { { "alt", "cmd" }, "h" },
+--
+-- 	-- move focused window into / out of a column
+-- 	slurp_in = { { "alt", "ctrl" }, "h" },
+-- 	barf_out = { { "alt", "ctrl" }, "l" },
+--
+-- 	-- move the focused window into / out of the tiling layer
+-- 	toggle_floating = { { "alt", "cmd", "shift" }, "escape" },
+-- 	-- raise all floating windows on top of tiled windows
+-- 	focus_floating = { { "alt", "cmd", "shift" }, "f" },
+--
+-- 	-- focus the first / second / etc window in the current space
+-- 	focus_window_1 = { { "cmd", "shift" }, "1" },
+-- 	focus_window_2 = { { "cmd", "shift" }, "2" },
+-- 	focus_window_3 = { { "cmd", "shift" }, "3" },
+-- 	focus_window_4 = { { "cmd", "shift" }, "4" },
+-- 	focus_window_5 = { { "cmd", "shift" }, "5" },
+-- 	focus_window_6 = { { "cmd", "shift" }, "6" },
+-- 	focus_window_7 = { { "cmd", "shift" }, "7" },
+-- 	focus_window_8 = { { "cmd", "shift" }, "8" },
+-- 	focus_window_9 = { { "cmd", "shift" }, "9" },
+--
+-- 	switch_virtual_space_1 = { { "alt", "cmd" }, "1" },
+-- 	switch_virtual_space_2 = { { "alt", "cmd" }, "2" },
+-- 	switch_virtual_space_3 = { { "alt", "cmd" }, "3" },
+-- 	move_window_virtual_1 = { { "alt", "cmd", "shift" }, "1" },
+-- 	move_window_virtual_2 = { { "alt", "cmd", "shift" }, "2" },
+-- 	move_window_virtual_3 = { { "alt", "cmd", "shift" }, "3" },
+--
+-- 	-- switch to a new Mission Control space
+-- 	switch_space_l = { { "alt", "cmd" }, "," },
+-- 	switch_space_r = { { "alt", "cmd" }, "." },
+-- 	-- switch_space_1 = { { "alt", "cmd" }, "1" },
+-- 	-- switch_space_2 = { { "alt", "cmd" }, "2" },
+-- 	-- switch_space_3 = { { "alt", "cmd" }, "3" },
+-- 	switch_space_4 = { { "alt", "cmd" }, "4" },
+-- 	switch_space_5 = { { "alt", "cmd" }, "5" },
+-- 	switch_space_6 = { { "alt", "cmd" }, "6" },
+-- 	switch_space_7 = { { "alt", "cmd" }, "7" },
+-- 	switch_space_8 = { { "alt", "cmd" }, "8" },
+-- 	switch_space_9 = { { "alt", "cmd" }, "9" },
+--
+-- 	-- move focused window to a new space and tile
+-- 	-- move_window_1 = { { "alt", "cmd", "shift" }, "1" },
+-- 	-- move_window_2 = { { "alt", "cmd", "shift" }, "2" },
+-- 	-- move_window_3 = { { "alt", "cmd", "shift" }, "3" },
+-- 	move_window_4 = { { "alt", "cmd", "shift" }, "4" },
+-- 	move_window_5 = { { "alt", "cmd", "shift" }, "5" },
+-- 	move_window_6 = { { "alt", "cmd", "shift" }, "6" },
+-- 	move_window_7 = { { "alt", "cmd", "shift" }, "7" },
+-- 	move_window_8 = { { "alt", "cmd", "shift" }, "8" },
+-- 	move_window_9 = { { "alt", "cmd", "shift" }, "9" },
+-- })
+-- PaperWM:start()
