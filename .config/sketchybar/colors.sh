@@ -16,7 +16,7 @@ export TRANSPARENT=0x00000000
 export ACCENT=$YELLOW
 export ACCENT_TRANSPARENT=0x44ffe4bf # Transparent version of accent
 
-export BAR_COLOR=$TRANSPARENT   # Bar background
+export BAR_COLOR=0x55000000
 export ITEM_BG_COLOR=0x44ffffff # Item background
 
 # Workspace colors by appearance (edit these to tune focused workspace contrast)
