@@ -84,7 +84,7 @@ outer.right = [{ monitor."dell" = 16 }, 12]
 # outer.left = [{ monitor."dell" = 680 }, 12]
 # outer.right = [{ monitor."dell" = 680 }, 12]
 outer.bottom = [{ monitor."dell" = 16 }, 12]
-outer.top = [{ monitor."dell" = 32 }, 28]
+outer.top = [{ monitor."dell" = 60 }, { monitor."deskpad" = 60 }, 28]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -219,9 +219,9 @@ enter = 'mode main'
 
 [workspace-to-monitor-force-assignment]
 6 = 'DeskPad'
-u = 'secondary'
-i = 'secondary'
-o = 'secondary'
+u = 'built-in'
+i = 'built-in'
+o = 'built-in'
 
 # [[on-window-detected]]
 # check-further-callbacks = true
