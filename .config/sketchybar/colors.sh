@@ -99,10 +99,6 @@ else
   export TEXT_COLOR=$ROSE_PINE_DAWN_TEXT
 fi
 
-# export ACCENT=$YELLOW
-# export ACCENT_TRANSPARENT=0x44${ACCENT#0xff} # Transparent version of accent
-# export GREY_TRANSP=0x11${GREY#0xff} # Transparent version of grey
-
 # Bar background by appearance.
 export BAR_COLOR=$BASE_COLOR
 
@@ -111,7 +107,6 @@ export ITEM_BG_COLOR=$HIGHLIGHT_HIGH
 export TEXT_PRIMARY=$TEXT_COLOR
 export TEXT_MUTED=$MUTED_COLOR
 
-# Workspace colors by appearance (edit these to tune focused workspace contrast)
 export SPACE_ACTIVE_COLOR=$FULL_COLOR_INVERSE
 export SPACE_ACTIVE_BG_COLOR=$YELLOW
 export SPACE_INACTIVE_COLOR=$TEXT_COLOR
