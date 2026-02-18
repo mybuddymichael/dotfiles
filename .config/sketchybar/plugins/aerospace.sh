@@ -8,6 +8,17 @@ source "$CONFIG_DIR/colors.sh"
 
 focused_workspace="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>/dev/null)}"
 
+# Update app icons for this workspace.
+# Use explicit format output to avoid relying on default column layout.
+apps=$(aerospace list-windows --workspace "$1" --format '%{app-name}' 2>/dev/null | sort -u)
+
+if [ -z "$apps" ]; then
+  sketchybar --set $NAME drawing=off label.drawing=off
+  exit 0
+fi
+
+sketchybar --set $NAME drawing=on
+
 if [ "$1" = "$focused_workspace" ]; then
   sketchybar --set $NAME background.drawing=on \
     background.color=$SPACE_ACTIVE_BG_COLOR \
@@ -18,10 +29,6 @@ else
     icon.color=$SPACE_INACTIVE_COLOR \
     label.color=$SPACE_INACTIVE_COLOR
 fi
-
-# Update app icons for this workspace.
-# Use explicit format output to avoid relying on default column layout.
-apps=$(aerospace list-windows --workspace "$1" --format '%{app-name}' 2>/dev/null | sort -u)
 
 icon_string=""
 if [ -n "$apps" ]; then
