@@ -175,6 +175,19 @@ alt-shift-s = ['move-node-to-workspace s', 'workspace s']
 alt-shift-u = ['move-node-to-workspace u', 'workspace u']
 alt-shift-i = ['move-node-to-workspace i', 'workspace i']
 alt-shift-o = ['move-node-to-workspace o', 'workspace o']
+# See: https://nikitabobko.github.io/AeroSpace/commands#swap-workspace
+alt-shift-ctrl-1 = 'swap-workspace 1'
+alt-shift-ctrl-2 = 'swap-workspace 2'
+alt-shift-ctrl-3 = 'swap-workspace 3'
+alt-shift-ctrl-4 = 'swap-workspace 4'
+alt-shift-ctrl-5 = 'swap-workspace 5'
+alt-shift-ctrl-6 = 'swap-workspace 6'
+alt-shift-ctrl-f = 'swap-workspace f'
+alt-shift-ctrl-s = 'swap-workspace s'
+alt-shift-ctrl-u = 'swap-workspace u'
+alt-shift-ctrl-i = 'swap-workspace i'
+alt-shift-ctrl-o = 'swap-workspace o'
+
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 # alt-tab = 'workspace-back-and-forth'
