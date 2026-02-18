@@ -43,25 +43,17 @@ if [ -n "$OUTPUT" ] && [ "$OUTPUT" != "" ]; then
   rm -f "$TEMP_FILE"
 fi
 
-# Update sketchybar - adjust padding based on content
+# If no upcoming events today, show a friendly label
 if [ -z "$LABEL" ]; then
-  # Icon only - centered padding accounting for internal icon-label spacing
-  # Shift slightly right to compensate for internal spacing
-  sketchybar --set "$NAME" \
-    icon="󰃮" \
-    icon.color="$CAL_EVENT_ICON_COLOR" \
-    icon.padding_left=10 \
-    icon.padding_right=7 \
-    label="" \
-    label.padding_right=0
-else
-  # Icon with label - normal padding
-  sketchybar --set "$NAME" \
-    icon="󰃮" \
-    icon.color="$CAL_EVENT_ICON_COLOR" \
-    icon.padding_left=10 \
-    icon.padding_right=10 \
-    label="$LABEL" \
-    label.color="$CAL_EVENT_LABEL_COLOR" \
-    label.padding_right=10
+  LABEL="(No more events.)"
 fi
+
+# Update sketchybar - icon with label
+sketchybar --set "$NAME" \
+  icon="󰃮" \
+  icon.color="$CAL_EVENT_ICON_COLOR" \
+  icon.padding_left=10 \
+  icon.padding_right=10 \
+  label="$LABEL" \
+  label.color="$CAL_EVENT_LABEL_COLOR" \
+  label.padding_right=10
