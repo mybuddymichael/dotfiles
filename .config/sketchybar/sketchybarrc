@@ -40,14 +40,15 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
-sketchybar --add event aerospace_workspace_change
-sketchybar --add event aerospace_mode_changed
-sketchybar --add event appearance_change AppleInterfaceThemeChangedNotification
+# Set up non-rendering items and events
+sketchybar --add event aerospace_workspace_change \
+           --add event aerospace_mode_changed \
+           --add event appearance_change AppleInterfaceThemeChangedNotification \
+           --add item appearance_listener center \
+           --set appearance_listener drawing=off script="$PLUGIN_DIR/appearance.sh" \
+           --subscribe appearance_listener appearance_change
 
-sketchybar --add item appearance_listener center \
-  --set appearance_listener drawing=off script="$PLUGIN_DIR/appearance.sh" \
-  --subscribe appearance_listener appearance_change
-
+# Aerospace workspaces
 for sid in $(aerospace list-workspaces --all); do
   # Determine icon based on workspace ID
   space_icon=""
