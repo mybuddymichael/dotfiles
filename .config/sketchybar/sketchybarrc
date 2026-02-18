@@ -17,7 +17,18 @@ source "$CONFIG_DIR/colors.sh"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=36 blur_radius=0 color=$BAR_COLOR margin=16 corner_radius=12 y_offset=12 padding_left=5 padding_right=2 border_color=0x19000000 border_width=1
+sketchybar --bar \
+  position=top \
+  height=36 \
+  blur_radius=0 \
+  color=$BAR_COLOR \
+  margin=16 \
+  corner_radius=12 \
+  y_offset=12 \
+  padding_left=3 \
+  padding_right=2 \
+  border_color=0x19000000 \
+  border_width=1
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
