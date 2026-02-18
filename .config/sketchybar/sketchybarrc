@@ -42,6 +42,11 @@ sketchybar --default "${default[@]}"
 
 sketchybar --add event aerospace_workspace_change
 sketchybar --add event aerospace_mode_changed
+sketchybar --add event appearance_change AppleInterfaceThemeChangedNotification
+
+sketchybar --add item appearance_listener center \
+  --set appearance_listener drawing=off script="$PLUGIN_DIR/appearance.sh" \
+  --subscribe appearance_listener appearance_change
 
 for sid in $(aerospace list-workspaces --all); do
   # Determine icon based on workspace ID
@@ -59,7 +64,7 @@ for sid in $(aerospace list-workspaces --all); do
     --subscribe space.$sid aerospace_workspace_change \
     --set space.$sid \
     background.color=$TRANSPARENT \
-    background.corner_radius=5 \
+    background.corner_radius=6 \
     background.height=25 \
     background.drawing=off \
     background.padding_left=6 \

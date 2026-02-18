@@ -19,6 +19,7 @@ exec-on-workspace-change = [
 
 on-focus-changed = [
   'exec-and-forget sketchybar --trigger aerospace_mode_changed',
+  'exec-and-forget sketchybar --trigger aerospace_workspace_change',
 ]
 on-mode-changed = [
   'exec-and-forget sketchybar --trigger aerospace_mode_changed',
@@ -225,6 +226,10 @@ o = 'secondary'
 # [[on-window-detected]]
 # check-further-callbacks = true
 # run = 'layout floating'
+
+[[on-window-detected]]
+check-further-callbacks = true
+run = ['exec-and-forget sketchybar --trigger aerospace_workspace_change']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
