@@ -17,7 +17,7 @@ source "$CONFIG_DIR/colors.sh"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=36 blur_radius=30 color=$BAR_COLOR margin=12 corner_radius=12 y_offset=12
+sketchybar --bar position=top height=36 blur_radius=0 color=$BAR_COLOR margin=16 corner_radius=12 y_offset=12 padding_left=5 padding_right=2 border_color=0x19000000 border_width=1
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -63,15 +63,16 @@ for sid in $(aerospace list-workspaces --all); do
   sketchybar --add item space.$sid left \
     --subscribe space.$sid aerospace_workspace_change \
     --set space.$sid \
+    drawing=off \
     background.color=$TRANSPARENT \
     background.corner_radius=6 \
-    background.height=25 \
+    background.height=26 \
     background.drawing=off \
     background.padding_left=4 \
     background.padding_right=4 \
     y_offset=1 \
     icon="$space_icon" \
-    icon.font="SF Pro:Bold:14.0" \
+    icon.font="SF Pro:Bold:16.0" \
     icon.highlight_color=$SPACE_HIGHLIGHT_COLOR \
     label.drawing=off \
     label.font="sketchybar-app-font:Regular:14.0" \
@@ -127,20 +128,13 @@ sketchybar --add item clock right \
   click_script="open -a Calendar" \
   icon.font="Hack Nerd Font:Regular:14.0" \
   label.color="$CAL_EVENT_LABEL_COLOR" \
-  background.drawing=on \
-  background.color="$CAL_EVENT_BG_COLOR" \
-  background.corner_radius=8 \
-  background.height=25
-
-sketchybar --add item things_todo right \
+  --add item things_todo right \
   --set things_todo \
   update_freq=20 \
   script="$PLUGIN_DIR/things_todo.sh" \
   click_script="open -a Things3" \
-  background.drawing=on \
-  background.color=$ACCENT_TRANSPARENT \
   background.corner_radius=8 \
-  background.height=25
+  background.height=26
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
