@@ -11,30 +11,35 @@ fi
 
 case "${PERCENTAGE}" in
 9[0-9] | 100)
-  ICON=""
+  ICON="􀛩"
   COLOR=$BATTERY_COLOR_NORMAL
   ;;
 [6-8][0-9])
-  ICON=""
+  ICON="􀺶"
   COLOR=$BATTERY_COLOR_NORMAL
   ;;
 [3-5][0-9])
-  ICON=""
+  ICON="􀺸"
   COLOR=$BATTERY_COLOR_WARNING
   ;;
 [1-2][0-9])
-  ICON=""
+  ICON="􀛨"
   COLOR=$BATTERY_COLOR_LOW
   ;;
 *)
-  ICON=""
+  ICON="􀛪"
   COLOR=$BATTERY_COLOR_CRITICAL
   ;;
 esac
 
 if [[ "$CHARGING" != "" ]]; then
-  ICON="󱐋"
+  ICON="􀢋"
   COLOR=$BATTERY_COLOR_CHARGING
 fi
 
-sketchybar --set "$NAME" icon="$ICON" icon.color="$COLOR" label="${PERCENTAGE}%" label.color="$COLOR"
+sketchybar --set "$NAME" \
+  icon="$ICON" \
+  icon.font="SF Pro:Semibold:14.0" \
+  icon.color="$COLOR" \
+  label="${PERCENTAGE}%" \
+  label.color="$COLOR"

@@ -78,17 +78,15 @@ for sid in $(aerospace list-workspaces --all); do
     drawing=off \
     background.color=$TRANSPARENT \
     background.corner_radius=6 \
-    background.height=26 \
+    background.height=24 \
     background.drawing=off \
     background.padding_left=4 \
     background.padding_right=4 \
-    y_offset=1 \
     icon="$space_icon" \
     icon.font="SF Pro:Bold:16.0" \
     icon.highlight_color=$SPACE_HIGHLIGHT_COLOR \
     label.drawing=off \
     label.font="sketchybar-app-font:Regular:14.0" \
-    label.y_offset=-1 \
     click_script="aerospace workspace $sid" \
     script="$CONFIG_DIR/plugins/aerospace.sh $sid"
 done
@@ -106,16 +104,16 @@ done
 # https://felixkratz.github.io/SketchyBar/config/events
 
 sketchybar --add item clock right \
-  --set clock update_freq=10 icon= script="$PLUGIN_DIR/clock.sh" \
+  --set clock update_freq=10 script="$PLUGIN_DIR/clock.sh" \
   --add item battery right \
-  --set battery update_freq=120 icon.drawing=on icon.font="Hack Nerd Font:Regular:14.0" script="$PLUGIN_DIR/battery.sh" \
+  --set battery update_freq=120 icon.drawing=on script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change \
   --add item calendar_event right \
   --set calendar_event \
   update_freq=60 \
   script="$PLUGIN_DIR/calendar_event.sh" \
   click_script="open -a Calendar" \
-  icon.font="Hack Nerd Font:Regular:14.0" \
+  icon.font="SF Pro:Bold:14.0" \
   label.color="$CAL_EVENT_LABEL_COLOR" \
   --add item things_todo right \
   --set things_todo \
