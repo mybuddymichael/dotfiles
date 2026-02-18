@@ -26,13 +26,28 @@ if [ -n "$OUTPUT" ] && [ "$OUTPUT" != "" ]; then
       
       if [ -n "$EVENT_TIME" ] && [ -n "$CURRENT_EVENT_TITLE" ]; then
         EVENT_START_MINUTES=$(echo "$EVENT_TIME" | awk -F: '{print $1*60 + $2}')
-        TIME_DIFF=$((CURRENT_MINUTES - EVENT_START_MINUTES))
+        MINUTES_UNTIL=$((EVENT_START_MINUTES - CURRENT_MINUTES))
         
         # Show this event if:
-        # 1. It hasn't started yet (TIME_DIFF < 0), OR  
-        # 2. It started less than 5 minutes ago (0 <= TIME_DIFF <= 5)
-        if [ $TIME_DIFF -le 5 ]; then
-          LABEL="$EVENT_TIME $CURRENT_EVENT_TITLE"
+        # 1. It hasn't started yet, OR
+        # 2. It started less than 5 minutes ago
+        if [ $MINUTES_UNTIL -ge -5 ]; then
+          if [ $MINUTES_UNTIL -eq 0 ]; then
+            RELATIVE_LABEL="now"
+          elif [ $MINUTES_UNTIL -gt 0 ]; then
+            if [ $MINUTES_UNTIL -gt 60 ]; then
+              HOURS=$((MINUTES_UNTIL / 60))
+              MINUTES_REMAINDER=$((MINUTES_UNTIL % 60))
+              RELATIVE_LABEL=$(printf "in %dh%02dm" "$HOURS" "$MINUTES_REMAINDER")
+            else
+              RELATIVE_LABEL="${MINUTES_UNTIL}m"
+            fi
+          else
+            MINUTES_AGO=$((MINUTES_UNTIL * -1))
+            RELATIVE_LABEL="started ${MINUTES_AGO}m ago"
+          fi
+
+          LABEL="$EVENT_TIME $CURRENT_EVENT_TITLE ($RELATIVE_LABEL)"
           break
         fi
       fi
