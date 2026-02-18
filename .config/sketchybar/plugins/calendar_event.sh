@@ -51,11 +51,9 @@ fi
 # Update sketchybar - icon with label
 sketchybar --set "$NAME" \
   icon="􀉉" \
-  icon.font="SF Pro:Bold:14.0" \
   icon.color="$CAL_EVENT_ICON_COLOR" \
   icon.padding_left=10 \
   icon.padding_right=10 \
   label="$LABEL" \
-  label.font="SF Pro:Bold:13.0" \
   label.color="$CAL_EVENT_LABEL_COLOR" \
   label.padding_right=10

@@ -7,6 +7,11 @@
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
+# Shared typography
+STATUS_LABEL_FONT="SF Pro:Semibold:13.0"
+STATUS_SYMBOL_ICON_FONT="SF Pro:Bold:14.0"
+THINGS_ICON_FONT="sketchybar-app-font:Regular:14.0"
+
 # Load colors
 source "$CONFIG_DIR/colors.sh"
 
@@ -104,7 +109,11 @@ done
 # https://felixkratz.github.io/SketchyBar/config/events
 
 sketchybar --add item clock right \
-  --set clock update_freq=10 script="$PLUGIN_DIR/clock.sh" \
+  --set clock \
+  update_freq=10 \
+  script="$PLUGIN_DIR/clock.sh" \
+  icon.font="$STATUS_SYMBOL_ICON_FONT" \
+  label.font="$STATUS_LABEL_FONT" \
   --add item battery right \
   --set battery update_freq=120 icon.drawing=on script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change \
@@ -113,13 +122,16 @@ sketchybar --add item clock right \
   update_freq=60 \
   script="$PLUGIN_DIR/calendar_event.sh" \
   click_script="open -a Calendar" \
-  icon.font="SF Pro:Bold:14.0" \
+  icon.font="$STATUS_SYMBOL_ICON_FONT" \
+  label.font="$STATUS_LABEL_FONT" \
   label.color="$CAL_EVENT_LABEL_COLOR" \
   --add item things_todo right \
   --set things_todo \
   update_freq=20 \
   script="$PLUGIN_DIR/things_todo.sh" \
   click_script="open -a Things3" \
+  icon.font="$THINGS_ICON_FONT" \
+  label.font="$STATUS_LABEL_FONT" \
   background.corner_radius=8 \
   background.height=26
 

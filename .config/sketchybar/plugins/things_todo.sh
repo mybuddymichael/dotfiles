@@ -6,7 +6,7 @@ source "$CONFIG_DIR/colors.sh"
 TODO="$(sift --top 2>/dev/null)"
 
 if [ -z "$TODO" ]; then
-  TODO="(No prioritized task)"
+  TODO="(Nothing prioritized.)"
 fi
 
 # Truncate if too long
@@ -23,5 +23,4 @@ sketchybar --set "$NAME" \
   icon.padding_right=10 \
   label="$TODO" \
   label.color="$THINGS_TODO_LABEL_COLOR" \
-  label.padding_right=10 \
-  icon.font="sketchybar-app-font:Regular:14.0"
+  label.padding_right=10
