@@ -47,7 +47,12 @@ if [ -n "$OUTPUT" ] && [ "$OUTPUT" != "" ]; then
             RELATIVE_LABEL="started ${MINUTES_AGO}m ago"
           fi
 
-          LABEL="$EVENT_TIME $CURRENT_EVENT_TITLE ($RELATIVE_LABEL)"
+          DISPLAY_EVENT_TITLE="$CURRENT_EVENT_TITLE"
+          if [ ${#DISPLAY_EVENT_TITLE} -gt 30 ]; then
+            DISPLAY_EVENT_TITLE="${DISPLAY_EVENT_TITLE:0:29}…"
+          fi
+
+          LABEL="$EVENT_TIME $DISPLAY_EVENT_TITLE ($RELATIVE_LABEL)"
           break
         fi
       fi
