@@ -117,14 +117,6 @@ sketchybar --add item clock right \
   --add item battery right \
   --set battery update_freq=120 icon.drawing=on script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery system_woke power_source_change \
-  --add item weather right \
-  --set weather \
-  update_freq=600 \
-  script="$PLUGIN_DIR/weather.sh" \
-  icon.font="$STATUS_SYMBOL_ICON_FONT" \
-  label.font="$STATUS_LABEL_FONT" \
-  icon.color="$WEATHER_COLOR" \
-  label.color="$WEATHER_COLOR" \
   --add item calendar_event right \
   --set calendar_event \
   update_freq=60 \
