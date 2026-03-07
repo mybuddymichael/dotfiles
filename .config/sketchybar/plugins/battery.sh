@@ -11,7 +11,7 @@ fi
 
 case "${PERCENTAGE}" in
 9[0-9] | 100)
-  ICON="􀛩"
+  ICON="􀛨"
   COLOR=$BATTERY_COLOR_NORMAL
   ;;
 [6-8][0-9])
@@ -23,7 +23,7 @@ case "${PERCENTAGE}" in
   COLOR=$BATTERY_COLOR_WARNING
   ;;
 [1-2][0-9])
-  ICON="􀛨"
+  ICON="􀛩"
   COLOR=$BATTERY_COLOR_LOW
   ;;
 *)
