@@ -4,6 +4,7 @@ deno = "latest"
 go = "latest"
 node = "latest"
 uv = "latest"
+watchexec = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
