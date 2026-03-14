@@ -1,18 +1,35 @@
 fish_history
 fish/fishd*
 
-.claude/projects
-.claude/shell-snapshots
-.claude/statsig
-.claude/todos
-.claude/plugins/config.json
+# Claude runtime/state
 .claude/.update.lock
-.claude/debug
+.claude/backups/
+.claude/cache/
+.claude/debug/
+.claude/downloads/
 .claude/file-history
 .claude/history*
-.claude/plans
-.claude/plugins/known_marketplaces.json
+.claude/ide/
+.claude/mcp-needs-auth-cache.json
+.claude/paste-cache/
+.claude/plans/
+.claude/projects/
+.claude/sessions/
+.claude/shell-snapshots/
+.claude/stats-cache.json
+.claude/statsig/
+.claude/telemetry/
+.claude/todos/
 .claude/*cache*
+
+# Claude plugin runtime/cache
+.claude/plugins/blocklist.json
+.claude/plugins/cache/
+.claude/plugins/config.json
+.claude/plugins/installed_plugins.json
+.claude/plugins/known_marketplaces.json
+.claude/plugins/marketplaces/
+.claude/plugins/repos/
 
 .config/crush/anthropic
 
