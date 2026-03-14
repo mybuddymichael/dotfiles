@@ -15,11 +15,11 @@ function __path_debug
 
     set -l log_file "$HOME/.cache/fish/path-debug.log"
     command mkdir -p (path dirname $log_file)
-    printf "[%s] %s\n" (date "+%Y-%m-%d %H:%M:%S") "$argv" >> $log_file
+    printf "[%s] %s\n" (date "+%Y-%m-%d %H:%M:%S") "$argv" >>$log_file
     for path_entry in $PATH
-        printf "  %s\n" $path_entry >> $log_file
+        printf "  %s\n" $path_entry >>$log_file
     end
-    printf "\n" >> $log_file
+    printf "\n" >>$log_file
 end
 
 __path_debug "startup: initial PATH"
