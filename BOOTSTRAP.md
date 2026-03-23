@@ -8,24 +8,30 @@ This repo uses `gnu-stow` for dotfile linking and `brew bundle` for package inst
 ```bash
 xcode-select --install
 ```
+
 2. Confirm `git` is available (this also triggers CLT prompt on a clean Mac):
 ```bash
 git --version
 ```
+
 3. In 1Password, create or choose one SSH key for this machine.
+
 4. Add the key's public key to GitHub (SSH keys), then verify SSH auth:
 ```bash
 ssh -T git@github.com
 ```
+
 5. Clone this repo over SSH:
 ```bash
 git clone git@github.com:<your-user>/<your-dotfiles-repo>.git ~/dotfiles
 cd ~/dotfiles
 ```
+
 6. Run the first-run workflow:
 ```bash
 ./install.sh first-run
 ```
+
 7. Configure this machine's SSH signing key in local (non-stowed) config:
 ```bash
 git config --file ~/.gitconfig user.signingkey "ssh-ed25519 AAAA..."
@@ -38,12 +44,15 @@ key = "ssh-ed25519 AAAA..."
 ```
 `~/.jjconfig.toml` is machine-local and not stowed from this repo, so this key stays uncommitted.
 Until this step is complete, `jj` commands can fail with `Signing key required`.
+
 8. Verify signing key configuration:
 ```bash
 git config --file ~/.gitconfig --get user.signingkey
 jj config get signing.key
 ```
+
 9. Sign in to Apple ID / App Store.
+
 10. Run App Store installs:
 ```bash
 ./install.sh post-apple-id
