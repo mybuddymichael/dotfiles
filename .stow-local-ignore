@@ -22,6 +22,9 @@ CLAUDE.md
 # Installation and build files
 install\.sh
 Brewfile
+Brewfile\..*
+BOOTSTRAP\.md
+bootstrap
 
 # IDE and editor files
 \.vscode

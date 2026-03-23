@@ -38,8 +38,7 @@
   noff = merge --no-ff
   update = "! git fetch --tags; git fetch --prune"
   grep = grep -n
-  ignored = "! git ls-files -v | ack \"^[a-z]\""
-	submit = !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
+		submit = !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
   cn = "!git commit -m 'More notes' && git push"
 [color]
   ui = true

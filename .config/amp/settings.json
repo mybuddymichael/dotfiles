@@ -1,0 +1,17 @@
+{
+	"amp.dangerouslyAllowAll": true,
+	"amp.permissions": [],
+	"amp.mcpServers": {},
+	"amp.mcpTrustedServers": [
+    {
+      "serverName": "figma",
+      "specHash": "5f0f6f0eb98d7784172621efa287badd1f16d9311dee591bdecc8013eeefc31f",
+      "allow": true
+    }
+  ],
+	"amp.terminal.theme": "terminal",
+	"amp.experimental.modes": [
+    "bombadil"
+  ],
+	"amp.agent.deepReasoningEffort": "xhigh"
+}

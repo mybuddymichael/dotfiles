@@ -34,3 +34,4 @@ fish/fishd*
 .config/crush/anthropic
 
 .config/jj/repos
+.config/gh/hosts.yml
