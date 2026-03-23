@@ -29,6 +29,9 @@ tar = ["log", "-r", "heads(::trunk() & ::@)::"]
 [git]
 sign-on-push = true
 
+[revsets]
+bookmark-advance-to = "@-"
+
 [templates]
 log = 'builtin_log_oneline'
 
