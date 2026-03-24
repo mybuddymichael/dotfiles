@@ -23,6 +23,7 @@ fish/fishd*
 .claude/*cache*
 
 # Claude plugin runtime/cache
+.claude/plugins/
 .claude/plugins/blocklist.json
 .claude/plugins/cache/
 .claude/plugins/config.json
