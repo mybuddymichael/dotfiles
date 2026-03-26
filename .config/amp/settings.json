@@ -13,5 +13,5 @@
 	"amp.experimental.modes": [
     "bombadil"
   ],
-	"amp.agent.deepReasoningEffort": "xhigh"
+	"amp.agent.deepReasoningEffort": "high"
 }

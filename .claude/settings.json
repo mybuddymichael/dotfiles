@@ -34,5 +34,6 @@
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
+  "extraKnownMarketplaces": {},
   "alwaysThinkingEnabled": true
 }
