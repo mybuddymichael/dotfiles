@@ -34,5 +34,10 @@ fish/fishd*
 
 .config/crush/anthropic
 
+# pi agent runtime/state
+.pi/agent/sessions/
+.pi/agent/auth.json
+.pi/agent/oauth.json.migrated
+
 .config/jj/repos
 .config/gh/hosts.yml
