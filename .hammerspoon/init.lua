@@ -5,19 +5,8 @@ end)
 
 require("mouse_four_five")
 
-local function reloadSketchybar()
-	local task = hs.task.new("/opt/homebrew/bin/sketchybar", nil, { "--reload" })
-	if task then
-		task:start()
-	end
-end
-
-appearanceWatcher = hs.distributednotifications.new(function(notification, _, _)
-	if notification == "AppleInterfaceThemeChangedNotification" then
-		reloadSketchybar()
-	end
-end, "AppleInterfaceThemeChangedNotification")
-appearanceWatcher:start()
+ThemeManager = hs.loadSpoon("ThemeManager")
+ThemeManager:start()
 
 -- hs.logger.defaultLogLevel = "debug"
 -- hs.window.animationDuration = 0
