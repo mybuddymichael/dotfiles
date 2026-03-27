@@ -1,0 +1,3 @@
+- Be extremely concise. Sacrifice grammar for the sake of concision.
+- Prefer rg over grep.
+- When asking the user quetsions, use the `questionnaire` tool.
