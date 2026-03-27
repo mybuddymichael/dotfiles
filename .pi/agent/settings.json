@@ -1,16 +1,16 @@
 {
-	"lastChangelogVersion": "0.63.1",
-	"defaultProvider": "openai-codex",
-	"defaultModel": "gpt-5.4",
-	"theme": "rose-pine-dawn",
-	"defaultThinkingLevel": "high",
-	"compaction": {
-		"enabled": false
-	},
-	"hideThinkingBlock": true,
-	"enabledModels": [
-		"openai-codex/gpt-5.4",
-		"anthropic/claude-opus-4-6",
-		"openai-codex/gpt-5.3-codex"
-	]
+  "lastChangelogVersion": "0.63.1",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-4-6",
+  "theme": "rose-pine-dawn",
+  "defaultThinkingLevel": "high",
+  "compaction": {
+    "enabled": false
+  },
+  "hideThinkingBlock": true,
+  "enabledModels": [
+    "openai-codex/gpt-5.4",
+    "anthropic/claude-opus-4-6",
+    "openai-codex/gpt-5.3-codex"
+  ]
 }
