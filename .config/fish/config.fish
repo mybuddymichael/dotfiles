@@ -96,6 +96,7 @@ __mise_path_postprocess
 # Set a custom PATH.
 
 fish_add_path -g "$HOME/.local/bin"
+fish_add_path -g "/Applications/Obsidian.app/Contents/MacOS"
 
 # Vim is my EDITOR.
 
