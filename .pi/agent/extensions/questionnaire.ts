@@ -13,6 +13,8 @@ import {
 	matchesKey,
 	Text,
 	truncateToWidth,
+	visibleWidth,
+	wrapTextWithAnsi,
 } from "@mariozechner/pi-tui";
 import { Type } from "@sinclair/typebox";
 
@@ -306,8 +308,39 @@ export default function questionnaire(pi: ExtensionAPI) {
 						const q = currentQuestion();
 						const opts = currentOptions();
 
-						// Helper to add truncated line
 						const add = (s: string) => lines.push(truncateToWidth(s, width));
+						const addWrappedBlock = (
+							text: string,
+							firstPrefix: string,
+							continuationPrefix: string,
+							style: (s: string) => string = (s) => s,
+						) => {
+							const logicalLines = text.replace(/\t/g, "   ").split(/\r?\n/);
+
+							for (let logicalIndex = 0; logicalIndex < logicalLines.length; logicalIndex++) {
+								const rawLine = logicalLines[logicalIndex] ?? "";
+								const startingPrefix =
+									logicalIndex === 0 ? firstPrefix : continuationPrefix;
+								const availableWidth = Math.max(
+									1,
+									width - visibleWidth(startingPrefix),
+								);
+
+								if (rawLine.length === 0) {
+									lines.push(truncateToWidth(startingPrefix, width, ""));
+									continue;
+								}
+
+								const wrapped = wrapTextWithAnsi(style(rawLine), availableWidth);
+								for (let wrappedIndex = 0; wrappedIndex < wrapped.length; wrappedIndex++) {
+									const prefix =
+										logicalIndex === 0 && wrappedIndex === 0
+											? firstPrefix
+											: continuationPrefix;
+									lines.push(prefix + wrapped[wrappedIndex]);
+								}
+							}
+						};
 
 						add(theme.fg("accent", "─".repeat(width)));
 
@@ -337,29 +370,46 @@ export default function questionnaire(pi: ExtensionAPI) {
 							lines.push("");
 						}
 
-						// Helper to render options list
 						function renderOptions() {
 							for (let i = 0; i < opts.length; i++) {
 								const opt = opts[i];
 								const selected = i === optionIndex;
 								const isOther = opt.isOther === true;
-								const prefix = selected ? theme.fg("accent", "> ") : "  ";
+								const selectionPrefix = selected ? theme.fg("accent", "> ") : "  ";
+								const labelPrefix = `${i + 1}. `;
+								const continuationPrefix = " ".repeat(
+									visibleWidth(selectionPrefix) + visibleWidth(labelPrefix),
+								);
+								const descriptionPrefix = " ".repeat(
+									visibleWidth(selectionPrefix) + visibleWidth(labelPrefix) + 2,
+								);
 								const color = selected ? "accent" : "text";
-								// Mark "Type something" differently when in input mode
-								if (isOther && inputMode) {
-									add(prefix + theme.fg("accent", `${i + 1}. ${opt.label} ✎`));
-								} else {
-									add(prefix + theme.fg(color, `${i + 1}. ${opt.label}`));
-								}
+								const displayLabel =
+									isOther && inputMode ? `${opt.label} ✎` : opt.label;
+
+								addWrappedBlock(
+									displayLabel,
+									selectionPrefix + theme.fg(color, labelPrefix),
+									continuationPrefix,
+									(s) => theme.fg(color, s),
+								);
+
 								if (opt.description) {
-									add(`     ${theme.fg("muted", opt.description)}`);
+									addWrappedBlock(
+										opt.description,
+										descriptionPrefix,
+										descriptionPrefix,
+										(s) => theme.fg("muted", s),
+									);
 								}
 							}
 						}
 
 						// Content
 						if (inputMode && q) {
-							add(theme.fg("text", ` ${q.prompt}`));
+							addWrappedBlock(q.prompt, theme.fg("text", " "), " ", (s) =>
+								theme.fg("text", s),
+							);
 							lines.push("");
 							// Show options for reference
 							renderOptions();
@@ -393,7 +443,9 @@ export default function questionnaire(pi: ExtensionAPI) {
 								add(theme.fg("warning", ` Unanswered: ${missing}`));
 							}
 						} else if (q) {
-							add(theme.fg("text", ` ${q.prompt}`));
+							addWrappedBlock(q.prompt, theme.fg("text", " "), " ", (s) =>
+								theme.fg("text", s),
+							);
 							lines.push("");
 							renderOptions();
 						}
