@@ -1,19 +1,18 @@
 {
-  "lastChangelogVersion": "0.64.0",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.4",
+  "lastChangelogVersion": "0.66.1",
+  "defaultProvider": "opencode-go",
+  "defaultModel": "glm-5.1",
   "theme": "rose-pine-dawn",
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "medium",
   "compaction": {
     "enabled": false
   },
   "hideThinkingBlock": true,
   "enabledModels": [
-    "openai-codex/gpt-5.4",
-    "anthropic/claude-opus-4-6",
-    "openai-codex/gpt-5.3-codex"
+    "openai-codex/gpt-5.4"
   ],
   "packages": [
-    "npm:glimpseui"
+    "npm:glimpseui@0.6.2",
+    "npm:pi-tool-display@0.3.1"
   ]
 }
