@@ -3,7 +3,8 @@ bun = "latest"
 deno = "latest"
 go = "latest"
 node = "24.14.1"
-uv = "latest"
+pnpm = "latest"
+uv = "0.11.2"
 watchexec = "latest"
 
 [settings]
