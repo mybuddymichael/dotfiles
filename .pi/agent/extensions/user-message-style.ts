@@ -6,9 +6,9 @@ type RenderFn = (width: number) => string[];
 
 type PatchableUserMessagePrototype = {
 	render: RenderFn;
-	__userMessageLabelOriginalRender?: RenderFn;
-	__userMessageLabelPatched?: boolean;
-	__userMessageLabelPatchVersion?: number;
+	__userMessageStyleOriginalRender?: RenderFn;
+	__userMessageStylePatched?: boolean;
+	__userMessageStylePatchVersion?: number;
 };
 
 type MarkdownLikeChild = {
@@ -17,15 +17,14 @@ type MarkdownLikeChild = {
 	defaultTextStyle?: unknown;
 };
 
-const PATCH_VERSION = 2;
-const ANSI_COLOR_3 = "\x1b[33m";
+const PATCH_VERSION = 3;
+const ANSI_COLOR_2 = "\x1b[32m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
-const TITLE = "── user ";
-const INDENT = " ";
+const PREFIX = "▎ ";
 
-function color3(text: string): string {
-	return `${ANSI_COLOR_3}${text}${ANSI_RESET_FG}`;
+function color2(text: string): string {
+	return `${ANSI_COLOR_2}${text}${ANSI_RESET_FG}`;
 }
 
 function stripAnsi(text: string): string {
@@ -86,19 +85,10 @@ function renderBody(instance: unknown, width: number, originalRender: RenderFn):
 	}
 }
 
-function indentLine(line: string): string {
-	return `${INDENT}${line}`;
-}
-
-function buildTopLine(width: number): string {
-	const contentWidth = Math.max(1, width - visibleWidth(INDENT));
-	const fill = "─".repeat(Math.max(0, contentWidth - visibleWidth(TITLE)));
-	return indentLine(color3(truncateToWidth(`${TITLE}${fill}`, contentWidth, "", true)));
-}
-
-function buildBottomLine(width: number): string {
-	const contentWidth = Math.max(1, width - visibleWidth(INDENT));
-	return indentLine(color3("─".repeat(contentWidth)));
+function prefixLine(line: string, width: number): string {
+	const contentWidth = Math.max(1, width - visibleWidth(PREFIX));
+	const plainLine = stripAnsi(line);
+	return color2(`${PREFIX}${truncateToWidth(plainLine, contentWidth, "", true)}`);
 }
 
 function patchUserMessagePrototype(): void {
@@ -106,38 +96,32 @@ function patchUserMessagePrototype(): void {
 	if (typeof prototype.render !== "function") return;
 
 	if (
-		prototype.__userMessageLabelPatched
-		&& prototype.__userMessageLabelPatchVersion === PATCH_VERSION
-		&& typeof prototype.__userMessageLabelOriginalRender === "function"
+		prototype.__userMessageStylePatched
+		&& prototype.__userMessageStylePatchVersion === PATCH_VERSION
+		&& typeof prototype.__userMessageStyleOriginalRender === "function"
 	) {
 		return;
 	}
 
-	if (!prototype.__userMessageLabelOriginalRender) {
-		prototype.__userMessageLabelOriginalRender = prototype.render;
+	if (!prototype.__userMessageStyleOriginalRender) {
+		prototype.__userMessageStyleOriginalRender = prototype.render;
 	}
 
-	const originalRender = prototype.__userMessageLabelOriginalRender;
+	const originalRender = prototype.__userMessageStyleOriginalRender;
 	if (!originalRender) return;
 
-	prototype.render = function renderUserMessageWithLabel(width: number): string[] {
+	prototype.render = function renderUserMessageWithStyle(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
-		const contentWidth = Math.max(1, safeWidth - visibleWidth(INDENT));
+		const contentWidth = Math.max(1, safeWidth - visibleWidth(PREFIX));
 		const body = renderBody(this, contentWidth, originalRender);
-		const indentedBody = (body.length > 0 ? body : [""]).map(indentLine);
-		return [
-			"",
-			buildTopLine(safeWidth),
-			...indentedBody,
-			buildBottomLine(safeWidth),
-		];
+		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixLine(line, safeWidth))];
 	};
 
-	prototype.__userMessageLabelPatched = true;
-	prototype.__userMessageLabelPatchVersion = PATCH_VERSION;
+	prototype.__userMessageStylePatched = true;
+	prototype.__userMessageStylePatchVersion = PATCH_VERSION;
 }
 
-export default function userMessageLabelExtension(pi: ExtensionAPI): void {
+export default function userMessageStyleExtension(pi: ExtensionAPI): void {
 	patchUserMessagePrototype();
 
 	pi.on("session_start", async () => {
