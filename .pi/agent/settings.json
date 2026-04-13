@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.66.1",
+  "lastChangelogVersion": "0.67.1",
   "defaultProvider": "opencode-go",
   "defaultModel": "glm-5.1",
-  "theme": "rose-pine-dawn",
+  "theme": "rose-pine-moon",
   "defaultThinkingLevel": "medium",
   "compaction": {
     "enabled": false
