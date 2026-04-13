@@ -9,7 +9,7 @@
  *   /handoff execute phase one of the plan
  *   /handoff check other places that need this fix
  *
- * The generated prompt appears as a draft in the editor for review/editing.
+ * The generated prompt is inserted directly into the new thread input.
  */
 
 import { complete, type Message } from "@mariozechner/pi-ai";
@@ -26,6 +26,7 @@ const SYSTEM_PROMPT = `You are a context transfer assistant. Given a conversatio
 2. Lists any relevant files that were discussed or modified
 3. Clearly states the next task based on the user's goal
 4. Is self-contained - the new thread should be able to proceed without the old conversation
+5. Preserves the key elements of the user's goal, and their key instructions
 
 Format your response as a prompt the user can send to start the new thread. Be concise but include all necessary context. Do not include any preamble like "Here's the prompt" - just output the prompt itself.
 
@@ -150,14 +151,6 @@ export default function (pi: ExtensionAPI) {
 				return;
 			}
 
-			// Let user edit the generated prompt
-			const editedPrompt = await ctx.ui.editor("Edit handoff prompt", result);
-
-			if (editedPrompt === undefined) {
-				ctx.ui.notify("Cancelled", "info");
-				return;
-			}
-
 			// Create new session with parent tracking
 			const newSessionResult = await ctx.newSession({
 				parentSession: currentSessionFile,
@@ -168,9 +161,9 @@ export default function (pi: ExtensionAPI) {
 				return;
 			}
 
-			// Set the edited prompt in the main editor for submission
-			ctx.ui.setEditorText(editedPrompt);
-			ctx.ui.notify("Handoff ready. Submit when ready.", "info");
+			// Set the generated prompt in the new session input for submission
+			ctx.ui.setEditorText(result);
+			ctx.ui.notify("Handoff ready in new thread. Submit when ready.", "info");
 		},
 	});
 }
