@@ -11,8 +11,5 @@
   "enabledModels": [
     "openai-codex/gpt-5.4"
   ],
-  "packages": [
-    "npm:glimpseui@0.6.2",
-    "npm:pi-tool-display@0.3.1"
-  ]
+  "packages": []
 }
