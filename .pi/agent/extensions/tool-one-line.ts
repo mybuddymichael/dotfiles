@@ -139,19 +139,34 @@ class TruncatedPreviewText implements Component {
 	private maxLines: number;
 	private indent: string;
 	private leadingBlankLine: boolean;
+	private overflowLineFormatter?: (hiddenLineCount: number) => string;
 
-	constructor(text = "", maxLines = 3, indent = "", leadingBlankLine = false) {
+	constructor(
+		text = "",
+		maxLines = 3,
+		indent = "",
+		leadingBlankLine = false,
+		overflowLineFormatter?: (hiddenLineCount: number) => string,
+	) {
 		this.text = text;
 		this.maxLines = maxLines;
 		this.indent = indent;
 		this.leadingBlankLine = leadingBlankLine;
+		this.overflowLineFormatter = overflowLineFormatter;
 	}
 
-	setParts(text: string, maxLines = this.maxLines, indent = this.indent, leadingBlankLine = this.leadingBlankLine): void {
+	setParts(
+		text: string,
+		maxLines = this.maxLines,
+		indent = this.indent,
+		leadingBlankLine = this.leadingBlankLine,
+		overflowLineFormatter = this.overflowLineFormatter,
+	): void {
 		this.text = text;
 		this.maxLines = maxLines;
 		this.indent = indent;
 		this.leadingBlankLine = leadingBlankLine;
+		this.overflowLineFormatter = overflowLineFormatter;
 	}
 
 	render(width: number): string[] {
@@ -160,24 +175,30 @@ class TruncatedPreviewText implements Component {
 		const sourceLines = this.text.split("\n");
 		const indentWidth = visibleWidth(this.indent);
 		const contentWidth = Math.max(1, safeWidth - indentWidth);
-		let truncated = false;
+		let hiddenLineCount = 0;
 
 		for (let index = 0; index < sourceLines.length; index++) {
 			const wrapped = wrapTextWithAnsi(sourceLines[index] ?? "", contentWidth);
 			const chunks = wrapped.length > 0 ? wrapped : [""];
-			for (const chunk of chunks) {
+			for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
+				const chunk = chunks[chunkIndex] ?? "";
 				if (lines.length >= this.maxLines) {
-					truncated = true;
+					hiddenLineCount += chunks.length - chunkIndex;
+					hiddenLineCount += sourceLines
+						.slice(index + 1)
+						.reduce((count, sourceLine) => {
+							const wrappedLine = wrapTextWithAnsi(sourceLine ?? "", contentWidth);
+							return count + Math.max(1, wrappedLine.length);
+						}, 0);
 					break;
 				}
 				lines.push(truncateToWidth(`${this.indent}${chunk}`, safeWidth, "", true));
 			}
-			if (truncated) break;
+			if (hiddenLineCount > 0) break;
 		}
 
-		if (truncated && lines.length > 0) {
-			const lastLine = lines[lines.length - 1] ?? "";
-			lines[lines.length - 1] = truncateToWidth(lastLine, safeWidth, "…", true);
+		if (hiddenLineCount > 0 && this.overflowLineFormatter) {
+			lines.push(truncateToWidth(this.overflowLineFormatter(hiddenLineCount), safeWidth, "", true));
 		}
 
 		const renderedLines = trimBlankLines(lines);
@@ -341,11 +362,12 @@ function previewComponent(
 	maxLines = 3,
 	indent = "",
 	leadingBlankLine = false,
+	overflowLineFormatter?: (hiddenLineCount: number) => string,
 ): TruncatedPreviewText {
 	const component = context.lastComponent instanceof TruncatedPreviewText
 		? context.lastComponent
 		: new TruncatedPreviewText();
-	component.setParts(text, maxLines, indent, leadingBlankLine);
+	component.setParts(text, maxLines, indent, leadingBlankLine, overflowLineFormatter);
 	return component;
 }
 
@@ -567,9 +589,10 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 								.map((line) => bashTheme.fg("toolOutput", line))
 								.join("\n"),
 							context as RenderContext,
-							3,
+							10,
 							"  ",
 							true,
+							(hiddenLineCount) => bashTheme.fg("dim", `  +${hiddenLineCount} more`),
 						),
 					);
 				}
