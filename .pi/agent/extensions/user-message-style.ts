@@ -46,7 +46,7 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 8;
+const PATCH_VERSION = 10;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
@@ -75,6 +75,19 @@ function getBashModeAnsi(): string {
 
 function color6(text: string): string {
 	return `${getBashModeAnsi()}${text}${ANSI_RESET_FG}`;
+}
+
+function getUserMessageTextAnsi(): string {
+	try {
+		return activeTheme?.getFgAnsi("userMessageText") ?? "";
+	} catch {
+		return "";
+	}
+}
+
+function colorUserMessageText(text: string): string {
+	const ansi = getUserMessageTextAnsi();
+	return ansi ? `${ansi}${text}${ANSI_RESET_FG}` : text;
 }
 
 function stripAnsi(text: string): string {
@@ -151,12 +164,12 @@ function getPrefixKind(text: string): PrefixKind {
 }
 
 function colorPrefix(prefix: string, kind: PrefixKind): string {
-	if (kind === "default") return color2(prefix);
+	if (kind === "default") return colorUserMessageText(prefix);
 	return color6(prefix);
 }
 
 function colorContent(text: string, kind: PrefixKind): string {
-	if (kind === "default") return text;
+	if (kind === "default") return colorUserMessageText(text);
 	return color6(text);
 }
 
