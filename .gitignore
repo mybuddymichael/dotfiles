@@ -38,6 +38,7 @@ fish/fishd*
 .pi/agent/sessions/
 .pi/agent/auth.json
 .pi/agent/oauth.json.migrated
+.pi/agent/settings.json
 
 .config/jj/repos
 .config/gh/hosts.yml
