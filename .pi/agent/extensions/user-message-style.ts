@@ -45,17 +45,12 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 5;
+const PATCH_VERSION = 6;
 const ANSI_GREEN = "\x1b[32m";
-const ANSI_YELLOW = "\x1b[33m";
-const ANSI_BOLD = "\x1b[1m";
-const ANSI_RESET = "\x1b[0m";
+const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
 const DEFAULT_PREFIX = "▎ ";
-const BASH_PREFIX = "! ";
-const BASH_EXCLUDED_PREFIX = "‼ ";
-const BASH_STYLE = `${ANSI_BOLD}${ANSI_YELLOW}`;
 
 type PrefixKind = "default" | "bash" | "bashExcluded";
 
@@ -65,6 +60,10 @@ type PatchableBashExecutionInstance = BashExecutionComponent & {
 
 function color2(text: string): string {
 	return `${ANSI_GREEN}${text}${ANSI_RESET_FG}`;
+}
+
+function color6(text: string): string {
+	return `${ANSI_CYAN}${text}${ANSI_RESET_FG}`;
 }
 
 function stripAnsi(text: string): string {
@@ -128,9 +127,7 @@ function renderBody(instance: unknown, width: number, originalRender: RenderFn):
 function getPrefix(kind: PrefixKind): string {
 	switch (kind) {
 		case "bash":
-			return BASH_PREFIX;
 		case "bashExcluded":
-			return BASH_EXCLUDED_PREFIX;
 		default:
 			return DEFAULT_PREFIX;
 	}
@@ -144,20 +141,25 @@ function getPrefixKind(text: string): PrefixKind {
 
 function colorPrefix(prefix: string, kind: PrefixKind): string {
 	if (kind === "default") return color2(prefix);
-	return `${BASH_STYLE}${prefix}${ANSI_RESET}`;
+	return color6(prefix);
+}
+
+function colorContent(text: string, kind: PrefixKind): string {
+	if (kind === "default") return text;
+	return `${ANSI_CYAN}${text}${ANSI_RESET_FG}`;
 }
 
 function prefixLine(line: string, width: number, kind: PrefixKind): string {
 	const prefix = getPrefix(kind);
 	const contentWidth = Math.max(1, width - visibleWidth(prefix));
 	const plainLine = stripAnsi(line);
-	return `${colorPrefix(prefix, kind)}${truncateToWidth(plainLine, contentWidth, "", true)}`;
+	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(plainLine, contentWidth, "", true), kind)}`;
 }
 
 function prefixRenderedLine(line: string, width: number, kind: PrefixKind): string {
 	const prefix = getPrefix(kind);
 	const contentWidth = Math.max(1, width - visibleWidth(prefix));
-	return `${colorPrefix(prefix, kind)}${truncateToWidth(line, contentWidth, "", true)}`;
+	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(line, contentWidth, "", true), kind)}`;
 }
 
 function trimBashBox(lines: string[]): string[] {
