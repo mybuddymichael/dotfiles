@@ -40,7 +40,10 @@ type Theme = {
 			| "toolTitle"
 			| "toolOutput"
 			| "bashMode"
-			| "syntaxNumber",
+			| "syntaxNumber"
+			| "syntaxFunction"
+			| "syntaxVariable"
+			| "syntaxPunctuation",
 		text: string,
 	): string;
 };
@@ -85,12 +88,6 @@ type SpinnerState = {
 const PATCH_VERSION = 2;
 const SPINNER_INTERVAL_MS = 80;
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
-const ANSI_COLOR_3 = "\x1b[33m";
-const ANSI_COLOR_5 = "\x1b[35m";
-const ANSI_COLOR_7 = "\x1b[37m";
-const ANSI_COLOR_4 = "\x1b[34m";
-const ANSI_COLOR_8 = "\x1b[38;5;8m";
-const ANSI_RESET_FG = "\x1b[39m";
 const NBSP = "\u00A0";
 const WRAPPABLE_PATH_SEPARATOR = "/ ";
 const WRAPPABLE_GREP_SEPARATOR = "| ";
@@ -253,17 +250,6 @@ function compactText(text: string | undefined): string {
 	return text.replace(/\s+/g, " ").trim();
 }
 
-function color3Bold(theme: Theme, text: string): string {
-	return `${ANSI_COLOR_3}${theme.bold(text)}${ANSI_RESET_FG}`;
-}
-
-function color7Bold(theme: Theme, text: string): string {
-	return `${ANSI_COLOR_7}${theme.bold(text)}${ANSI_RESET_FG}`;
-}
-
-function color4(text: string): string {
-	return `${ANSI_COLOR_4}${text}${ANSI_RESET_FG}`;
-}
 
 function formatPathForWrapping(path: string): string {
 	return path.replaceAll("/", WRAPPABLE_PATH_SEPARATOR);
@@ -280,16 +266,16 @@ function restoreWrappedSpacing(text: string): string {
 }
 
 function formatToolLabel(theme: Theme, toolName: string, details: string): string {
-	return `${color7Bold(theme, toolName)}${NBSP}${details}`;
+	return `${theme.fg("toolTitle", theme.bold(toolName))}${NBSP}${details}`;
 }
 
 function formatPathLabel(theme: Theme, toolName: string, path: string): string {
-	return formatToolLabel(theme, toolName, color4(formatPathForWrapping(path)));
+	return formatToolLabel(theme, toolName, theme.fg("syntaxFunction", formatPathForWrapping(path)));
 }
 
 function formatGrepLabel(theme: Theme, pattern: string | undefined, path: string, glob?: string): string {
 	const query = theme.fg("syntaxNumber", theme.bold(formatGrepPatternForWrapping(compactText(pattern))));
-	const location = `${ANSI_COLOR_8}in${NBSP}${formatPathForWrapping(path)}${glob ? ` (${compactText(glob)})` : ""}${ANSI_RESET_FG}`;
+	const location = theme.fg("muted", `in${NBSP}${formatPathForWrapping(path)}${glob ? ` (${compactText(glob)})` : ""}`);
 	return formatToolLabel(theme, "Grep", `${query} ${location}`);
 }
 
@@ -306,8 +292,8 @@ function formatEditLabel(theme: Theme, path: string): string {
 }
 
 function formatFindLabel(theme: Theme, pattern: string | undefined, path: string): string {
-	const query = color3Bold(theme, compactText(pattern));
-	const location = `${ANSI_COLOR_8}in${NBSP}${formatPathForWrapping(path)}${ANSI_RESET_FG}`;
+	const query = theme.fg("syntaxVariable", theme.bold(compactText(pattern)));
+	const location = theme.fg("syntaxPunctuation", `in${NBSP}${formatPathForWrapping(path)}`);
 	return formatToolLabel(theme, "Find", `${query} ${location}`);
 }
 
