@@ -38,7 +38,9 @@ type Theme = {
 			| "error"
 			| "warning"
 			| "toolTitle"
-			| "toolOutput",
+			| "toolOutput"
+			| "bashMode"
+			| "syntaxNumber",
 		text: string,
 	): string;
 };
@@ -85,7 +87,6 @@ const SPINNER_INTERVAL_MS = 80;
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
 const ANSI_COLOR_3 = "\x1b[33m";
 const ANSI_COLOR_5 = "\x1b[35m";
-const ANSI_COLOR_6 = "\x1b[36m";
 const ANSI_COLOR_7 = "\x1b[37m";
 const ANSI_COLOR_4 = "\x1b[34m";
 const ANSI_COLOR_8 = "\x1b[38;5;8m";
@@ -287,7 +288,7 @@ function formatPathLabel(theme: Theme, toolName: string, path: string): string {
 }
 
 function formatGrepLabel(theme: Theme, pattern: string | undefined, path: string, glob?: string): string {
-	const query = `${ANSI_COLOR_5}${theme.bold(formatGrepPatternForWrapping(compactText(pattern)))}${ANSI_RESET_FG}`;
+	const query = theme.fg("syntaxNumber", theme.bold(formatGrepPatternForWrapping(compactText(pattern))));
 	const location = `${ANSI_COLOR_8}in${NBSP}${formatPathForWrapping(path)}${glob ? ` (${compactText(glob)})` : ""}${ANSI_RESET_FG}`;
 	return formatToolLabel(theme, "Grep", `${query} ${location}`);
 }
@@ -311,7 +312,7 @@ function formatFindLabel(theme: Theme, pattern: string | undefined, path: string
 }
 
 function formatBashLabel(theme: Theme, command: string | undefined): string {
-	return formatToolLabel(theme, "Run", `${ANSI_COLOR_6}${compactText(command)}${ANSI_RESET_FG}`);
+	return formatToolLabel(theme, "Run", theme.fg("bashMode", compactText(command)));
 }
 
 function startSpinner(context: RenderContext): void {
