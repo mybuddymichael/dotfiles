@@ -1,5 +1,5 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { UserMessageComponent } from "@mariozechner/pi-coding-agent";
+import { CustomEditor, UserMessageComponent } from "@mariozechner/pi-coding-agent";
 import { Markdown, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
 type RenderFn = (width: number) => string[];
@@ -17,7 +17,16 @@ type MarkdownLikeChild = {
 	defaultTextStyle?: unknown;
 };
 
-const PATCH_VERSION = 3;
+type AutocompleteListLike = {
+	render(width: number): string[];
+};
+
+type PatchableEditor = UserMessageStyleEditor & {
+	isShowingAutocomplete?: () => boolean;
+	autocompleteList?: AutocompleteListLike;
+};
+
+const PATCH_VERSION = 4;
 const ANSI_COLOR_2 = "\x1b[32m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
@@ -91,6 +100,43 @@ function prefixLine(line: string, width: number): string {
 	return color2(`${PREFIX}${truncateToWidth(plainLine, contentWidth, "", true)}`);
 }
 
+function prefixRenderedLine(line: string, width: number): string {
+	const contentWidth = Math.max(1, width - visibleWidth(PREFIX));
+	return `${color2(PREFIX)}${truncateToWidth(line, contentWidth, "", true)}`;
+}
+
+class UserMessageStyleEditor extends CustomEditor {
+	render(width: number): string[] {
+		const safeWidth = Math.max(1, Math.floor(width));
+		const prefixWidth = visibleWidth(PREFIX);
+		const contentWidth = Math.max(1, safeWidth - prefixWidth);
+		const baseLines = super.render(contentWidth);
+		const editor = this as PatchableEditor;
+
+		let autocompleteLines: string[] = [];
+		if (editor.isShowingAutocomplete?.() && editor.autocompleteList) {
+			try {
+				autocompleteLines = editor.autocompleteList.render(contentWidth);
+			} catch {
+				autocompleteLines = [];
+			}
+		}
+
+		const editorLineCount = Math.max(0, baseLines.length - autocompleteLines.length);
+		const editorLines = baseLines.slice(0, editorLineCount);
+		if (editorLines.length <= 2) {
+			return [prefixRenderedLine("", safeWidth), "", ...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`)];
+		}
+
+		const bodyLines = editorLines.slice(1, -1);
+		return [
+			...bodyLines.map((line) => prefixRenderedLine(line, safeWidth)),
+			"",
+			...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`),
+		];
+	}
+}
+
 function patchUserMessagePrototype(): void {
 	const prototype = UserMessageComponent.prototype as unknown as PatchableUserMessagePrototype;
 	if (typeof prototype.render !== "function") return;
@@ -124,8 +170,9 @@ function patchUserMessagePrototype(): void {
 export default function userMessageStyleExtension(pi: ExtensionAPI): void {
 	patchUserMessagePrototype();
 
-	pi.on("session_start", async () => {
+	pi.on("session_start", async (_event, ctx) => {
 		patchUserMessagePrototype();
+		ctx.ui.setEditorComponent((tui, theme, keybindings) => new UserMessageStyleEditor(tui, theme, keybindings));
 	});
 
 	pi.on("before_agent_start", async () => {

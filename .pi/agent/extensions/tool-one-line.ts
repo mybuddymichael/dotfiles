@@ -92,6 +92,7 @@ const ANSI_COLOR_8 = "\x1b[38;5;8m";
 const ANSI_RESET_FG = "\x1b[39m";
 const NBSP = "\u00A0";
 const WRAPPABLE_PATH_SEPARATOR = "/ ";
+const WRAPPABLE_GREP_SEPARATOR = "| ";
 
 const toolCache = new Map<string, ReturnType<typeof createBuiltInDefinitions>>();
 
@@ -116,10 +117,10 @@ class WrappedStatusText implements Component {
 		const firstContentWidth = Math.max(1, safeWidth - visibleWidth(firstPrefix));
 		const continuationContentWidth = Math.max(1, safeWidth - visibleWidth(continuationPrefix));
 		const firstPass = wrapTextWithAnsi(this.label, firstContentWidth);
-		const firstChunk = restoreWrappedPathSpacing(firstPass[0] ?? "");
+		const firstChunk = restoreWrappedSpacing(firstPass[0] ?? "");
 		const remainder = firstPass.slice(1).join(" ").trim();
 		const continuationChunks = remainder.length > 0
-			? wrapTextWithAnsi(remainder, continuationContentWidth).map(restoreWrappedPathSpacing)
+			? wrapTextWithAnsi(remainder, continuationContentWidth).map(restoreWrappedSpacing)
 			: [];
 		const lines = [
 			`${firstPrefix}${truncateToWidth(firstChunk, firstContentWidth, "", true)}`,
@@ -127,7 +128,7 @@ class WrappedStatusText implements Component {
 				`${continuationPrefix}${truncateToWidth(chunk, continuationContentWidth, "", true)}`
 			)),
 		];
-		return lines.map((line) => truncateToWidth(restoreWrappedPathSpacing(line), safeWidth, "", true));
+		return lines.map((line) => truncateToWidth(restoreWrappedSpacing(line), safeWidth, "", true));
 	}
 
 	invalidate(): void {}
@@ -185,6 +186,7 @@ class TruncatedPreviewText implements Component {
 
 	invalidate(): void {}
 }
+
 
 function createBuiltInDefinitions(cwd: string) {
 	return {
@@ -245,8 +247,14 @@ function formatPathForWrapping(path: string): string {
 	return path.replaceAll("/", WRAPPABLE_PATH_SEPARATOR);
 }
 
-function restoreWrappedPathSpacing(text: string): string {
-	return text.replaceAll(WRAPPABLE_PATH_SEPARATOR, "/");
+function formatGrepPatternForWrapping(pattern: string): string {
+	return pattern.replaceAll("|", WRAPPABLE_GREP_SEPARATOR);
+}
+
+function restoreWrappedSpacing(text: string): string {
+	return text
+		.replaceAll(WRAPPABLE_PATH_SEPARATOR, "/")
+		.replaceAll(WRAPPABLE_GREP_SEPARATOR, "|");
 }
 
 function formatToolLabel(theme: Theme, toolName: string, details: string): string {
@@ -258,7 +266,7 @@ function formatPathLabel(theme: Theme, toolName: string, path: string): string {
 }
 
 function formatGrepLabel(theme: Theme, pattern: string | undefined, path: string, glob?: string): string {
-	const query = `${ANSI_COLOR_5}${theme.bold(compactText(pattern))}${ANSI_RESET_FG}`;
+	const query = `${ANSI_COLOR_5}${theme.bold(formatGrepPatternForWrapping(compactText(pattern)))}${ANSI_RESET_FG}`;
 	const location = `${ANSI_COLOR_8}in${NBSP}${formatPathForWrapping(path)}${glob ? ` (${compactText(glob)})` : ""}${ANSI_RESET_FG}`;
 	return formatToolLabel(theme, "Grep", `${query} ${location}`);
 }
@@ -374,6 +382,7 @@ function cleanBashOutput(result: ToolResult<BashToolDetails> | undefined): strin
 		.trim();
 	return output === "(no output)" ? "" : output;
 }
+
 
 function patchToolExecutionPrototype(): void {
 	const prototype = ToolExecutionComponent.prototype as unknown as CollapsedPatchableToolExecutionPrototype;
