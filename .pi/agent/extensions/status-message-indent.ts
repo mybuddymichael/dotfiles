@@ -6,30 +6,33 @@ type PatchableText = {
 	paddingX?: number;
 	paddingY?: number;
 	render(width: number): string[];
-	__sessionStatusIndentPatched?: boolean;
+	__statusMessageIndentPatched?: boolean;
 };
 
 const NEW_SESSION_TEXT = "✓ New session started";
-const RESUMED_SESSION_PREFIX = "Resumed session";
+const EXTRA_INDENT_STATUS_PREFIXES = [
+	"Resumed session",
+	"Only one model in scope",
+] as const;
 
 function patchTextRender(): void {
 	const prototype = Text.prototype as unknown as PatchableText;
 	const originalRender = prototype.render;
 	if (typeof originalRender !== "function") return;
-	if (prototype.__sessionStatusIndentPatched) return;
+	if (prototype.__statusMessageIndentPatched) return;
 
-	prototype.render = function renderWithAdjustedSessionStatusIndent(width: number): string[] {
+	prototype.render = function renderWithAdjustedStatusMessageIndent(width: number): string[] {
 		const text = this.text;
 		const isNewSessionMessage = typeof text === "string"
 			&& text.includes(NEW_SESSION_TEXT)
 			&& this.paddingX === 1
 			&& this.paddingY === 1;
-		const isResumedSessionMessage = typeof text === "string"
-			&& text.includes(RESUMED_SESSION_PREFIX)
+		const isExtraIndentStatusMessage = typeof text === "string"
+			&& EXTRA_INDENT_STATUS_PREFIXES.some((prefix) => text.includes(prefix))
 			&& this.paddingX === 1
 			&& this.paddingY === 0;
 
-		if (!isNewSessionMessage && !isResumedSessionMessage) {
+		if (!isNewSessionMessage && !isExtraIndentStatusMessage) {
 			return originalRender.call(this, width);
 		}
 
@@ -42,9 +45,9 @@ function patchTextRender(): void {
 		}
 	};
 
-	prototype.__sessionStatusIndentPatched = true;
+	prototype.__statusMessageIndentPatched = true;
 }
 
-export default function sessionStatusIndentExtension(_pi: ExtensionAPI): void {
+export default function statusMessageIndentExtension(_pi: ExtensionAPI): void {
 	patchTextRender();
 }
