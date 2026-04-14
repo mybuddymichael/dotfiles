@@ -1,10 +1,11 @@
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI, Theme } from "@mariozechner/pi-coding-agent";
 import {
 	BashExecutionComponent,
 	CustomEditor,
 	InteractiveMode,
 	UserMessageComponent,
 } from "@mariozechner/pi-coding-agent";
+import type { EditorTheme } from "@mariozechner/pi-tui";
 import { Markdown, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
 type RenderFn = (width: number) => string[];
@@ -45,12 +46,14 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 6;
+const PATCH_VERSION = 8;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
 const DEFAULT_PREFIX = "▎ ";
+
+let activeTheme: Theme | undefined;
 
 type PrefixKind = "default" | "bash" | "bashExcluded";
 
@@ -62,8 +65,16 @@ function color2(text: string): string {
 	return `${ANSI_GREEN}${text}${ANSI_RESET_FG}`;
 }
 
+function getBashModeAnsi(): string {
+	try {
+		return activeTheme?.getFgAnsi("bashMode") ?? ANSI_CYAN;
+	} catch {
+		return ANSI_CYAN;
+	}
+}
+
 function color6(text: string): string {
-	return `${ANSI_CYAN}${text}${ANSI_RESET_FG}`;
+	return `${getBashModeAnsi()}${text}${ANSI_RESET_FG}`;
 }
 
 function stripAnsi(text: string): string {
@@ -146,7 +157,7 @@ function colorPrefix(prefix: string, kind: PrefixKind): string {
 
 function colorContent(text: string, kind: PrefixKind): string {
 	if (kind === "default") return text;
-	return `${ANSI_CYAN}${text}${ANSI_RESET_FG}`;
+	return color6(text);
 }
 
 function prefixLine(line: string, width: number, kind: PrefixKind): string {
@@ -160,6 +171,13 @@ function prefixRenderedLine(line: string, width: number, kind: PrefixKind): stri
 	const prefix = getPrefix(kind);
 	const contentWidth = Math.max(1, width - visibleWidth(prefix));
 	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(line, contentWidth, "", true), kind)}`;
+}
+
+function getModeLabel(kind: PrefixKind, width: number, piTheme: Theme | undefined = activeTheme): string | undefined {
+	if (kind === "default") return undefined;
+	const label = kind === "bashExcluded" ? "  bash mode (excluded from context)" : "  bash mode";
+	const truncated = truncateToWidth(label, Math.max(1, width), "", true);
+	return piTheme?.fg("bashMode", truncated) ?? color6(truncated);
 }
 
 function trimBashBox(lines: string[]): string[] {
@@ -209,6 +227,15 @@ function withPatchedAddChild<T>(
 }
 
 class UserMessageStyleEditor extends CustomEditor {
+	constructor(
+		tui: ConstructorParameters<typeof CustomEditor>[0],
+		theme: EditorTheme,
+		keybindings: ConstructorParameters<typeof CustomEditor>[2],
+		private readonly piTheme: Theme,
+	) {
+		super(tui, theme, keybindings);
+	}
+
 	render(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
 		const prefixKind = getPrefixKind(this.getText());
@@ -228,12 +255,20 @@ class UserMessageStyleEditor extends CustomEditor {
 
 		const editorLineCount = Math.max(0, baseLines.length - autocompleteLines.length);
 		const editorLines = baseLines.slice(0, editorLineCount);
+		const modeLabel = getModeLabel(prefixKind, safeWidth, this.piTheme);
+
 		if (editorLines.length <= 2) {
-			return [prefixRenderedLine("", safeWidth, prefixKind), "", ...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`)];
+			return [
+				...(modeLabel ? [modeLabel, ""] : []),
+				prefixRenderedLine("", safeWidth, prefixKind),
+				"",
+				...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`),
+			];
 		}
 
 		const bodyLines = editorLines.slice(1, -1);
 		return [
+			...(modeLabel ? [modeLabel, ""] : []),
 			...bodyLines.map((line) => prefixRenderedLine(line, safeWidth, prefixKind)),
 			"",
 			...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`),
@@ -295,7 +330,7 @@ function patchBashExecutionPrototype(): void {
 		const safeWidth = Math.max(1, Math.floor(width));
 		const prefixKind = (this as PatchableBashExecutionInstance).__userMessageStylePrefixKind ?? "bash";
 		const body = trimBashBox(originalRender.call(this, safeWidth));
-		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixRenderedLine(line, safeWidth, prefixKind))];
+		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixLine(line, safeWidth, prefixKind))];
 	};
 
 	prototype.__userMessageStylePatched = true;
@@ -345,13 +380,15 @@ export default function userMessageStyleExtension(pi: ExtensionAPI): void {
 	patchInteractiveModePrototype();
 
 	pi.on("session_start", async (_event, ctx) => {
+		activeTheme = ctx.ui.theme;
 		patchUserMessagePrototype();
 		patchBashExecutionPrototype();
 		patchInteractiveModePrototype();
-		ctx.ui.setEditorComponent((tui, theme, keybindings) => new UserMessageStyleEditor(tui, theme, keybindings));
+		ctx.ui.setEditorComponent((tui, theme, keybindings) => new UserMessageStyleEditor(tui, theme, keybindings, ctx.ui.theme));
 	});
 
-	pi.on("before_agent_start", async () => {
+	pi.on("before_agent_start", async (_event, ctx) => {
+		activeTheme = ctx.ui.theme;
 		patchUserMessagePrototype();
 		patchBashExecutionPrototype();
 		patchInteractiveModePrototype();
