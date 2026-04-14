@@ -1,5 +1,10 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { CustomEditor, UserMessageComponent } from "@mariozechner/pi-coding-agent";
+import {
+	BashExecutionComponent,
+	CustomEditor,
+	InteractiveMode,
+	UserMessageComponent,
+} from "@mariozechner/pi-coding-agent";
 import { Markdown, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
 type RenderFn = (width: number) => string[];
@@ -7,6 +12,20 @@ type RenderFn = (width: number) => string[];
 type PatchableUserMessagePrototype = {
 	render: RenderFn;
 	__userMessageStyleOriginalRender?: RenderFn;
+	__userMessageStylePatched?: boolean;
+	__userMessageStylePatchVersion?: number;
+};
+
+type PatchableBashExecutionPrototype = {
+	render: RenderFn;
+	__userMessageStyleOriginalRender?: RenderFn;
+	__userMessageStylePatched?: boolean;
+	__userMessageStylePatchVersion?: number;
+};
+
+type PatchableInteractiveModePrototype = {
+	addMessageToChat?: (message: { role?: string; excludeFromContext?: boolean }, options: unknown) => unknown;
+	handleBashCommand?: (command: string, excludeFromContext?: boolean) => unknown;
 	__userMessageStylePatched?: boolean;
 	__userMessageStylePatchVersion?: number;
 };
@@ -26,14 +45,26 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 4;
-const ANSI_COLOR_2 = "\x1b[32m";
+const PATCH_VERSION = 5;
+const ANSI_GREEN = "\x1b[32m";
+const ANSI_YELLOW = "\x1b[33m";
+const ANSI_BOLD = "\x1b[1m";
+const ANSI_RESET = "\x1b[0m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
-const PREFIX = "▎ ";
+const DEFAULT_PREFIX = "▎ ";
+const BASH_PREFIX = "! ";
+const BASH_EXCLUDED_PREFIX = "‼ ";
+const BASH_STYLE = `${ANSI_BOLD}${ANSI_YELLOW}`;
+
+type PrefixKind = "default" | "bash" | "bashExcluded";
+
+type PatchableBashExecutionInstance = BashExecutionComponent & {
+	__userMessageStylePrefixKind?: Exclude<PrefixKind, "default">;
+};
 
 function color2(text: string): string {
-	return `${ANSI_COLOR_2}${text}${ANSI_RESET_FG}`;
+	return `${ANSI_GREEN}${text}${ANSI_RESET_FG}`;
 }
 
 function stripAnsi(text: string): string {
@@ -94,21 +125,92 @@ function renderBody(instance: unknown, width: number, originalRender: RenderFn):
 	}
 }
 
-function prefixLine(line: string, width: number): string {
-	const contentWidth = Math.max(1, width - visibleWidth(PREFIX));
-	const plainLine = stripAnsi(line);
-	return color2(`${PREFIX}${truncateToWidth(plainLine, contentWidth, "", true)}`);
+function getPrefix(kind: PrefixKind): string {
+	switch (kind) {
+		case "bash":
+			return BASH_PREFIX;
+		case "bashExcluded":
+			return BASH_EXCLUDED_PREFIX;
+		default:
+			return DEFAULT_PREFIX;
+	}
 }
 
-function prefixRenderedLine(line: string, width: number): string {
-	const contentWidth = Math.max(1, width - visibleWidth(PREFIX));
-	return `${color2(PREFIX)}${truncateToWidth(line, contentWidth, "", true)}`;
+function getPrefixKind(text: string): PrefixKind {
+	if (text.startsWith("!!")) return "bashExcluded";
+	if (text.startsWith("!")) return "bash";
+	return "default";
+}
+
+function colorPrefix(prefix: string, kind: PrefixKind): string {
+	if (kind === "default") return color2(prefix);
+	return `${BASH_STYLE}${prefix}${ANSI_RESET}`;
+}
+
+function prefixLine(line: string, width: number, kind: PrefixKind): string {
+	const prefix = getPrefix(kind);
+	const contentWidth = Math.max(1, width - visibleWidth(prefix));
+	const plainLine = stripAnsi(line);
+	return `${colorPrefix(prefix, kind)}${truncateToWidth(plainLine, contentWidth, "", true)}`;
+}
+
+function prefixRenderedLine(line: string, width: number, kind: PrefixKind): string {
+	const prefix = getPrefix(kind);
+	const contentWidth = Math.max(1, width - visibleWidth(prefix));
+	return `${colorPrefix(prefix, kind)}${truncateToWidth(line, contentWidth, "", true)}`;
+}
+
+function trimBashBox(lines: string[]): string[] {
+	const trimmed = trimEdgeBlankLines(lines);
+	if (trimmed.length >= 2) return trimmed.slice(1, -1);
+	return trimmed;
+}
+
+function withPatchedAddChild<T>(
+	mode: {
+		chatContainer?: { addChild?: (child: unknown) => unknown };
+		pendingMessagesContainer?: { addChild?: (child: unknown) => unknown };
+	},
+	prefixKind: Exclude<PrefixKind, "default">,
+	run: () => T,
+): T {
+	const patchContainer = (container?: { addChild?: (child: unknown) => unknown }) => {
+		if (!container || typeof container.addChild !== "function") return undefined;
+		const originalAddChild = container.addChild;
+		container.addChild = function addChildWithPrefixKind(child: unknown): unknown {
+			if (child instanceof BashExecutionComponent) {
+				(child as PatchableBashExecutionInstance).__userMessageStylePrefixKind = prefixKind;
+			}
+			return originalAddChild.call(this, child);
+		};
+		return originalAddChild;
+	};
+
+	const originalChatAddChild = patchContainer(mode.chatContainer);
+	const originalPendingAddChild = patchContainer(mode.pendingMessagesContainer);
+	const restore = () => {
+		if (originalChatAddChild && mode.chatContainer) mode.chatContainer.addChild = originalChatAddChild;
+		if (originalPendingAddChild && mode.pendingMessagesContainer) mode.pendingMessagesContainer.addChild = originalPendingAddChild;
+	};
+
+	try {
+		const result = run();
+		if (result && typeof (result as PromiseLike<unknown>).then === "function") {
+			return Promise.resolve(result as PromiseLike<unknown>).finally(restore) as T;
+		}
+		restore();
+		return result;
+	} catch (error) {
+		restore();
+		throw error;
+	}
 }
 
 class UserMessageStyleEditor extends CustomEditor {
 	render(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
-		const prefixWidth = visibleWidth(PREFIX);
+		const prefixKind = getPrefixKind(this.getText());
+		const prefixWidth = visibleWidth(getPrefix(prefixKind));
 		const contentWidth = Math.max(1, safeWidth - prefixWidth);
 		const baseLines = super.render(contentWidth);
 		const editor = this as PatchableEditor;
@@ -125,12 +227,12 @@ class UserMessageStyleEditor extends CustomEditor {
 		const editorLineCount = Math.max(0, baseLines.length - autocompleteLines.length);
 		const editorLines = baseLines.slice(0, editorLineCount);
 		if (editorLines.length <= 2) {
-			return [prefixRenderedLine("", safeWidth), "", ...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`)];
+			return [prefixRenderedLine("", safeWidth, prefixKind), "", ...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`)];
 		}
 
 		const bodyLines = editorLines.slice(1, -1);
 		return [
-			...bodyLines.map((line) => prefixRenderedLine(line, safeWidth)),
+			...bodyLines.map((line) => prefixRenderedLine(line, safeWidth, prefixKind)),
 			"",
 			...autocompleteLines.map((line) => `${" ".repeat(prefixWidth)}${line}`),
 		];
@@ -158,10 +260,78 @@ function patchUserMessagePrototype(): void {
 
 	prototype.render = function renderUserMessageWithStyle(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
-		const contentWidth = Math.max(1, safeWidth - visibleWidth(PREFIX));
+		const prefixKind: PrefixKind = "default";
+		const contentWidth = Math.max(1, safeWidth - visibleWidth(getPrefix(prefixKind)));
 		const body = renderBody(this, contentWidth, originalRender);
-		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixLine(line, safeWidth))];
+		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixLine(line, safeWidth, prefixKind))];
 	};
+
+	prototype.__userMessageStylePatched = true;
+	prototype.__userMessageStylePatchVersion = PATCH_VERSION;
+}
+
+function patchBashExecutionPrototype(): void {
+	const prototype = BashExecutionComponent.prototype as unknown as PatchableBashExecutionPrototype;
+	if (typeof prototype.render !== "function") return;
+
+	if (
+		prototype.__userMessageStylePatched
+		&& prototype.__userMessageStylePatchVersion === PATCH_VERSION
+		&& typeof prototype.__userMessageStyleOriginalRender === "function"
+	) {
+		return;
+	}
+
+	if (!prototype.__userMessageStyleOriginalRender) {
+		prototype.__userMessageStyleOriginalRender = prototype.render;
+	}
+
+	const originalRender = prototype.__userMessageStyleOriginalRender;
+	if (!originalRender) return;
+
+	prototype.render = function renderBashExecutionWithStyle(width: number): string[] {
+		const safeWidth = Math.max(1, Math.floor(width));
+		const prefixKind = (this as PatchableBashExecutionInstance).__userMessageStylePrefixKind ?? "bash";
+		const body = trimBashBox(originalRender.call(this, safeWidth));
+		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixRenderedLine(line, safeWidth, prefixKind))];
+	};
+
+	prototype.__userMessageStylePatched = true;
+	prototype.__userMessageStylePatchVersion = PATCH_VERSION;
+}
+
+function patchInteractiveModePrototype(): void {
+	const prototype = InteractiveMode.prototype as unknown as PatchableInteractiveModePrototype & {
+		chatContainer?: { addChild?: (child: unknown) => unknown };
+		pendingMessagesContainer?: { addChild?: (child: unknown) => unknown };
+	};
+
+	if (
+		prototype.__userMessageStylePatched
+		&& prototype.__userMessageStylePatchVersion === PATCH_VERSION
+	) {
+		return;
+	}
+
+	const originalAddMessageToChat = prototype.addMessageToChat;
+	if (typeof originalAddMessageToChat === "function") {
+		prototype.addMessageToChat = function addMessageToChatWithStyledBashMarker(message, options): unknown {
+			if (message?.role !== "bashExecution") {
+				return originalAddMessageToChat.call(this, message, options);
+			}
+
+			const prefixKind: Exclude<PrefixKind, "default"> = message.excludeFromContext ? "bashExcluded" : "bash";
+			return withPatchedAddChild(this as typeof prototype, prefixKind, () => originalAddMessageToChat.call(this, message, options));
+		};
+	}
+
+	const originalHandleBashCommand = prototype.handleBashCommand;
+	if (typeof originalHandleBashCommand === "function") {
+		prototype.handleBashCommand = function handleBashCommandWithStyledMarker(command, excludeFromContext = false): unknown {
+			const prefixKind: Exclude<PrefixKind, "default"> = excludeFromContext ? "bashExcluded" : "bash";
+			return withPatchedAddChild(this as typeof prototype, prefixKind, () => originalHandleBashCommand.call(this, command, excludeFromContext));
+		};
+	}
 
 	prototype.__userMessageStylePatched = true;
 	prototype.__userMessageStylePatchVersion = PATCH_VERSION;
@@ -169,13 +339,19 @@ function patchUserMessagePrototype(): void {
 
 export default function userMessageStyleExtension(pi: ExtensionAPI): void {
 	patchUserMessagePrototype();
+	patchBashExecutionPrototype();
+	patchInteractiveModePrototype();
 
 	pi.on("session_start", async (_event, ctx) => {
 		patchUserMessagePrototype();
+		patchBashExecutionPrototype();
+		patchInteractiveModePrototype();
 		ctx.ui.setEditorComponent((tui, theme, keybindings) => new UserMessageStyleEditor(tui, theme, keybindings));
 	});
 
 	pi.on("before_agent_start", async () => {
 		patchUserMessagePrototype();
+		patchBashExecutionPrototype();
+		patchInteractiveModePrototype();
 	});
 }
