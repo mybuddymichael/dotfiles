@@ -96,6 +96,7 @@ __mise_path_postprocess
 # Set a custom PATH.
 
 fish_add_path -g "$HOME/.local/bin"
+fish_add_path "$HOME/.bun/bin"
 fish_add_path -g "/Applications/Obsidian.app/Contents/MacOS"
 
 # Vim is my EDITOR.
@@ -129,9 +130,9 @@ abbr -a amr amp -m rush
 abbr -a ams amp -m smart
 abbr -a amd amp -m deep
 abbr -a amb amp -m bombadil
-abbr -a wpi mise exec node@24.14.1 -- pi --models anthropic/claude-opus-4-6:high
-abbr -a ppi mise exec node@24.14.1 -- pi --models openai-codex/gpt-5.4:medium,openai-codex/gpt-5.4:high
-abbr -a opi mise exec node@24.14.1 -- pi --models opencode-go/glm-5.1,opencode-go/kimi-k2.5
+abbr -a wpi mise exec -- pi --models anthropic/claude-opus-4-6:high
+abbr -a ppi mise exec -- pi --models openai-codex/gpt-5.4:medium,openai-codex/gpt-5.4:high
+abbr -a opi mise exec -- pi --models opencode-go/glm-5.1,opencode-go/kimi-k2.5
 
 # Colors.
 
