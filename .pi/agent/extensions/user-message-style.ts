@@ -46,12 +46,16 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 11;
+const PATCH_VERSION = 12;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
 const DEFAULT_PREFIX = "▎ ";
+const USER_RAIL = "┃";
+const USER_FILL = "╱";
+const USER_LABEL = " USER ";
+const USER_BODY_PREFIX = "┃ ";
 
 let activeTheme: Theme | undefined;
 
@@ -173,6 +177,66 @@ function prefixRenderedLine(line: string, width: number, kind: PrefixKind): stri
 	const prefix = getPrefix(kind);
 	const contentWidth = Math.max(1, width - visibleWidth(prefix));
 	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(line, contentWidth, "", true), kind)}`;
+}
+
+function themeFg(color: "muted" | "dim" | "text", text: string): string {
+	try {
+		return activeTheme?.fg(color, text) ?? text;
+	} catch {
+		return text;
+	}
+}
+
+function themeBg(color: "selectedBg", text: string): string {
+	try {
+		return activeTheme?.bg(color, text) ?? text;
+	} catch {
+		return text;
+	}
+}
+
+function themeBgAsFg(color: "selectedBg", text: string): string {
+	try {
+		const ansi = activeTheme?.getBgAnsi(color) ?? "";
+		if (!ansi) return text;
+		return `${ansi.replace(/\[48;/g, "[38;")}${text}${ANSI_RESET_FG}`;
+	} catch {
+		return text;
+	}
+}
+
+function renderUserFrameLine(width: number, left: string, middle = "", right = ""): string {
+	const safeWidth = Math.max(1, Math.floor(width));
+	const base = `${left}${middle}${right}`;
+	const remaining = Math.max(0, safeWidth - visibleWidth(base));
+	return truncateToWidth(`${left}${middle}${right}${themeBgAsFg("selectedBg", USER_FILL.repeat(remaining))}`, safeWidth, "", true);
+}
+
+function renderUserHeaderLine(width: number): string {
+	const rail = themeBgAsFg("selectedBg", USER_RAIL);
+	const lead = `${rail} `;
+	const label = themeBg("selectedBg", themeFg("dim", USER_LABEL));
+	const trail = " ";
+	return renderUserFrameLine(width, lead, label, trail);
+}
+
+function renderUserDividerLine(width: number): string {
+	return truncateToWidth(themeBgAsFg("selectedBg", USER_RAIL), Math.max(1, Math.floor(width)), "", true);
+}
+
+function renderUserBodyLine(line: string, width: number): string {
+	const safeWidth = Math.max(1, Math.floor(width));
+	const contentWidth = Math.max(1, safeWidth - visibleWidth(USER_BODY_PREFIX));
+	return `${themeBgAsFg("selectedBg", USER_BODY_PREFIX)}${truncateToWidth(line, contentWidth, "", true)}`;
+}
+
+function renderUserMessageBlock(lines: string[], width: number): string[] {
+	const body = lines.length > 0 ? lines : [""];
+	return [
+		renderUserHeaderLine(width),
+		renderUserDividerLine(width),
+		...body.map((line) => renderUserBodyLine(line, width)),
+	];
 }
 
 function getModeLabel(kind: PrefixKind, width: number, piTheme: Theme | undefined = activeTheme): string | undefined {
@@ -299,10 +363,9 @@ function patchUserMessagePrototype(): void {
 
 	prototype.render = function renderUserMessageWithStyle(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
-		const prefixKind: PrefixKind = "default";
-		const contentWidth = Math.max(1, safeWidth - visibleWidth(getPrefix(prefixKind)));
+		const contentWidth = Math.max(1, safeWidth - visibleWidth(USER_BODY_PREFIX));
 		const body = renderBody(this, contentWidth, originalRender);
-		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixLine(line, safeWidth, prefixKind))];
+		return ["", ...renderUserMessageBlock(body, safeWidth)];
 	};
 
 	prototype.__userMessageStylePatched = true;
