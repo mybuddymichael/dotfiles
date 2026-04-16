@@ -70,6 +70,7 @@ type ToolResult<TDetails = unknown> = {
 
 type SpinnerState = {
 	interval?: NodeJS.Timeout;
+	expandedResultBody?: Component;
 };
 
 const SPINNER_INTERVAL_MS = 80;
@@ -350,6 +351,22 @@ function previewComponent(
 	return component;
 }
 
+function renderExpandedResultWithHeader<TDetails>(
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	renderBuiltInResult: (builtInContext: RenderContext) => Component | undefined,
+): Container {
+	const component = containerComponent(context);
+	component.addChild(oneLine(theme, { ...context, lastComponent: undefined }, label));
+	const state = context.state as SpinnerState;
+	const builtInContext: RenderContext = { ...context, lastComponent: state.expandedResultBody };
+	const body = renderBuiltInResult(builtInContext) ?? emptyComponent({ ...context, lastComponent: undefined });
+	state.expandedResultBody = body;
+	component.addChild(body);
+	return component;
+}
+
 function trimBlankLines(lines: string[]): string[] {
 	let start = 0;
 	let end = lines.length;
@@ -413,12 +430,14 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const path = `${toFullPath(context.args.path, context.cwd)}${formatReadRange(context.args.offset, context.args.limit)}`;
 			if (!options.expanded) return oneLine(readTheme, readContext, formatReadLabel(readTheme, path));
 			stopSpinner(readContext);
-			return getBuiltInDefinitions(context.cwd).read.renderResult?.(
-				result as ToolResult<ReadToolDetails>,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(readContext);
+			return renderExpandedResultWithHeader(readTheme, readContext, formatReadLabel(readTheme, path), (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).read.renderResult?.(
+					result as ToolResult<ReadToolDetails>,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 
@@ -441,20 +460,19 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const writeContext = context as RenderContext;
 			if (options.isPartial) return emptyComponent(writeContext);
 			const writeTheme = theme as Theme;
+			const label = formatPathLabel(writeTheme, "Write", toFullPath(context.args.path, context.cwd));
 			if (!options.expanded) {
-				return oneLine(
-					writeTheme,
-					writeContext,
-					formatPathLabel(writeTheme, "Write", toFullPath(context.args.path, context.cwd)),
-				);
+				return oneLine(writeTheme, writeContext, label);
 			}
 			stopSpinner(writeContext);
-			return getBuiltInDefinitions(context.cwd).write.renderResult?.(
-				result as ToolResult,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(writeContext);
+			return renderExpandedResultWithHeader(writeTheme, writeContext, label, (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).write.renderResult?.(
+					result as ToolResult,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 
@@ -478,9 +496,9 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			if (options.isPartial) return emptyComponent(editContext);
 			stopSpinner(editContext);
 			const editTheme = theme as Theme;
+			const label = formatEditLabel(editTheme, toFullPath(context.args.path, context.cwd));
 			if (!options.expanded) {
 				const component = containerComponent(editContext);
-				const label = formatEditLabel(editTheme, toFullPath(context.args.path, context.cwd));
 				component.addChild(oneLine(editTheme, editContext, appendExpandHint(editTheme, label)));
 				const changes = countDiffChanges((result as ToolResult<EditToolDetails>).details?.diff);
 				if (changes) {
@@ -494,12 +512,14 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 				}
 				return component;
 			}
-			return getBuiltInDefinitions(context.cwd).edit.renderResult?.(
-				result as ToolResult<EditToolDetails>,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(editContext);
+			return renderExpandedResultWithHeader(editTheme, editContext, label, (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).edit.renderResult?.(
+					result as ToolResult<EditToolDetails>,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 
@@ -523,10 +543,10 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			if (options.isPartial) return emptyComponent(bashContext);
 			stopSpinner(bashContext);
 			const bashTheme = theme as Theme;
+			const label = formatBashLabel(bashTheme, context.args.command);
 			if (!options.expanded) {
 				const component = containerComponent(bashContext);
 				const output = cleanBashOutput(result as ToolResult<BashToolDetails>);
-				const label = formatBashLabel(bashTheme, context.args.command);
 				component.addChild(oneLine(bashTheme, bashContext, appendExpandHint(bashTheme, label)));
 				if (output.length > 0) {
 					component.addChild(
@@ -545,12 +565,14 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 				}
 				return component;
 			}
-			return getBuiltInDefinitions(context.cwd).bash.renderResult?.(
-				result as ToolResult<BashToolDetails>,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(bashContext);
+			return renderExpandedResultWithHeader(bashTheme, bashContext, label, (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).bash.renderResult?.(
+					result as ToolResult<BashToolDetails>,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 
@@ -575,20 +597,19 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			if (options.isPartial) return emptyComponent(grepContext);
 			const grepTheme = theme as Theme;
 			const path = toFullPath(context.args.path, context.cwd);
+			const label = formatGrepLabel(grepTheme, context.args.pattern, path, context.args.glob);
 			if (!options.expanded) {
-				return oneLine(
-					grepTheme,
-					grepContext,
-					formatGrepLabel(grepTheme, context.args.pattern, path, context.args.glob),
-				);
+				return oneLine(grepTheme, grepContext, label);
 			}
 			stopSpinner(grepContext);
-			return getBuiltInDefinitions(context.cwd).grep.renderResult?.(
-				result as ToolResult<GrepToolDetails>,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(grepContext);
+			return renderExpandedResultWithHeader(grepTheme, grepContext, label, (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).grep.renderResult?.(
+					result as ToolResult<GrepToolDetails>,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 
@@ -611,20 +632,19 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const findContext = context as RenderContext;
 			if (options.isPartial) return emptyComponent(findContext);
 			const findTheme = theme as Theme;
+			const label = formatFindLabel(findTheme, context.args.pattern, toFullPath(context.args.path, context.cwd));
 			if (!options.expanded) {
-				return oneLine(
-					findTheme,
-					findContext,
-					formatFindLabel(findTheme, context.args.pattern, toFullPath(context.args.path, context.cwd)),
-				);
+				return oneLine(findTheme, findContext, label);
 			}
 			stopSpinner(findContext);
-			return getBuiltInDefinitions(context.cwd).find.renderResult?.(
-				result as ToolResult<FindToolDetails>,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(findContext);
+			return renderExpandedResultWithHeader(findTheme, findContext, label, (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).find.renderResult?.(
+					result as ToolResult<FindToolDetails>,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 
@@ -643,16 +663,19 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const lsContext = context as RenderContext;
 			if (options.isPartial) return emptyComponent(lsContext);
 			const lsTheme = theme as Theme;
+			const label = formatListLabel(lsTheme, toFullPath(context.args.path, context.cwd));
 			if (!options.expanded) {
-				return oneLine(lsTheme, lsContext, formatListLabel(lsTheme, toFullPath(context.args.path, context.cwd)));
+				return oneLine(lsTheme, lsContext, label);
 			}
 			stopSpinner(lsContext);
-			return getBuiltInDefinitions(context.cwd).ls.renderResult?.(
-				result as ToolResult<LsToolDetails>,
-				options,
-				theme,
-				context,
-			) ?? emptyComponent(lsContext);
+			return renderExpandedResultWithHeader(lsTheme, lsContext, label, (builtInContext) => (
+				getBuiltInDefinitions(context.cwd).ls.renderResult?.(
+					result as ToolResult<LsToolDetails>,
+					options,
+					theme,
+					builtInContext,
+				)
+			));
 		},
 	});
 }
