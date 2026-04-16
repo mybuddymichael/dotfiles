@@ -96,6 +96,15 @@ for sid in $(aerospace list-workspaces --all); do
     script="$CONFIG_DIR/plugins/aerospace.sh $sid"
 done
 
+# Current frontmost application
+sketchybar --add item front_app left \
+  --set front_app \
+  icon.drawing=off \
+  label.drawing=on \
+  label.padding_left=8 \
+  label.padding_right=12 \
+  script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
 
 ##### Adding Right Items #####
 # In the same way as the left items we can add items to the right side.
