@@ -1,11 +1,15 @@
 import type { AssistantMessage } from "@mariozechner/pi-ai";
 import type { ExtensionAPI, Theme } from "@mariozechner/pi-coding-agent";
 import { AssistantMessageComponent } from "@mariozechner/pi-coding-agent";
-import { Container, Loader, Markdown, Spacer, Text } from "@mariozechner/pi-tui";
+import { Container, Loader, Markdown, Spacer, Text, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
-const PATCH_VERSION = 3;
+const ANSI_RESET_FG = "\x1b[39m";
+
+const PATCH_VERSION = 4;
 const INDENT = 2;
 const WORKING_PREFIX = "Working";
+const AGENT_FILL = "╱";
+const AGENT_LABEL = " AGENT ";
 
 type PatchableAssistantMessagePrototype = {
 	updateContent(message: AssistantMessage): void;
@@ -37,7 +41,7 @@ type PatchableLoaderPrototype = {
 	__assistantIndentPatchVersion?: number;
 };
 
-type ThemeLike = Pick<Theme, "fg" | "italic">;
+type ThemeLike = Pick<Theme, "fg" | "italic" | "bg" | "getBgAnsi">;
 
 let currentTheme: ThemeLike | undefined;
 
@@ -45,7 +49,28 @@ function getThemeLike(): ThemeLike {
 	return currentTheme ?? {
 		fg: (_color, text) => text,
 		italic: (text) => text,
+		bg: (_color, text) => text,
+		getBgAnsi: () => "",
 	};
+}
+
+function themeBgAsFg(themeLike: ThemeLike, color: "selectedBg", text: string): string {
+	try {
+		const ansi = themeLike.getBgAnsi?.(color) ?? "";
+		if (!ansi) return text;
+		return `${ansi.replace(/\[48;/g, "[38;")}${text}${ANSI_RESET_FG}`;
+	} catch {
+		return text;
+	}
+}
+
+function renderAgentHeaderLine(width: number, themeLike: ThemeLike): string {
+	const safeWidth = Math.max(1, Math.floor(width));
+	const indent = " ".repeat(INDENT);
+	const label = themeLike.bg("selectedBg", themeLike.fg("dim", AGENT_LABEL));
+	const base = `${indent}${label}`;
+	const remaining = Math.max(0, safeWidth - visibleWidth(base));
+	return truncateToWidth(`${base}${themeBgAsFg(themeLike, "selectedBg", AGENT_FILL.repeat(remaining))}`, safeWidth, "", true);
 }
 
 function patchAssistantMessagePrototype(): void {
@@ -75,11 +100,18 @@ function patchAssistantMessagePrototype(): void {
 
 		contentContainer.clear();
 
-		const hasVisibleContent = message.content.some((c) =>
-			(c.type === "text" && c.text.trim()) || (c.type === "thinking" && c.thinking.trim())
-		);
+		const hasVisibleText = message.content.some((c) => c.type === "text" && c.text.trim());
+		const hasVisibleThinking = message.content.some((c) => c.type === "thinking" && c.thinking.trim());
 
-		if (hasVisibleContent) {
+		if (hasVisibleText) {
+			const themeLike = getThemeLike();
+			contentContainer.addChild(new Spacer(1));
+			contentContainer.addChild({
+				render: (width: number) => [renderAgentHeaderLine(width, themeLike)],
+				invalidate: () => {},
+			});
+			contentContainer.addChild(new Spacer(1));
+		} else if (hasVisibleThinking) {
 			contentContainer.addChild(new Spacer(1));
 		}
 

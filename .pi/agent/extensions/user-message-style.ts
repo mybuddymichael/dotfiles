@@ -46,7 +46,7 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 12;
+const PATCH_VERSION = 13;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
@@ -161,15 +161,13 @@ function colorPrefix(prefix: string, kind: PrefixKind): string {
 
 function colorContent(text: string, kind: PrefixKind): string {
 	if (kind === "default") return text;
-	return color6(text);
+	return text;
 }
 
 function prefixLine(line: string, width: number, kind: PrefixKind): string {
 	const prefix = getPrefix(kind);
 	const contentWidth = Math.max(1, width - visibleWidth(prefix));
-	const content = kind === "default"
-		? truncateToWidth(line, contentWidth, "", true)
-		: truncateToWidth(stripAnsi(line), contentWidth, "", true);
+	const content = truncateToWidth(line, contentWidth, "", true);
 	return `${colorPrefix(prefix, kind)}${colorContent(content, kind)}`;
 }
 
