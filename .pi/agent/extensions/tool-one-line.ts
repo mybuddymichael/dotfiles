@@ -8,7 +8,6 @@ import type {
 	ReadToolDetails,
 } from "@mariozechner/pi-coding-agent";
 import {
-	ToolExecutionComponent,
 	createBashToolDefinition,
 	createEditToolDefinition,
 	createFindToolDefinition,
@@ -16,6 +15,7 @@ import {
 	createLsToolDefinition,
 	createReadToolDefinition,
 	createWriteToolDefinition,
+	keyHint,
 } from "@mariozechner/pi-coding-agent";
 import {
 	Container,
@@ -68,24 +68,10 @@ type ToolResult<TDetails = unknown> = {
 	details?: TDetails;
 };
 
-type CollapsedPatchableToolExecutionPrototype = {
-	render(width: number): string[];
-	expanded?: boolean;
-	hideComponent?: boolean;
-	callRendererComponent?: Component;
-	resultRendererComponent?: Component;
-	contentText?: Component;
-	contentBox?: Component;
-	__toolOneLineOriginalRender?: (width: number) => string[];
-	__toolOneLinePatched?: boolean;
-	__toolOneLinePatchVersion?: number;
-};
-
 type SpinnerState = {
 	interval?: NodeJS.Timeout;
 };
 
-const PATCH_VERSION = 2;
 const SPINNER_INTERVAL_MS = 80;
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
 const NBSP = "\u00A0";
@@ -343,6 +329,12 @@ function emptyComponent(context: RenderContext): Container {
 	return component;
 }
 
+function containerComponent(context: RenderContext): Container {
+	const component = context.lastComponent instanceof Container ? context.lastComponent : new Container();
+	component.clear();
+	return component;
+}
+
 function previewComponent(
 	text: string,
 	context: RenderContext,
@@ -366,15 +358,23 @@ function trimBlankLines(lines: string[]): string[] {
 	return lines.slice(start, end);
 }
 
-function renderCollapsedLines(component: Component | undefined, width: number): string[] | undefined {
-	if (!component) return undefined;
-	try {
-		const safeWidth = Math.max(1, width);
-		const lines = trimBlankLines(component.render(safeWidth));
-		return lines.length > 0 ? lines.map((line) => truncateToWidth(line, safeWidth, "", true)) : undefined;
-	} catch {
-		return undefined;
+function expandHint(theme: Theme): string {
+	return theme.fg("dim", `(${keyHint("app.tools.expand", "to expand")})`);
+}
+
+function appendExpandHint(theme: Theme, label: string): string {
+	return `${label}${NBSP}${expandHint(theme)}`;
+}
+
+function countDiffChanges(diff: string | undefined): { additions: number; removals: number } | undefined {
+	if (!diff) return undefined;
+	let additions = 0;
+	let removals = 0;
+	for (const line of diff.split("\n")) {
+		if (line.startsWith("+") && !line.startsWith("+++")) additions++;
+		if (line.startsWith("-") && !line.startsWith("---")) removals++;
 	}
+	return { additions, removals };
 }
 
 function extractTextContent(result: ToolResult | undefined): string {
@@ -392,88 +392,45 @@ function cleanBashOutput(result: ToolResult<BashToolDetails> | undefined): strin
 	return output === "(no output)" ? "" : output;
 }
 
-
-function patchToolExecutionPrototype(): void {
-	const prototype = ToolExecutionComponent.prototype as unknown as CollapsedPatchableToolExecutionPrototype;
-	if (typeof prototype.render !== "function") return;
-
-	if (
-		prototype.__toolOneLinePatched
-		&& prototype.__toolOneLinePatchVersion === PATCH_VERSION
-		&& typeof prototype.__toolOneLineOriginalRender === "function"
-	) {
-		return;
-	}
-
-	if (!prototype.__toolOneLineOriginalRender) {
-		prototype.__toolOneLineOriginalRender = prototype.render;
-	}
-
-	const originalRender = prototype.__toolOneLineOriginalRender;
-	if (!originalRender) return;
-
-	prototype.render = function renderToolExecutionOneLine(width: number): string[] {
-		if (this.hideComponent) return [];
-		if (this.expanded) return originalRender.call(this, width);
-
-		const safeWidth = Math.max(1, Math.floor(width));
-		const lines = renderCollapsedLines(this.resultRendererComponent, safeWidth)
-			?? renderCollapsedLines(this.callRendererComponent, safeWidth)
-			?? renderCollapsedLines(this.contentText, safeWidth)
-			?? renderCollapsedLines(this.contentBox, safeWidth)
-			?? [];
-
-		return lines.length > 0 ? ["", ...lines] : [];
-	};
-
-	prototype.__toolOneLinePatched = true;
-	prototype.__toolOneLinePatchVersion = PATCH_VERSION;
-}
-
 export default function toolOneLineExtension(pi: ExtensionAPI): void {
-	patchToolExecutionPrototype();
-
-	pi.on("session_start", async () => {
-		patchToolExecutionPrototype();
-	});
-
-	pi.on("before_agent_start", async () => {
-		patchToolExecutionPrototype();
-	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).read,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).read.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const readTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			const path = `${toFullPath(args.path, context.cwd)}${formatReadRange(args.offset, args.limit)}`;
 			return oneLine(readTheme, context as RenderContext, formatReadLabel(readTheme, path));
 		},
 		renderResult(result, options, theme, context) {
-			if (!options.expanded) {
-				const readTheme = theme as Theme;
-				const path = `${toFullPath(context.args.path, context.cwd)}${formatReadRange(context.args.offset, context.args.limit)}`;
-				return oneLine(readTheme, context as RenderContext, formatReadLabel(readTheme, path));
-			}
-			stopSpinner(context as RenderContext);
+			const readContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(readContext);
+			const readTheme = theme as Theme;
+			const path = `${toFullPath(context.args.path, context.cwd)}${formatReadRange(context.args.offset, context.args.limit)}`;
+			if (!options.expanded) return oneLine(readTheme, readContext, formatReadLabel(readTheme, path));
+			stopSpinner(readContext);
 			return getBuiltInDefinitions(context.cwd).read.renderResult?.(
 				result as ToolResult<ReadToolDetails>,
 				options,
 				theme,
 				context,
-			) ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(readContext);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).write,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).write.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const writeTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			return oneLine(
 				writeTheme,
 				context as RenderContext,
@@ -481,31 +438,35 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			);
 		},
 		renderResult(result, options, theme, context) {
+			const writeContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(writeContext);
+			const writeTheme = theme as Theme;
 			if (!options.expanded) {
-				const writeTheme = theme as Theme;
 				return oneLine(
 					writeTheme,
-					context as RenderContext,
+					writeContext,
 					formatPathLabel(writeTheme, "Write", toFullPath(context.args.path, context.cwd)),
 				);
 			}
-			stopSpinner(context as RenderContext);
+			stopSpinner(writeContext);
 			return getBuiltInDefinitions(context.cwd).write.renderResult?.(
 				result as ToolResult,
 				options,
 				theme,
 				context,
-			) ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(writeContext);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).edit,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).edit.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const editTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			return oneLine(
 				editTheme,
 				context as RenderContext,
@@ -513,40 +474,44 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			);
 		},
 		renderResult(result, options, theme, context) {
-			stopSpinner(context as RenderContext);
-			const builtInResult = getBuiltInDefinitions(context.cwd).edit.renderResult?.(
+			const editContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(editContext);
+			stopSpinner(editContext);
+			const editTheme = theme as Theme;
+			if (!options.expanded) {
+				const component = containerComponent(editContext);
+				const label = formatEditLabel(editTheme, toFullPath(context.args.path, context.cwd));
+				component.addChild(oneLine(editTheme, editContext, appendExpandHint(editTheme, label)));
+				const changes = countDiffChanges((result as ToolResult<EditToolDetails>).details?.diff);
+				if (changes) {
+					component.addChild(
+						previewComponent(
+							`${editTheme.fg("success", `  +${changes.additions}`)}${editTheme.fg("dim", " / ")}${editTheme.fg("error", `-${changes.removals}`)}`,
+							editContext,
+							1,
+						),
+					);
+				}
+				return component;
+			}
+			return getBuiltInDefinitions(context.cwd).edit.renderResult?.(
 				result as ToolResult<EditToolDetails>,
 				options,
 				theme,
 				context,
-			);
-			if (!options.expanded) {
-				const component = context.lastComponent instanceof Container
-					? context.lastComponent
-					: new Container();
-				component.clear();
-				const editTheme = theme as Theme;
-				component.addChild(
-					oneLine(
-						editTheme,
-						context as RenderContext,
-						formatEditLabel(editTheme, toFullPath(context.args.path, context.cwd)),
-					),
-				);
-				if (builtInResult) component.addChild(builtInResult);
-				return component;
-			}
-			return builtInResult ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(editContext);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).bash,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).bash.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const bashTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			return oneLine(
 				bashTheme,
 				context as RenderContext,
@@ -554,20 +519,15 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			);
 		},
 		renderResult(result, options, theme, context) {
+			const bashContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(bashContext);
+			stopSpinner(bashContext);
+			const bashTheme = theme as Theme;
 			if (!options.expanded) {
-				const bashTheme = theme as Theme;
-				const component = context.lastComponent instanceof Container
-					? context.lastComponent
-					: new Container();
+				const component = containerComponent(bashContext);
 				const output = cleanBashOutput(result as ToolResult<BashToolDetails>);
-				component.clear();
-				component.addChild(
-					oneLine(
-						bashTheme,
-						context as RenderContext,
-						formatBashLabel(bashTheme, context.args.command),
-					),
-				);
+				const label = formatBashLabel(bashTheme, context.args.command);
+				component.addChild(oneLine(bashTheme, bashContext, appendExpandHint(bashTheme, label)));
 				if (output.length > 0) {
 					component.addChild(
 						previewComponent(
@@ -575,7 +535,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 								.split("\n")
 								.map((line) => bashTheme.fg("toolOutput", line))
 								.join("\n"),
-							context as RenderContext,
+							bashContext,
 							10,
 							"  ",
 							true,
@@ -585,23 +545,24 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 				}
 				return component;
 			}
-			stopSpinner(context as RenderContext);
 			return getBuiltInDefinitions(context.cwd).bash.renderResult?.(
 				result as ToolResult<BashToolDetails>,
 				options,
 				theme,
 				context,
-			) ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(bashContext);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).grep,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).grep.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const grepTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			const path = toFullPath(args.path, context.cwd);
 			return oneLine(
 				grepTheme,
@@ -610,32 +571,36 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			);
 		},
 		renderResult(result, options, theme, context) {
+			const grepContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(grepContext);
+			const grepTheme = theme as Theme;
+			const path = toFullPath(context.args.path, context.cwd);
 			if (!options.expanded) {
-				const grepTheme = theme as Theme;
-				const path = toFullPath(context.args.path, context.cwd);
 				return oneLine(
 					grepTheme,
-					context as RenderContext,
+					grepContext,
 					formatGrepLabel(grepTheme, context.args.pattern, path, context.args.glob),
 				);
 			}
-			stopSpinner(context as RenderContext);
+			stopSpinner(grepContext);
 			return getBuiltInDefinitions(context.cwd).grep.renderResult?.(
 				result as ToolResult<GrepToolDetails>,
 				options,
 				theme,
 				context,
-			) ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(grepContext);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).find,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).find.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const findTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			return oneLine(
 				findTheme,
 				context as RenderContext,
@@ -643,45 +608,51 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			);
 		},
 		renderResult(result, options, theme, context) {
+			const findContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(findContext);
+			const findTheme = theme as Theme;
 			if (!options.expanded) {
-				const findTheme = theme as Theme;
 				return oneLine(
 					findTheme,
-					context as RenderContext,
+					findContext,
 					formatFindLabel(findTheme, context.args.pattern, toFullPath(context.args.path, context.cwd)),
 				);
 			}
-			stopSpinner(context as RenderContext);
+			stopSpinner(findContext);
 			return getBuiltInDefinitions(context.cwd).find.renderResult?.(
 				result as ToolResult<FindToolDetails>,
 				options,
 				theme,
 				context,
-			) ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(findContext);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).ls,
+		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			return getBuiltInDefinitions(ctx.cwd).ls.execute(toolCallId, params, signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const lsTheme = theme as Theme;
+			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			return oneLine(lsTheme, context as RenderContext, formatListLabel(lsTheme, toFullPath(args.path, context.cwd)));
 		},
 		renderResult(result, options, theme, context) {
+			const lsContext = context as RenderContext;
+			if (options.isPartial) return emptyComponent(lsContext);
+			const lsTheme = theme as Theme;
 			if (!options.expanded) {
-				const lsTheme = theme as Theme;
-				return oneLine(lsTheme, context as RenderContext, formatListLabel(lsTheme, toFullPath(context.args.path, context.cwd)));
+				return oneLine(lsTheme, lsContext, formatListLabel(lsTheme, toFullPath(context.args.path, context.cwd)));
 			}
-			stopSpinner(context as RenderContext);
+			stopSpinner(lsContext);
 			return getBuiltInDefinitions(context.cwd).ls.renderResult?.(
 				result as ToolResult<LsToolDetails>,
 				options,
 				theme,
 				context,
-			) ?? emptyComponent(context as RenderContext);
+			) ?? emptyComponent(lsContext);
 		},
 	});
 }
