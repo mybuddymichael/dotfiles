@@ -29,11 +29,15 @@ vim.o.breakindent = true
 -- Set tab display width to 2 characters
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
 -- Enable smart indentation
 vim.o.smartindent = true
 -- Enable auto-indentation
 vim.o.autoindent = true
-vim.o.expandtab = false
+-- Use spaces instead of tabs by default (filetype plugins for Go, Make, etc.
+-- override this where tabs are idiomatic). Required to match Prettier output
+-- in web projects and avoid LSP-fallback formatting producing tabs.
+vim.o.expandtab = true
 
 -- Save undo history
 vim.o.undofile = true
