@@ -46,7 +46,7 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 10;
+const PATCH_VERSION = 11;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
@@ -75,19 +75,6 @@ function getBashModeAnsi(): string {
 
 function color6(text: string): string {
 	return `${getBashModeAnsi()}${text}${ANSI_RESET_FG}`;
-}
-
-function getUserMessageTextAnsi(): string {
-	try {
-		return activeTheme?.getFgAnsi("userMessageText") ?? "";
-	} catch {
-		return "";
-	}
-}
-
-function colorUserMessageText(text: string): string {
-	const ansi = getUserMessageTextAnsi();
-	return ansi ? `${ansi}${text}${ANSI_RESET_FG}` : text;
 }
 
 function stripAnsi(text: string): string {
@@ -164,20 +151,22 @@ function getPrefixKind(text: string): PrefixKind {
 }
 
 function colorPrefix(prefix: string, kind: PrefixKind): string {
-	if (kind === "default") return colorUserMessageText(prefix);
+	if (kind === "default") return prefix;
 	return color6(prefix);
 }
 
 function colorContent(text: string, kind: PrefixKind): string {
-	if (kind === "default") return colorUserMessageText(text);
+	if (kind === "default") return text;
 	return color6(text);
 }
 
 function prefixLine(line: string, width: number, kind: PrefixKind): string {
 	const prefix = getPrefix(kind);
 	const contentWidth = Math.max(1, width - visibleWidth(prefix));
-	const plainLine = stripAnsi(line);
-	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(plainLine, contentWidth, "", true), kind)}`;
+	const content = kind === "default"
+		? truncateToWidth(line, contentWidth, "", true)
+		: truncateToWidth(stripAnsi(line), contentWidth, "", true);
+	return `${colorPrefix(prefix, kind)}${colorContent(content, kind)}`;
 }
 
 function prefixRenderedLine(line: string, width: number, kind: PrefixKind): string {
