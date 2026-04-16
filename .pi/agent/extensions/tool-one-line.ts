@@ -193,6 +193,34 @@ class TruncatedPreviewText implements Component {
 	invalidate(): void {}
 }
 
+class IndentedComponent implements Component {
+	private child?: Component;
+	private indent: string;
+
+	constructor(child?: Component, indent = "  ") {
+		this.child = child;
+		this.indent = indent;
+	}
+
+	setParts(child?: Component, indent = this.indent): void {
+		this.child = child;
+		this.indent = indent;
+	}
+
+	render(width: number): string[] {
+		if (!this.child) return [];
+		const safeWidth = Math.max(1, Math.floor(width));
+		const indentWidth = visibleWidth(this.indent);
+		const childWidth = Math.max(1, safeWidth - indentWidth);
+		return this.child
+			.render(childWidth)
+			.map((line) => truncateToWidth(`${this.indent}${line}`, safeWidth, "", true));
+	}
+
+	invalidate(): void {
+		this.child?.invalidate?.();
+	}
+}
 
 function createBuiltInDefinitions(cwd: string) {
 	return {
@@ -351,6 +379,18 @@ function previewComponent(
 	return component;
 }
 
+function indentedComponent(
+	child: Component | undefined,
+	context: RenderContext,
+	indent = "  ",
+): IndentedComponent {
+	const component = context.lastComponent instanceof IndentedComponent
+		? context.lastComponent
+		: new IndentedComponent();
+	component.setParts(child, indent);
+	return component;
+}
+
 function renderExpandedResultWithHeader<TDetails>(
 	theme: Theme,
 	context: RenderContext,
@@ -363,7 +403,7 @@ function renderExpandedResultWithHeader<TDetails>(
 	const builtInContext: RenderContext = { ...context, lastComponent: state.expandedResultBody };
 	const body = renderBuiltInResult(builtInContext) ?? emptyComponent({ ...context, lastComponent: undefined });
 	state.expandedResultBody = body;
-	component.addChild(body);
+	component.addChild(indentedComponent(body, { ...context, lastComponent: undefined }));
 	return component;
 }
 
