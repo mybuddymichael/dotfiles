@@ -177,7 +177,7 @@ function prefixRenderedLine(line: string, width: number, kind: PrefixKind): stri
 	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(line, contentWidth, "", true), kind)}`;
 }
 
-function themeFg(color: "muted" | "dim" | "text", text: string): string {
+function themeFg(color: "muted" | "dim" | "text" | "borderAccent", text: string): string {
 	try {
 		return activeTheme?.fg(color, text) ?? text;
 	} catch {
@@ -213,7 +213,7 @@ function renderUserFrameLine(width: number, left: string, middle = "", right = "
 function renderUserHeaderLine(width: number): string {
 	const rail = themeBgAsFg("selectedBg", USER_RAIL);
 	const lead = `${rail} `;
-	const label = themeBg("selectedBg", themeFg("dim", USER_LABEL));
+	const label = themeBg("selectedBg", themeFg("borderAccent", USER_LABEL));
 	const trail = " ";
 	return renderUserFrameLine(width, lead, label, trail);
 }

@@ -5,7 +5,7 @@ import { Container, Loader, Markdown, Spacer, Text, truncateToWidth, visibleWidt
 
 const ANSI_RESET_FG = "\x1b[39m";
 
-const PATCH_VERSION = 4;
+const PATCH_VERSION = 6;
 const INDENT = 2;
 const WORKING_PREFIX = "Working";
 const AGENT_FILL = "╱";
@@ -67,7 +67,7 @@ function themeBgAsFg(themeLike: ThemeLike, color: "selectedBg", text: string): s
 function renderAgentHeaderLine(width: number, themeLike: ThemeLike): string {
 	const safeWidth = Math.max(1, Math.floor(width));
 	const indent = " ".repeat(INDENT);
-	const label = themeLike.bg("selectedBg", themeLike.fg("dim", AGENT_LABEL));
+	const label = themeLike.bg("selectedBg", themeLike.fg("border", AGENT_LABEL));
 	const base = `${indent}${label}`;
 	const remaining = Math.max(0, safeWidth - visibleWidth(base));
 	return truncateToWidth(`${base}${themeBgAsFg(themeLike, "selectedBg", AGENT_FILL.repeat(remaining))}`, safeWidth, "", true);
