@@ -17,9 +17,11 @@ import {
 	createWriteToolDefinition,
 	keyHint,
 } from "@mariozechner/pi-coding-agent";
+import { Type } from "@sinclair/typebox";
 import {
 	Container,
 	type Component,
+	Spacer,
 	truncateToWidth,
 	visibleWidth,
 	wrapTextWithAnsi,
@@ -80,6 +82,10 @@ const WRAPPABLE_PATH_SEPARATOR = "/ ";
 const WRAPPABLE_GREP_SEPARATOR = "| ";
 
 const toolCache = new Map<string, ReturnType<typeof createBuiltInDefinitions>>();
+const intentProperty = Type.String({
+	description:
+		"Short note explaining why this tool call helps accomplish the current task. Always populate this field.",
+});
 
 class WrappedStatusText implements Component {
 	private marker: string;
@@ -316,6 +322,57 @@ function formatBashLabel(theme: Theme, command: string | undefined): string {
 	return formatToolLabel(theme, "Run", theme.fg("bashMode", compactText(command)));
 }
 
+function withIntentParameters<T extends Record<string, any>>(parameters: T): T {
+	return {
+		...parameters,
+		properties: {
+			...(parameters.properties ?? {}),
+			intent: intentProperty,
+		},
+		required: [...new Set([...(parameters.required ?? []), "intent"])],
+	} as T;
+}
+
+function prepareArgumentsWithIntent(args: unknown): Record<string, unknown> {
+	if (!args || typeof args !== "object") return { intent: "Intent not provided" };
+	const input = args as Record<string, unknown>;
+	if (typeof input.intent === "string" && input.intent.trim().length > 0) return input;
+	return { ...input, intent: "Intent not provided" };
+}
+
+function stripIntent<T extends Record<string, unknown>>(args: T): Omit<T, "intent"> {
+	const { intent: _intent, ...rest } = args;
+	return rest;
+}
+
+function formatIntent(theme: Theme, intent: string | undefined): string {
+	const value = compactText(intent);
+	if (!value) return "";
+	return theme.fg("thinkingText", value);
+}
+
+function renderToolWithIntent(
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+): Component {
+	const formattedIntent = formatIntent(theme, intent);
+	if (!formattedIntent) return oneLine(theme, context, label);
+	const component = containerComponent(context);
+	component.addChild(
+		previewComponent(
+			formattedIntent,
+			{ ...context, lastComponent: undefined },
+			4,
+			"  ",
+		),
+	);
+	component.addChild(new Spacer(1));
+	component.addChild(oneLine(theme, { ...context, lastComponent: undefined }, label));
+	return component;
+}
+
 function startSpinner(context: RenderContext): void {
 	const state = context.state as SpinnerState;
 	if (state.interval) return;
@@ -396,9 +453,10 @@ function renderExpandedResultWithHeader<TDetails>(
 	context: RenderContext,
 	label: string,
 	renderBuiltInResult: (builtInContext: RenderContext) => Component | undefined,
+	intent?: string,
 ): Container {
 	const component = containerComponent(context);
-	component.addChild(oneLine(theme, { ...context, lastComponent: undefined }, label));
+	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, label, intent));
 	const state = context.state as SpinnerState;
 	const builtInContext: RenderContext = { ...context, lastComponent: state.expandedResultBody };
 	const body = renderBuiltInResult(builtInContext) ?? emptyComponent({ ...context, lastComponent: undefined });
@@ -468,7 +526,9 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			if (options.isPartial) return emptyComponent(readContext);
 			const readTheme = theme as Theme;
 			const path = `${toFullPath(context.args.path, context.cwd)}${formatReadRange(context.args.offset, context.args.limit)}`;
-			if (!options.expanded) return oneLine(readTheme, readContext, formatReadLabel(readTheme, path));
+			if (!options.expanded) {
+				return oneLine(readTheme, readContext, formatReadLabel(readTheme, path));
+			}
 			stopSpinner(readContext);
 			return renderExpandedResultWithHeader(readTheme, readContext, formatReadLabel(readTheme, path), (builtInContext) => (
 				getBuiltInDefinitions(context.cwd).read.renderResult?.(
@@ -483,17 +543,20 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).write,
+		parameters: withIntentParameters(getBuiltInDefinitions(process.cwd()).write.parameters),
+		prepareArguments: prepareArgumentsWithIntent,
 		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).write.execute(toolCallId, params, signal, onUpdate, ctx);
+			return getBuiltInDefinitions(ctx.cwd).write.execute(toolCallId, stripIntent(params), signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const writeTheme = theme as Theme;
 			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return oneLine(
+			return renderToolWithIntent(
 				writeTheme,
 				context as RenderContext,
 				formatPathLabel(writeTheme, "Write", toFullPath(args.path, context.cwd)),
+				args.intent,
 			);
 		},
 		renderResult(result, options, theme, context) {
@@ -502,7 +565,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const writeTheme = theme as Theme;
 			const label = formatPathLabel(writeTheme, "Write", toFullPath(context.args.path, context.cwd));
 			if (!options.expanded) {
-				return oneLine(writeTheme, writeContext, label);
+				return renderToolWithIntent(writeTheme, writeContext, label, context.args.intent);
 			}
 			stopSpinner(writeContext);
 			return renderExpandedResultWithHeader(writeTheme, writeContext, label, (builtInContext) => (
@@ -512,23 +575,26 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 					theme,
 					builtInContext,
 				)
-			));
+			), context.args.intent);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).edit,
+		parameters: withIntentParameters(getBuiltInDefinitions(process.cwd()).edit.parameters),
+		prepareArguments: prepareArgumentsWithIntent,
 		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).edit.execute(toolCallId, params, signal, onUpdate, ctx);
+			return getBuiltInDefinitions(ctx.cwd).edit.execute(toolCallId, stripIntent(params), signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const editTheme = theme as Theme;
 			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return oneLine(
+			return renderToolWithIntent(
 				editTheme,
 				context as RenderContext,
 				formatEditLabel(editTheme, toFullPath(args.path, context.cwd)),
+				args.intent,
 			);
 		},
 		renderResult(result, options, theme, context) {
@@ -539,7 +605,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const label = formatEditLabel(editTheme, toFullPath(context.args.path, context.cwd));
 			if (!options.expanded) {
 				const component = containerComponent(editContext);
-				component.addChild(oneLine(editTheme, editContext, appendExpandHint(editTheme, label)));
+				component.addChild(renderToolWithIntent(editTheme, { ...editContext, lastComponent: undefined }, appendExpandHint(editTheme, label), context.args.intent));
 				const changes = countDiffChanges((result as ToolResult<EditToolDetails>).details?.diff);
 				if (changes) {
 					component.addChild(
@@ -559,23 +625,26 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 					theme,
 					builtInContext,
 				)
-			));
+			), context.args.intent);
 		},
 	});
 
 	pi.registerTool({
 		...getBuiltInDefinitions(process.cwd()).bash,
+		parameters: withIntentParameters(getBuiltInDefinitions(process.cwd()).bash.parameters),
+		prepareArguments: prepareArgumentsWithIntent,
 		renderShell: "self",
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).bash.execute(toolCallId, params, signal, onUpdate, ctx);
+			return getBuiltInDefinitions(ctx.cwd).bash.execute(toolCallId, stripIntent(params), signal, onUpdate, ctx);
 		},
 		renderCall(args, theme, context) {
 			const bashTheme = theme as Theme;
 			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return oneLine(
+			return renderToolWithIntent(
 				bashTheme,
 				context as RenderContext,
 				formatBashLabel(bashTheme, args.command),
+				args.intent,
 			);
 		},
 		renderResult(result, options, theme, context) {
@@ -587,7 +656,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			if (!options.expanded) {
 				const component = containerComponent(bashContext);
 				const output = cleanBashOutput(result as ToolResult<BashToolDetails>);
-				component.addChild(oneLine(bashTheme, bashContext, appendExpandHint(bashTheme, label)));
+				component.addChild(renderToolWithIntent(bashTheme, { ...bashContext, lastComponent: undefined }, appendExpandHint(bashTheme, label), context.args.intent));
 				if (output.length > 0) {
 					component.addChild(
 						previewComponent(
@@ -612,7 +681,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 					theme,
 					builtInContext,
 				)
-			));
+			), context.args.intent);
 		},
 	});
 
@@ -626,11 +695,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 			const grepTheme = theme as Theme;
 			if (!context.isPartial) return emptyComponent(context as RenderContext);
 			const path = toFullPath(args.path, context.cwd);
-			return oneLine(
-				grepTheme,
-				context as RenderContext,
-				formatGrepLabel(grepTheme, args.pattern, path, args.glob),
-			);
+			return oneLine(grepTheme, context as RenderContext, formatGrepLabel(grepTheme, args.pattern, path, args.glob));
 		},
 		renderResult(result, options, theme, context) {
 			const grepContext = context as RenderContext;
@@ -662,11 +727,7 @@ export default function toolOneLineExtension(pi: ExtensionAPI): void {
 		renderCall(args, theme, context) {
 			const findTheme = theme as Theme;
 			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return oneLine(
-				findTheme,
-				context as RenderContext,
-				formatFindLabel(findTheme, args.pattern, toFullPath(args.path, context.cwd)),
-			);
+			return oneLine(findTheme, context as RenderContext, formatFindLabel(findTheme, args.pattern, toFullPath(args.path, context.cwd)));
 		},
 		renderResult(result, options, theme, context) {
 			const findContext = context as RenderContext;
