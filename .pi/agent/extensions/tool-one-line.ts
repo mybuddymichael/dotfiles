@@ -2,10 +2,6 @@ import type {
 	BashToolDetails,
 	EditToolDetails,
 	ExtensionAPI,
-	FindToolDetails,
-	GrepToolDetails,
-	LsToolDetails,
-	ReadToolDetails,
 } from "@mariozechner/pi-coding-agent";
 import {
 	createBashToolDefinition,
@@ -74,6 +70,10 @@ type SpinnerState = {
 	interval?: NodeJS.Timeout;
 	expandedResultBody?: Component;
 };
+
+type BuiltInDefinitions = ReturnType<typeof createBuiltInDefinitions>;
+type BuiltInToolName = keyof BuiltInDefinitions;
+type ToolRenderOptions = { isPartial: boolean; expanded: boolean };
 
 const SPINNER_INTERVAL_MS = 80;
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
@@ -300,18 +300,6 @@ function formatGrepLabel(theme: Theme, pattern: string | undefined, path: string
 	return formatToolLabel(theme, "Grep", `${query} ${location}`);
 }
 
-function formatReadLabel(theme: Theme, path: string): string {
-	return formatPathLabel(theme, "Read", path);
-}
-
-function formatListLabel(theme: Theme, path: string): string {
-	return formatPathLabel(theme, "List", path);
-}
-
-function formatEditLabel(theme: Theme, path: string): string {
-	return formatPathLabel(theme, "Edit", path);
-}
-
 function formatFindLabel(theme: Theme, pattern: string | undefined, path: string): string {
 	const query = theme.fg("syntaxVariable", theme.bold(compactText(pattern)));
 	const location = theme.fg("syntaxPunctuation", `in${NBSP}${formatPathForWrapping(path)}`);
@@ -359,7 +347,7 @@ function renderToolWithIntent(
 ): Component {
 	const formattedIntent = formatIntent(theme, intent);
 	if (!formattedIntent) return oneLine(theme, context, label);
-	const component = containerComponent(context);
+	const component = resetContainer(context);
 	component.addChild(
 		previewComponent(
 			formattedIntent,
@@ -409,13 +397,7 @@ function oneLine(theme: Theme, context: RenderContext, label: string): WrappedSt
 	return component;
 }
 
-function emptyComponent(context: RenderContext): Container {
-	const component = context.lastComponent instanceof Container ? context.lastComponent : new Container();
-	component.clear();
-	return component;
-}
-
-function containerComponent(context: RenderContext): Container {
+function resetContainer(context: RenderContext): Container {
 	const component = context.lastComponent instanceof Container ? context.lastComponent : new Container();
 	component.clear();
 	return component;
@@ -448,21 +430,243 @@ function indentedComponent(
 	return component;
 }
 
-function renderExpandedResultWithHeader<TDetails>(
+function renderExpandedResultWithHeader(
 	theme: Theme,
 	context: RenderContext,
 	label: string,
 	renderBuiltInResult: (builtInContext: RenderContext) => Component | undefined,
 	intent?: string,
 ): Container {
-	const component = containerComponent(context);
+	const component = resetContainer(context);
 	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, label, intent));
 	const state = context.state as SpinnerState;
 	const builtInContext: RenderContext = { ...context, lastComponent: state.expandedResultBody };
-	const body = renderBuiltInResult(builtInContext) ?? emptyComponent({ ...context, lastComponent: undefined });
+	const body = renderBuiltInResult(builtInContext) ?? resetContainer({ ...context, lastComponent: undefined });
 	state.expandedResultBody = body;
 	component.addChild(indentedComponent(body, { ...context, lastComponent: undefined }));
 	return component;
+}
+
+function renderPartialCallLine(theme: Theme, context: RenderContext, label: string): Component {
+	if (!context.isPartial) return resetContainer(context);
+	return oneLine(theme, context, label);
+}
+
+function renderPartialCallWithIntent(
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+): Component {
+	if (!context.isPartial) return resetContainer(context);
+	return renderToolWithIntent(theme, context, label, intent);
+}
+
+function renderStandardToolResult<TName extends BuiltInToolName>(
+	toolName: TName,
+	result: ToolResult,
+	options: ToolRenderOptions,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+): Component {
+	if (options.isPartial) return resetContainer(context);
+	if (!options.expanded) {
+		return oneLine(theme, context, label);
+	}
+	stopSpinner(context);
+	return renderExpandedResultWithHeader(theme, context, label, (builtInContext) => (
+		renderBuiltInToolResult(toolName, context.cwd, result, options, theme, builtInContext)
+	));
+}
+
+function renderStandardIntentToolResult<TName extends BuiltInToolName>(
+	toolName: TName,
+	result: ToolResult,
+	options: ToolRenderOptions,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+): Component {
+	if (options.isPartial) return resetContainer(context);
+	if (!options.expanded) {
+		return renderToolWithIntent(theme, context, label, intent);
+	}
+	stopSpinner(context);
+	return renderExpandedResultWithHeader(theme, context, label, (builtInContext) => (
+		renderBuiltInToolResult(toolName, context.cwd, result, options, theme, builtInContext)
+	), intent);
+}
+
+function renderCollapsedEditResult(
+	result: ToolResult<EditToolDetails>,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+): Component {
+	const component = resetContainer(context);
+	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, appendExpandHint(theme, label), intent));
+	const changes = countDiffChanges(result.details?.diff);
+	if (changes) {
+		component.addChild(
+			previewComponent(
+				`${theme.fg("success", `  +${changes.additions}`)}${theme.fg("dim", " / ")}${theme.fg("error", `-${changes.removals}`)}`,
+				context,
+				1,
+			),
+		);
+	}
+	return component;
+}
+
+function renderCollapsedBashResult(
+	result: ToolResult<BashToolDetails>,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+): Component {
+	const component = resetContainer(context);
+	const output = cleanBashOutput(result);
+	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, appendExpandHint(theme, label), intent));
+	if (output.length > 0) {
+		component.addChild(
+			previewComponent(
+				output
+					.split("\n")
+					.map((line) => theme.fg("toolOutput", line))
+					.join("\n"),
+				context,
+				10,
+				"  ",
+				true,
+				(hiddenLineCount) => theme.fg("dim", `  +${hiddenLineCount} more`),
+			),
+		);
+	}
+	return component;
+}
+
+type LabelBuilder = (args: any, theme: Theme, cwd: string) => string;
+type CollapsedIntentResultRenderer = (
+	result: ToolResult,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+) => Component;
+
+function registerStandardTool(
+	pi: ExtensionAPI,
+	toolName: BuiltInToolName,
+	buildLabel: LabelBuilder,
+): void {
+	pi.registerTool({
+		...getBuiltInTool(process.cwd(), toolName),
+		renderShell: "self",
+		async execute(toolCallId, params, signal, onUpdate, ctx) {
+			return executeBuiltInTool(toolName, toolCallId, params, signal, onUpdate, ctx);
+		},
+		renderCall(args, theme, context) {
+			const toolTheme = theme as Theme;
+			return renderPartialCallLine(toolTheme, context as RenderContext, buildLabel(args, toolTheme, context.cwd));
+		},
+		renderResult(result, options, theme, context) {
+			const toolTheme = theme as Theme;
+			return renderStandardToolResult(
+				toolName,
+				result as ToolResult,
+				options,
+				toolTheme,
+				context as RenderContext,
+				buildLabel(context.args, toolTheme, context.cwd),
+			);
+		},
+	});
+}
+
+function registerIntentTool(
+	pi: ExtensionAPI,
+	toolName: BuiltInToolName,
+	buildLabel: LabelBuilder,
+	renderCollapsedResult?: CollapsedIntentResultRenderer,
+): void {
+	pi.registerTool({
+		...getBuiltInTool(process.cwd(), toolName),
+		parameters: withIntentParameters(getBuiltInTool(process.cwd(), toolName).parameters),
+		prepareArguments: prepareArgumentsWithIntent,
+		renderShell: "self",
+		async execute(toolCallId, params, signal, onUpdate, ctx) {
+			return executeBuiltInTool(toolName, toolCallId, stripIntent(params), signal, onUpdate, ctx);
+		},
+		renderCall(args, theme, context) {
+			const toolTheme = theme as Theme;
+			return renderPartialCallWithIntent(
+				toolTheme,
+				context as RenderContext,
+				buildLabel(args, toolTheme, context.cwd),
+				args.intent,
+			);
+		},
+		renderResult(result, options, theme, context) {
+			const toolTheme = theme as Theme;
+			const toolContext = context as RenderContext;
+			const label = buildLabel(context.args, toolTheme, context.cwd);
+			if (!renderCollapsedResult) {
+				return renderStandardIntentToolResult(
+					toolName,
+					result as ToolResult,
+					options,
+					toolTheme,
+					toolContext,
+					label,
+					context.args.intent,
+				);
+			}
+			if (options.isPartial) return resetContainer(toolContext);
+			stopSpinner(toolContext);
+			if (!options.expanded) {
+				return renderCollapsedResult(
+					result as ToolResult,
+					toolTheme,
+					toolContext,
+					label,
+					context.args.intent,
+				);
+			}
+			return renderExpandedResultWithHeader(toolTheme, toolContext, label, (builtInContext) => (
+				renderBuiltInToolResult(toolName, context.cwd, result as ToolResult, options, theme, builtInContext)
+			), context.args.intent);
+		},
+	});
+}
+
+function getBuiltInTool<TName extends BuiltInToolName>(cwd: string, toolName: TName): BuiltInDefinitions[TName] {
+	return getBuiltInDefinitions(cwd)[toolName];
+}
+
+function executeBuiltInTool<TName extends BuiltInToolName>(
+	toolName: TName,
+	toolCallId: string,
+	params: Record<string, unknown>,
+	signal: AbortSignal,
+	onUpdate: (result: unknown) => void,
+	ctx: { cwd: string },
+) {
+	return getBuiltInTool(ctx.cwd, toolName).execute(toolCallId, params, signal, onUpdate, ctx);
+}
+
+function renderBuiltInToolResult<TName extends BuiltInToolName>(
+	toolName: TName,
+	cwd: string,
+	result: ToolResult,
+	options: ToolRenderOptions,
+	theme: unknown,
+	context: RenderContext,
+): Component | undefined {
+	return getBuiltInTool(cwd, toolName).renderResult?.(result, options, theme, context);
 }
 
 function trimBlankLines(lines: string[]): string[] {
@@ -508,275 +712,27 @@ function cleanBashOutput(result: ToolResult<BashToolDetails> | undefined): strin
 }
 
 export default function toolOneLineExtension(pi: ExtensionAPI): void {
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).read,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).read.execute(toolCallId, params, signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const readTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			const path = `${toFullPath(args.path, context.cwd)}${formatReadRange(args.offset, args.limit)}`;
-			return oneLine(readTheme, context as RenderContext, formatReadLabel(readTheme, path));
-		},
-		renderResult(result, options, theme, context) {
-			const readContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(readContext);
-			const readTheme = theme as Theme;
-			const path = `${toFullPath(context.args.path, context.cwd)}${formatReadRange(context.args.offset, context.args.limit)}`;
-			if (!options.expanded) {
-				return oneLine(readTheme, readContext, formatReadLabel(readTheme, path));
-			}
-			stopSpinner(readContext);
-			return renderExpandedResultWithHeader(readTheme, readContext, formatReadLabel(readTheme, path), (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).read.renderResult?.(
-					result as ToolResult<ReadToolDetails>,
-					options,
-					theme,
-					builtInContext,
-				)
-			));
-		},
-	});
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).write,
-		parameters: withIntentParameters(getBuiltInDefinitions(process.cwd()).write.parameters),
-		prepareArguments: prepareArgumentsWithIntent,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).write.execute(toolCallId, stripIntent(params), signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const writeTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return renderToolWithIntent(
-				writeTheme,
-				context as RenderContext,
-				formatPathLabel(writeTheme, "Write", toFullPath(args.path, context.cwd)),
-				args.intent,
-			);
-		},
-		renderResult(result, options, theme, context) {
-			const writeContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(writeContext);
-			const writeTheme = theme as Theme;
-			const label = formatPathLabel(writeTheme, "Write", toFullPath(context.args.path, context.cwd));
-			if (!options.expanded) {
-				return renderToolWithIntent(writeTheme, writeContext, label, context.args.intent);
-			}
-			stopSpinner(writeContext);
-			return renderExpandedResultWithHeader(writeTheme, writeContext, label, (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).write.renderResult?.(
-					result as ToolResult,
-					options,
-					theme,
-					builtInContext,
-				)
-			), context.args.intent);
-		},
-	});
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).edit,
-		parameters: withIntentParameters(getBuiltInDefinitions(process.cwd()).edit.parameters),
-		prepareArguments: prepareArgumentsWithIntent,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).edit.execute(toolCallId, stripIntent(params), signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const editTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return renderToolWithIntent(
-				editTheme,
-				context as RenderContext,
-				formatEditLabel(editTheme, toFullPath(args.path, context.cwd)),
-				args.intent,
-			);
-		},
-		renderResult(result, options, theme, context) {
-			const editContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(editContext);
-			stopSpinner(editContext);
-			const editTheme = theme as Theme;
-			const label = formatEditLabel(editTheme, toFullPath(context.args.path, context.cwd));
-			if (!options.expanded) {
-				const component = containerComponent(editContext);
-				component.addChild(renderToolWithIntent(editTheme, { ...editContext, lastComponent: undefined }, appendExpandHint(editTheme, label), context.args.intent));
-				const changes = countDiffChanges((result as ToolResult<EditToolDetails>).details?.diff);
-				if (changes) {
-					component.addChild(
-						previewComponent(
-							`${editTheme.fg("success", `  +${changes.additions}`)}${editTheme.fg("dim", " / ")}${editTheme.fg("error", `-${changes.removals}`)}`,
-							editContext,
-							1,
-						),
-					);
-				}
-				return component;
-			}
-			return renderExpandedResultWithHeader(editTheme, editContext, label, (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).edit.renderResult?.(
-					result as ToolResult<EditToolDetails>,
-					options,
-					theme,
-					builtInContext,
-				)
-			), context.args.intent);
-		},
-	});
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).bash,
-		parameters: withIntentParameters(getBuiltInDefinitions(process.cwd()).bash.parameters),
-		prepareArguments: prepareArgumentsWithIntent,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).bash.execute(toolCallId, stripIntent(params), signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const bashTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return renderToolWithIntent(
-				bashTheme,
-				context as RenderContext,
-				formatBashLabel(bashTheme, args.command),
-				args.intent,
-			);
-		},
-		renderResult(result, options, theme, context) {
-			const bashContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(bashContext);
-			stopSpinner(bashContext);
-			const bashTheme = theme as Theme;
-			const label = formatBashLabel(bashTheme, context.args.command);
-			if (!options.expanded) {
-				const component = containerComponent(bashContext);
-				const output = cleanBashOutput(result as ToolResult<BashToolDetails>);
-				component.addChild(renderToolWithIntent(bashTheme, { ...bashContext, lastComponent: undefined }, appendExpandHint(bashTheme, label), context.args.intent));
-				if (output.length > 0) {
-					component.addChild(
-						previewComponent(
-							output
-								.split("\n")
-								.map((line) => bashTheme.fg("toolOutput", line))
-								.join("\n"),
-							bashContext,
-							10,
-							"  ",
-							true,
-							(hiddenLineCount) => bashTheme.fg("dim", `  +${hiddenLineCount} more`),
-						),
-					);
-				}
-				return component;
-			}
-			return renderExpandedResultWithHeader(bashTheme, bashContext, label, (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).bash.renderResult?.(
-					result as ToolResult<BashToolDetails>,
-					options,
-					theme,
-					builtInContext,
-				)
-			), context.args.intent);
-		},
-	});
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).grep,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).grep.execute(toolCallId, params, signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const grepTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			const path = toFullPath(args.path, context.cwd);
-			return oneLine(grepTheme, context as RenderContext, formatGrepLabel(grepTheme, args.pattern, path, args.glob));
-		},
-		renderResult(result, options, theme, context) {
-			const grepContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(grepContext);
-			const grepTheme = theme as Theme;
-			const path = toFullPath(context.args.path, context.cwd);
-			const label = formatGrepLabel(grepTheme, context.args.pattern, path, context.args.glob);
-			if (!options.expanded) {
-				return oneLine(grepTheme, grepContext, label);
-			}
-			stopSpinner(grepContext);
-			return renderExpandedResultWithHeader(grepTheme, grepContext, label, (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).grep.renderResult?.(
-					result as ToolResult<GrepToolDetails>,
-					options,
-					theme,
-					builtInContext,
-				)
-			));
-		},
-	});
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).find,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).find.execute(toolCallId, params, signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const findTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return oneLine(findTheme, context as RenderContext, formatFindLabel(findTheme, args.pattern, toFullPath(args.path, context.cwd)));
-		},
-		renderResult(result, options, theme, context) {
-			const findContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(findContext);
-			const findTheme = theme as Theme;
-			const label = formatFindLabel(findTheme, context.args.pattern, toFullPath(context.args.path, context.cwd));
-			if (!options.expanded) {
-				return oneLine(findTheme, findContext, label);
-			}
-			stopSpinner(findContext);
-			return renderExpandedResultWithHeader(findTheme, findContext, label, (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).find.renderResult?.(
-					result as ToolResult<FindToolDetails>,
-					options,
-					theme,
-					builtInContext,
-				)
-			));
-		},
-	});
-
-	pi.registerTool({
-		...getBuiltInDefinitions(process.cwd()).ls,
-		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInDefinitions(ctx.cwd).ls.execute(toolCallId, params, signal, onUpdate, ctx);
-		},
-		renderCall(args, theme, context) {
-			const lsTheme = theme as Theme;
-			if (!context.isPartial) return emptyComponent(context as RenderContext);
-			return oneLine(lsTheme, context as RenderContext, formatListLabel(lsTheme, toFullPath(args.path, context.cwd)));
-		},
-		renderResult(result, options, theme, context) {
-			const lsContext = context as RenderContext;
-			if (options.isPartial) return emptyComponent(lsContext);
-			const lsTheme = theme as Theme;
-			const label = formatListLabel(lsTheme, toFullPath(context.args.path, context.cwd));
-			if (!options.expanded) {
-				return oneLine(lsTheme, lsContext, label);
-			}
-			stopSpinner(lsContext);
-			return renderExpandedResultWithHeader(lsTheme, lsContext, label, (builtInContext) => (
-				getBuiltInDefinitions(context.cwd).ls.renderResult?.(
-					result as ToolResult<LsToolDetails>,
-					options,
-					theme,
-					builtInContext,
-				)
-			));
-		},
-	});
+	registerStandardTool(pi, "read", (args, theme, cwd) => (
+		formatPathLabel(
+			theme,
+			"Read",
+			`${toFullPath(args.path, cwd)}${formatReadRange(args.offset, args.limit)}`,
+		)
+	));
+	registerIntentTool(pi, "write", (args, theme, cwd) => (
+		formatPathLabel(theme, "Write", toFullPath(args.path, cwd))
+	));
+	registerIntentTool(pi, "edit", (args, theme, cwd) => (
+		formatPathLabel(theme, "Edit", toFullPath(args.path, cwd))
+	), renderCollapsedEditResult);
+	registerIntentTool(pi, "bash", (args, theme) => formatBashLabel(theme, args.command), renderCollapsedBashResult);
+	registerStandardTool(pi, "grep", (args, theme, cwd) => (
+		formatGrepLabel(theme, args.pattern, toFullPath(args.path, cwd), args.glob)
+	));
+	registerStandardTool(pi, "find", (args, theme, cwd) => (
+		formatFindLabel(theme, args.pattern, toFullPath(args.path, cwd))
+	));
+	registerStandardTool(pi, "ls", (args, theme, cwd) => (
+		formatPathLabel(theme, "List", toFullPath(args.path, cwd))
+	));
 }
