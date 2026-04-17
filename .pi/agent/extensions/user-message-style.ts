@@ -35,6 +35,7 @@ type MarkdownLikeChild = {
 	text?: unknown;
 	theme?: unknown;
 	defaultTextStyle?: unknown;
+	children?: unknown[];
 };
 
 type AutocompleteListLike = {
@@ -46,7 +47,7 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 13;
+const PATCH_VERSION = 14;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
@@ -105,18 +106,35 @@ function sanitizeDefaultTextStyle(style: unknown): Record<string, unknown> | und
 	return Object.keys(rest).length > 0 ? rest : undefined;
 }
 
+function isMarkdownLikeChild(value: unknown): value is MarkdownLikeChild {
+	return !!value
+		&& typeof value === "object"
+		&& typeof (value as MarkdownLikeChild).text === "string"
+		&& (value as MarkdownLikeChild).theme !== undefined;
+}
+
 function extractMarkdownChild(instance: unknown): MarkdownLikeChild | undefined {
 	if (!instance || typeof instance !== "object") return undefined;
-	const children = (instance as { children?: unknown[] }).children;
-	if (!Array.isArray(children)) return undefined;
 
-	return children.find(
-		(child): child is MarkdownLikeChild =>
-			!!child
-			&& typeof child === "object"
-			&& typeof (child as MarkdownLikeChild).text === "string"
-			&& (child as MarkdownLikeChild).theme !== undefined,
-	);
+	const stack: unknown[] = [instance];
+	const visited = new Set<unknown>();
+
+	while (stack.length > 0) {
+		const current = stack.pop();
+		if (!current || typeof current !== "object" || visited.has(current)) continue;
+		visited.add(current);
+
+		if (isMarkdownLikeChild(current)) return current;
+
+		const children = (current as { children?: unknown[] }).children;
+		if (Array.isArray(children)) {
+			for (let i = children.length - 1; i >= 0; i--) {
+				stack.push(children[i]);
+			}
+		}
+	}
+
+	return undefined;
 }
 
 function renderBody(instance: unknown, width: number, originalRender: RenderFn): string[] {
@@ -177,7 +195,7 @@ function prefixRenderedLine(line: string, width: number, kind: PrefixKind): stri
 	return `${colorPrefix(prefix, kind)}${colorContent(truncateToWidth(line, contentWidth, "", true), kind)}`;
 }
 
-function themeFg(color: "muted" | "dim" | "text" | "borderAccent", text: string): string {
+function themeFg(color: "muted" | "dim" | "text" | "borderAccent" | "borderMuted", text: string): string {
 	try {
 		return activeTheme?.fg(color, text) ?? text;
 	} catch {
@@ -193,11 +211,24 @@ function themeBg(color: "selectedBg", text: string): string {
 	}
 }
 
+function bgAnsiToFgAnsi(ansi: string): string {
+	return ansi.replace(/\x1b\[([0-9;]+)m/g, (_match, codes: string) => {
+		const parts = codes.split(";");
+		const converted = parts.map((part, index) => {
+			if (part === "48" && (parts[index + 1] === "5" || parts[index + 1] === "2")) return "38";
+			if (/^4[0-7]$/.test(part)) return `3${part[1]}`;
+			if (/^10[0-7]$/.test(part)) return `9${part[2]}`;
+			return part;
+		});
+		return `\x1b[${converted.join(";")}m`;
+	});
+}
+
 function themeBgAsFg(color: "selectedBg", text: string): string {
 	try {
 		const ansi = activeTheme?.getBgAnsi(color) ?? "";
 		if (!ansi) return text;
-		return `${ansi.replace(/\[48;/g, "[38;")}${text}${ANSI_RESET_FG}`;
+		return `${bgAnsiToFgAnsi(ansi)}${text}${ANSI_RESET_FG}`;
 	} catch {
 		return text;
 	}
@@ -207,7 +238,8 @@ function renderUserFrameLine(width: number, left: string, middle = "", right = "
 	const safeWidth = Math.max(1, Math.floor(width));
 	const base = `${left}${middle}${right}`;
 	const remaining = Math.max(0, safeWidth - visibleWidth(base));
-	return truncateToWidth(`${left}${middle}${right}${themeBgAsFg("selectedBg", USER_FILL.repeat(remaining))}`, safeWidth, "", true);
+	const fill = themeBgAsFg("selectedBg", USER_FILL.repeat(remaining));
+	return truncateToWidth(`${left}${middle}${right}${fill}`, safeWidth, "", true);
 }
 
 function renderUserHeaderLine(width: number): string {
@@ -218,21 +250,23 @@ function renderUserHeaderLine(width: number): string {
 	return renderUserFrameLine(width, lead, label, trail);
 }
 
-function renderUserDividerLine(width: number): string {
-	return truncateToWidth(themeBgAsFg("selectedBg", USER_RAIL), Math.max(1, Math.floor(width)), "", true);
-}
-
 function renderUserBodyLine(line: string, width: number): string {
 	const safeWidth = Math.max(1, Math.floor(width));
 	const contentWidth = Math.max(1, safeWidth - visibleWidth(USER_BODY_PREFIX));
-	return `${themeBgAsFg("selectedBg", USER_BODY_PREFIX)}${truncateToWidth(line, contentWidth, "", true)}`;
+	const prefix = `${themeBgAsFg("selectedBg", USER_RAIL)} `;
+	return `${prefix}${truncateToWidth(line, contentWidth, "", true)}`;
+}
+
+function normalizeUserBodyLines(lines: string[]): string[] {
+	const trimmed = trimEdgeBlankLines(lines);
+	return trimmed.length > 0 ? trimmed : [""];
 }
 
 function renderUserMessageBlock(lines: string[], width: number): string[] {
-	const body = lines.length > 0 ? lines : [""];
+	const body = normalizeUserBodyLines(lines);
 	return [
 		renderUserHeaderLine(width),
-		renderUserDividerLine(width),
+		renderUserBodyLine("", width),
 		...body.map((line) => renderUserBodyLine(line, width)),
 	];
 }
@@ -363,7 +397,7 @@ function patchUserMessagePrototype(): void {
 		const safeWidth = Math.max(1, Math.floor(width));
 		const contentWidth = Math.max(1, safeWidth - visibleWidth(USER_BODY_PREFIX));
 		const body = renderBody(this, contentWidth, originalRender);
-		return ["", ...renderUserMessageBlock(body, safeWidth)];
+		return renderUserMessageBlock(body, safeWidth);
 	};
 
 	prototype.__userMessageStylePatched = true;
