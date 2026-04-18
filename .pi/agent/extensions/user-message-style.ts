@@ -47,12 +47,12 @@ type PatchableEditor = UserMessageStyleEditor & {
 	autocompleteList?: AutocompleteListLike;
 };
 
-const PATCH_VERSION = 14;
+const PATCH_VERSION = 17;
 const ANSI_GREEN = "\x1b[32m";
 const ANSI_CYAN = "\x1b[36m";
 const ANSI_RESET_FG = "\x1b[39m";
 const ANSI_RE = /\x1b\[[0-9;]*m/g;
-const DEFAULT_PREFIX = "▎ ";
+const DEFAULT_PREFIX = "┃ ";
 const USER_RAIL = "┃";
 const USER_FILL = "╱";
 const USER_LABEL = " USER ";
@@ -242,8 +242,12 @@ function renderUserFrameLine(width: number, left: string, middle = "", right = "
 	return truncateToWidth(`${left}${middle}${right}${fill}`, safeWidth, "", true);
 }
 
+function renderUserRail(): string {
+	return themeFg("borderAccent", USER_RAIL);
+}
+
 function renderUserHeaderLine(width: number): string {
-	const rail = themeBgAsFg("selectedBg", USER_RAIL);
+	const rail = renderUserRail();
 	const lead = `${rail} `;
 	const label = themeBg("selectedBg", themeFg("borderAccent", USER_LABEL));
 	const trail = " ";
@@ -253,7 +257,7 @@ function renderUserHeaderLine(width: number): string {
 function renderUserBodyLine(line: string, width: number): string {
 	const safeWidth = Math.max(1, Math.floor(width));
 	const contentWidth = Math.max(1, safeWidth - visibleWidth(USER_BODY_PREFIX));
-	const prefix = `${themeBgAsFg("selectedBg", USER_RAIL)} `;
+	const prefix = `${renderUserRail()} `;
 	return `${prefix}${truncateToWidth(line, contentWidth, "", true)}`;
 }
 
@@ -425,13 +429,12 @@ function patchBashExecutionPrototype(): void {
 
 	prototype.render = function renderBashExecutionWithStyle(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
-		const prefixKind = (this as PatchableBashExecutionInstance).__userMessageStylePrefixKind ?? "bash";
 		const body = trimBashBox(originalRender.call(this, safeWidth));
 		const hasExistingSpacerAfterCommand = (body[1] ?? "").trim().length === 0;
 		const spacedBody = body.length > 1
 			? (hasExistingSpacerAfterCommand ? body : [body[0], "", ...body.slice(1)])
 			: (body.length > 0 ? body : [""]);
-		return ["", ...spacedBody.map((line) => prefixLine(line, safeWidth, prefixKind))];
+		return ["", ...spacedBody.map((line) => truncateToWidth(line, safeWidth, "", true))];
 	};
 
 	prototype.__userMessageStylePatched = true;
