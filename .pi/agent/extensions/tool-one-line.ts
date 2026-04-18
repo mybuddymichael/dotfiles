@@ -131,6 +131,8 @@ class TruncatedPreviewText implements Component {
 	private indent: string;
 	private leadingBlankLine: boolean;
 	private overflowLineFormatter?: (hiddenLineCount: number) => string;
+	private tail: boolean;
+	private blankLineBeforeOverflow: boolean;
 
 	constructor(
 		text = "",
@@ -138,12 +140,16 @@ class TruncatedPreviewText implements Component {
 		indent = "",
 		leadingBlankLine = false,
 		overflowLineFormatter?: (hiddenLineCount: number) => string,
+		tail = false,
+		blankLineBeforeOverflow = false,
 	) {
 		this.text = text;
 		this.maxLines = maxLines;
 		this.indent = indent;
 		this.leadingBlankLine = leadingBlankLine;
 		this.overflowLineFormatter = overflowLineFormatter;
+		this.tail = tail;
+		this.blankLineBeforeOverflow = blankLineBeforeOverflow;
 	}
 
 	setParts(
@@ -152,43 +158,37 @@ class TruncatedPreviewText implements Component {
 		indent = this.indent,
 		leadingBlankLine = this.leadingBlankLine,
 		overflowLineFormatter = this.overflowLineFormatter,
+		tail = this.tail,
+		blankLineBeforeOverflow = this.blankLineBeforeOverflow,
 	): void {
 		this.text = text;
 		this.maxLines = maxLines;
 		this.indent = indent;
 		this.leadingBlankLine = leadingBlankLine;
 		this.overflowLineFormatter = overflowLineFormatter;
+		this.tail = tail;
+		this.blankLineBeforeOverflow = blankLineBeforeOverflow;
 	}
 
 	render(width: number): string[] {
 		const safeWidth = Math.max(1, Math.floor(width));
-		const lines: string[] = [];
 		const sourceLines = this.text.split("\n");
 		const indentWidth = visibleWidth(this.indent);
 		const contentWidth = Math.max(1, safeWidth - indentWidth);
-		let hiddenLineCount = 0;
-
-		for (let index = 0; index < sourceLines.length; index++) {
-			const wrapped = wrapTextWithAnsi(sourceLines[index] ?? "", contentWidth);
-			const chunks = wrapped.length > 0 ? wrapped : [""];
-			for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
-				const chunk = chunks[chunkIndex] ?? "";
-				if (lines.length >= this.maxLines) {
-					hiddenLineCount += chunks.length - chunkIndex;
-					hiddenLineCount += sourceLines
-						.slice(index + 1)
-						.reduce((count, sourceLine) => {
-							const wrappedLine = wrapTextWithAnsi(sourceLine ?? "", contentWidth);
-							return count + Math.max(1, wrappedLine.length);
-						}, 0);
-					break;
-				}
-				lines.push(truncateToWidth(`${this.indent}${chunk}`, safeWidth, "", true));
-			}
-			if (hiddenLineCount > 0) break;
-		}
+		const wrappedChunks = sourceLines.flatMap((sourceLine) => {
+			const wrapped = wrapTextWithAnsi(sourceLine ?? "", contentWidth);
+			return (wrapped.length > 0 ? wrapped : [""]).map((chunk) => (
+				truncateToWidth(`${this.indent}${chunk}`, safeWidth, "", true)
+			));
+		});
+		const hiddenLineCount = Math.max(0, wrappedChunks.length - this.maxLines);
+		const visibleChunks = this.tail
+			? wrappedChunks.slice(Math.max(0, wrappedChunks.length - this.maxLines))
+			: wrappedChunks.slice(0, this.maxLines);
+		const lines = [...visibleChunks];
 
 		if (hiddenLineCount > 0 && this.overflowLineFormatter) {
+			if (this.blankLineBeforeOverflow && lines.length > 0) lines.push("");
 			lines.push(truncateToWidth(this.overflowLineFormatter(hiddenLineCount), safeWidth, "", true));
 		}
 
@@ -410,11 +410,13 @@ function previewComponent(
 	indent = "",
 	leadingBlankLine = false,
 	overflowLineFormatter?: (hiddenLineCount: number) => string,
+	tail = false,
+	blankLineBeforeOverflow = false,
 ): TruncatedPreviewText {
 	const component = context.lastComponent instanceof TruncatedPreviewText
 		? context.lastComponent
 		: new TruncatedPreviewText();
-	component.setParts(text, maxLines, indent, leadingBlankLine, overflowLineFormatter);
+	component.setParts(text, maxLines, indent, leadingBlankLine, overflowLineFormatter, tail, blankLineBeforeOverflow);
 	return component;
 }
 
@@ -530,7 +532,7 @@ function renderCollapsedBashResult(
 ): Component {
 	const component = resetContainer(context);
 	const output = cleanBashOutput(result);
-	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, appendExpandHint(theme, label), intent));
+	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, label, intent));
 	if (output.length > 0) {
 		component.addChild(
 			previewComponent(
@@ -542,7 +544,9 @@ function renderCollapsedBashResult(
 				10,
 				"  ",
 				true,
-				(hiddenLineCount) => theme.fg("dim", `  +${hiddenLineCount} more`),
+				(hiddenLineCount) => `${theme.fg("dim", `  ... ${hiddenLineCount} more lines`)} ${expandHint(theme)}`,
+				true,
+				true,
 			),
 		);
 	}
@@ -678,7 +682,7 @@ function trimBlankLines(lines: string[]): string[] {
 }
 
 function expandHint(theme: Theme): string {
-	return theme.fg("dim", `(${keyHint("app.tools.expand", "to expand")})`);
+	return `${theme.fg("muted", "(")}${keyHint("app.tools.expand", "to expand")}${theme.fg("muted", ")")}`;
 }
 
 function appendExpandHint(theme: Theme, label: string): string {
