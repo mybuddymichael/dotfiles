@@ -280,7 +280,7 @@ function getModeLabel(kind: PrefixKind, width: number, piTheme: Theme | undefine
 
 function trimBashBox(lines: string[]): string[] {
 	const trimmed = trimEdgeBlankLines(lines);
-	if (trimmed.length >= 2) return trimmed.slice(1, -1);
+	if (trimmed.length >= 2) return trimEdgeBlankLines(trimmed.slice(1, -1));
 	return trimmed;
 }
 
@@ -427,7 +427,11 @@ function patchBashExecutionPrototype(): void {
 		const safeWidth = Math.max(1, Math.floor(width));
 		const prefixKind = (this as PatchableBashExecutionInstance).__userMessageStylePrefixKind ?? "bash";
 		const body = trimBashBox(originalRender.call(this, safeWidth));
-		return ["", ...(body.length > 0 ? body : [""]).map((line) => prefixLine(line, safeWidth, prefixKind))];
+		const hasExistingSpacerAfterCommand = (body[1] ?? "").trim().length === 0;
+		const spacedBody = body.length > 1
+			? (hasExistingSpacerAfterCommand ? body : [body[0], "", ...body.slice(1)])
+			: (body.length > 0 ? body : [""]);
+		return ["", ...spacedBody.map((line) => prefixLine(line, safeWidth, prefixKind))];
 	};
 
 	prototype.__userMessageStylePatched = true;
