@@ -11,6 +11,7 @@ import {
 	createLsToolDefinition,
 	createReadToolDefinition,
 	createWriteToolDefinition,
+	isBashToolResult,
 	keyHint,
 } from "@mariozechner/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
@@ -23,6 +24,7 @@ import {
 	wrapTextWithAnsi,
 } from "@mariozechner/pi-tui";
 import { resolve } from "node:path";
+import { cleanBashOutput, rebuildHeadTruncatedBashContent, type ToolResult } from "./tool-one-line.bash";
 
 type Theme = {
 	bold(text: string): string;
@@ -59,11 +61,6 @@ type RenderContext = {
 	expanded: boolean;
 	showImages: boolean;
 	isError: boolean;
-};
-
-type ToolResult<TDetails = unknown> = {
-	content: Array<{ type: string; text?: string; data?: string; mimeType?: string }>;
-	details?: TDetails;
 };
 
 type SpinnerState = {
@@ -545,7 +542,7 @@ function renderCollapsedBashResult(
 				"  ",
 				true,
 				(hiddenLineCount) => `${theme.fg("dim", `  ... ${hiddenLineCount} more lines`)} ${expandHint(theme)}`,
-				true,
+				false,
 				true,
 			),
 		);
@@ -700,22 +697,19 @@ function countDiffChanges(diff: string | undefined): { additions: number; remova
 	return { additions, removals };
 }
 
-function extractTextContent(result: ToolResult | undefined): string {
-	return result?.content
-		.map((part) => part.type === "text" ? part.text ?? "" : "")
-		.join("")
-		.trim() ?? "";
-}
-
-function cleanBashOutput(result: ToolResult<BashToolDetails> | undefined): string {
-	const output = extractTextContent(result)
-		.replace(/\r\n?/g, "\n")
-		.replace(/\n?exit code:\s*-?\d+\s*$/i, "")
-		.trim();
-	return output === "(no output)" ? "" : output;
-}
-
 export default function toolOneLineExtension(pi: ExtensionAPI): void {
+	pi.on("tool_result", async (event) => {
+		if (!isBashToolResult(event)) return;
+		const truncation = event.details?.truncation;
+		const fullOutputPath = event.details?.fullOutputPath;
+		const content = event.content.find((part) => part.type === "text");
+		if (!truncation?.truncated || !fullOutputPath || content?.type !== "text") return;
+		const rebuilt = await rebuildHeadTruncatedBashContent(content.text ?? "", fullOutputPath, truncation);
+		return {
+			content: event.content.map((part) => part.type === "text" ? { ...part, text: rebuilt.text } : part),
+			details: { ...event.details, truncation: rebuilt.truncation },
+		};
+	});
 	registerStandardTool(pi, "read", (args, theme, cwd) => (
 		formatPathLabel(
 			theme,
