@@ -1,7 +1,6 @@
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { Text } from "@mariozechner/pi-tui";
 
-type PatchableText = {
+export type PatchableText = {
 	text?: string;
 	paddingX?: number;
 	paddingY?: number;
@@ -9,13 +8,13 @@ type PatchableText = {
 	__statusMessageIndentPatched?: boolean;
 };
 
-const NEW_SESSION_TEXT = "✓ New session started";
-const EXTRA_INDENT_STATUS_PREFIXES = [
+export const NEW_SESSION_TEXT = "✓ New session started";
+export const EXTRA_INDENT_STATUS_PREFIXES = [
 	"Resumed session",
 	"Only one model in scope",
 ] as const;
 
-function patchTextRender(): void {
+export function patchTextRender(): void {
 	const prototype = Text.prototype as unknown as PatchableText;
 	const originalRender = prototype.render;
 	if (typeof originalRender !== "function") return;
@@ -46,8 +45,4 @@ function patchTextRender(): void {
 	};
 
 	prototype.__statusMessageIndentPatched = true;
-}
-
-export default function statusMessageIndentExtension(_pi: ExtensionAPI): void {
-	patchTextRender();
 }

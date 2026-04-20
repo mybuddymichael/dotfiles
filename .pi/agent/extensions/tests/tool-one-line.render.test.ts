@@ -1,7 +1,7 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { initTheme } from "@mariozechner/pi-coding-agent";
 import { beforeAll, describe, expect, it } from "vitest";
-import toolOneLineExtension from "../tool-one-line.ts";
+import toolOneLineExtension from "../tool-one-line/index.ts";
 
 type RenderThemeLike = {
 	fg(color: string, value: string): string;

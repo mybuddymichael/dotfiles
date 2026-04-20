@@ -11,7 +11,6 @@ import {
 	createLsToolDefinition,
 	createReadToolDefinition,
 	createWriteToolDefinition,
-	isBashToolResult,
 	keyHint,
 } from "@mariozechner/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
@@ -24,9 +23,9 @@ import {
 	wrapTextWithAnsi,
 } from "@mariozechner/pi-tui";
 import { resolve } from "node:path";
-import { cleanBashOutput, rebuildHeadTruncatedBashContent, type ToolResult } from "./tool-one-line.bash";
+import { cleanBashOutput, type ToolResult } from "./bash-output.ts";
 
-type Theme = {
+export type Theme = {
 	bold(text: string): string;
 	fg(
 		color:
@@ -43,12 +42,13 @@ type Theme = {
 			| "syntaxNumber"
 			| "syntaxFunction"
 			| "syntaxVariable"
-			| "syntaxPunctuation",
+			| "syntaxPunctuation"
+			| "thinkingText",
 		text: string,
 	): string;
 };
 
-type RenderContext = {
+export type RenderContext = {
 	args: any;
 	state: Record<string, unknown>;
 	lastComponent?: Component;
@@ -63,14 +63,23 @@ type RenderContext = {
 	isError: boolean;
 };
 
-type SpinnerState = {
+export type SpinnerState = {
 	interval?: NodeJS.Timeout;
 	expandedResultBody?: Component;
 };
 
-type BuiltInDefinitions = ReturnType<typeof createBuiltInDefinitions>;
-type BuiltInToolName = keyof BuiltInDefinitions;
-type ToolRenderOptions = { isPartial: boolean; expanded: boolean };
+export type BuiltInDefinitions = ReturnType<typeof createBuiltInDefinitions>;
+export type BuiltInToolName = keyof BuiltInDefinitions;
+export type ToolRenderOptions = { isPartial: boolean; expanded: boolean };
+
+type LabelBuilder = (args: any, theme: Theme, cwd: string) => string;
+type CollapsedIntentResultRenderer = (
+	result: any,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+) => Component;
 
 const SPINNER_INTERVAL_MS = 80;
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
@@ -79,12 +88,12 @@ const WRAPPABLE_PATH_SEPARATOR = "/ ";
 const WRAPPABLE_GREP_SEPARATOR = "| ";
 
 const toolCache = new Map<string, ReturnType<typeof createBuiltInDefinitions>>();
-const intentProperty = Type.String({
+export const intentProperty = Type.String({
 	description:
 		"Short note explaining why this tool call helps accomplish the current task. Always populate this field.",
 });
 
-class WrappedStatusText implements Component {
+export class WrappedStatusText implements Component {
 	private marker: string;
 	private label: string;
 
@@ -122,7 +131,7 @@ class WrappedStatusText implements Component {
 	invalidate(): void {}
 }
 
-class TruncatedPreviewText implements Component {
+export class TruncatedPreviewText implements Component {
 	private text: string;
 	private maxLines: number;
 	private indent: string;
@@ -196,7 +205,7 @@ class TruncatedPreviewText implements Component {
 	invalidate(): void {}
 }
 
-class IndentedComponent implements Component {
+export class IndentedComponent implements Component {
 	private child?: Component;
 	private indent: string;
 
@@ -225,7 +234,7 @@ class IndentedComponent implements Component {
 	}
 }
 
-function createBuiltInDefinitions(cwd: string) {
+export function createBuiltInDefinitions(cwd: string) {
 	return {
 		read: createReadToolDefinition(cwd),
 		write: createWriteToolDefinition(cwd),
@@ -237,7 +246,7 @@ function createBuiltInDefinitions(cwd: string) {
 	};
 }
 
-function getBuiltInDefinitions(cwd: string) {
+export function getBuiltInDefinitions(cwd: string) {
 	let definitions = toolCache.get(cwd);
 	if (!definitions) {
 		definitions = createBuiltInDefinitions(cwd);
@@ -246,16 +255,16 @@ function getBuiltInDefinitions(cwd: string) {
 	return definitions;
 }
 
-function stripAtPrefix(value: string): string {
+export function stripAtPrefix(value: string): string {
 	return value.startsWith("@") ? value.slice(1) : value;
 }
 
-function toFullPath(inputPath: string | undefined, cwd: string, fallback = cwd): string {
+export function toFullPath(inputPath: string | undefined, cwd: string, fallback = cwd): string {
 	const raw = stripAtPrefix((inputPath || fallback).trim());
 	return resolve(cwd, raw || ".");
 }
 
-function formatReadRange(offset?: number, limit?: number): string {
+export function formatReadRange(offset?: number, limit?: number): string {
 	if (offset === undefined && limit === undefined) return "";
 	const start = offset ?? 1;
 	if (limit === undefined) return `:${start}`;
@@ -263,51 +272,50 @@ function formatReadRange(offset?: number, limit?: number): string {
 	return `:${start}-${end}`;
 }
 
-function compactText(text: string | undefined): string {
+export function compactText(text: string | undefined): string {
 	if (!text) return "";
 	return text.replace(/\s+/g, " ").trim();
 }
 
-
-function formatPathForWrapping(path: string): string {
+export function formatPathForWrapping(path: string): string {
 	return path.replaceAll("/", WRAPPABLE_PATH_SEPARATOR);
 }
 
-function formatGrepPatternForWrapping(pattern: string): string {
+export function formatGrepPatternForWrapping(pattern: string): string {
 	return pattern.replaceAll("|", WRAPPABLE_GREP_SEPARATOR);
 }
 
-function restoreWrappedSpacing(text: string): string {
+export function restoreWrappedSpacing(text: string): string {
 	return text
 		.replaceAll(WRAPPABLE_PATH_SEPARATOR, "/")
 		.replaceAll(WRAPPABLE_GREP_SEPARATOR, "|");
 }
 
-function formatToolLabel(theme: Theme, toolName: string, details: string): string {
+export function formatToolLabel(theme: Theme, toolName: string, details: string): string {
 	return `${theme.fg("toolTitle", theme.bold(toolName))}${NBSP}${details}`;
 }
 
-function formatPathLabel(theme: Theme, toolName: string, path: string): string {
+export function formatPathLabel(theme: Theme, toolName: string, path: string): string {
 	return formatToolLabel(theme, toolName, theme.fg("syntaxFunction", formatPathForWrapping(path)));
 }
 
-function formatGrepLabel(theme: Theme, pattern: string | undefined, path: string, glob?: string): string {
+export function formatGrepLabel(theme: Theme, pattern: string | undefined, path: string, glob?: string): string {
 	const query = theme.fg("syntaxNumber", theme.bold(formatGrepPatternForWrapping(compactText(pattern))));
 	const location = theme.fg("muted", `in${NBSP}${formatPathForWrapping(path)}${glob ? ` (${compactText(glob)})` : ""}`);
 	return formatToolLabel(theme, "Grep", `${query} ${location}`);
 }
 
-function formatFindLabel(theme: Theme, pattern: string | undefined, path: string): string {
+export function formatFindLabel(theme: Theme, pattern: string | undefined, path: string): string {
 	const query = theme.fg("syntaxVariable", theme.bold(compactText(pattern)));
 	const location = theme.fg("syntaxPunctuation", `in${NBSP}${formatPathForWrapping(path)}`);
 	return formatToolLabel(theme, "Find", `${query} ${location}`);
 }
 
-function formatBashLabel(theme: Theme, command: string | undefined): string {
+export function formatBashLabel(theme: Theme, command: string | undefined): string {
 	return formatToolLabel(theme, "Run", theme.fg("bashMode", compactText(command)));
 }
 
-function withIntentParameters<T extends Record<string, any>>(parameters: T): T {
+export function withIntentParameters<T extends Record<string, any>>(parameters: T): T {
 	return {
 		...parameters,
 		properties: {
@@ -318,25 +326,25 @@ function withIntentParameters<T extends Record<string, any>>(parameters: T): T {
 	} as T;
 }
 
-function prepareArgumentsWithIntent(args: unknown): Record<string, unknown> {
+export function prepareArgumentsWithIntent(args: unknown): Record<string, unknown> {
 	if (!args || typeof args !== "object") return { intent: "Intent not provided" };
 	const input = args as Record<string, unknown>;
 	if (typeof input.intent === "string" && input.intent.trim().length > 0) return input;
 	return { ...input, intent: "Intent not provided" };
 }
 
-function stripIntent<T extends Record<string, unknown>>(args: T): Omit<T, "intent"> {
+export function stripIntent<T extends Record<string, unknown>>(args: T): Omit<T, "intent"> {
 	const { intent: _intent, ...rest } = args;
 	return rest;
 }
 
-function formatIntent(theme: Theme, intent: string | undefined): string {
+export function formatIntent(theme: Theme, intent: string | undefined): string {
 	const value = compactText(intent);
 	if (!value) return "";
 	return theme.fg("thinkingText", value);
 }
 
-function renderToolWithIntent(
+export function renderToolWithIntent(
 	theme: Theme,
 	context: RenderContext,
 	label: string,
@@ -358,25 +366,25 @@ function renderToolWithIntent(
 	return component;
 }
 
-function startSpinner(context: RenderContext): void {
+export function startSpinner(context: RenderContext): void {
 	const state = context.state as SpinnerState;
 	if (state.interval) return;
 	state.interval = setInterval(() => context.invalidate(), SPINNER_INTERVAL_MS);
 }
 
-function stopSpinner(context: RenderContext): void {
+export function stopSpinner(context: RenderContext): void {
 	const state = context.state as SpinnerState;
 	if (!state.interval) return;
 	clearInterval(state.interval);
 	state.interval = undefined;
 }
 
-function spinnerFrame(): string {
+export function spinnerFrame(): string {
 	const index = Math.floor(Date.now() / SPINNER_INTERVAL_MS) % SPINNER_FRAMES.length;
 	return SPINNER_FRAMES[index] ?? SPINNER_FRAMES[0];
 }
 
-function statusPrefix(theme: Theme, context: RenderContext): string {
+export function statusPrefix(theme: Theme, context: RenderContext): string {
 	if (context.isPartial) {
 		startSpinner(context);
 		return theme.fg("accent", spinnerFrame());
@@ -386,7 +394,7 @@ function statusPrefix(theme: Theme, context: RenderContext): string {
 	return context.isError ? theme.fg("error", "✕") : theme.fg("success", "✓");
 }
 
-function oneLine(theme: Theme, context: RenderContext, label: string): WrappedStatusText {
+export function oneLine(theme: Theme, context: RenderContext, label: string): WrappedStatusText {
 	const component = context.lastComponent instanceof WrappedStatusText
 		? context.lastComponent
 		: new WrappedStatusText();
@@ -394,13 +402,13 @@ function oneLine(theme: Theme, context: RenderContext, label: string): WrappedSt
 	return component;
 }
 
-function resetContainer(context: RenderContext): Container {
+export function resetContainer(context: RenderContext): Container {
 	const component = context.lastComponent instanceof Container ? context.lastComponent : new Container();
 	component.clear();
 	return component;
 }
 
-function previewComponent(
+export function previewComponent(
 	text: string,
 	context: RenderContext,
 	maxLines = 3,
@@ -417,7 +425,7 @@ function previewComponent(
 	return component;
 }
 
-function indentedComponent(
+export function indentedComponent(
 	child: Component | undefined,
 	context: RenderContext,
 	indent = "  ",
@@ -429,7 +437,7 @@ function indentedComponent(
 	return component;
 }
 
-function renderExpandedResultWithHeader(
+export function renderExpandedResultWithHeader(
 	theme: Theme,
 	context: RenderContext,
 	label: string,
@@ -446,12 +454,12 @@ function renderExpandedResultWithHeader(
 	return component;
 }
 
-function renderPartialCallLine(theme: Theme, context: RenderContext, label: string): Component {
+export function renderPartialCallLine(theme: Theme, context: RenderContext, label: string): Component {
 	if (!context.isPartial) return resetContainer(context);
 	return oneLine(theme, context, label);
 }
 
-function renderPartialCallWithIntent(
+export function renderPartialCallWithIntent(
 	theme: Theme,
 	context: RenderContext,
 	label: string,
@@ -461,7 +469,7 @@ function renderPartialCallWithIntent(
 	return renderToolWithIntent(theme, context, label, intent);
 }
 
-function renderStandardToolResult<TName extends BuiltInToolName>(
+export function renderStandardToolResult<TName extends BuiltInToolName>(
 	toolName: TName,
 	result: ToolResult,
 	options: ToolRenderOptions,
@@ -479,7 +487,7 @@ function renderStandardToolResult<TName extends BuiltInToolName>(
 	));
 }
 
-function renderStandardIntentToolResult<TName extends BuiltInToolName>(
+export function renderStandardIntentToolResult<TName extends BuiltInToolName>(
 	toolName: TName,
 	result: ToolResult,
 	options: ToolRenderOptions,
@@ -498,7 +506,7 @@ function renderStandardIntentToolResult<TName extends BuiltInToolName>(
 	), intent);
 }
 
-function renderCollapsedEditResult(
+export function renderCollapsedEditResult(
 	result: ToolResult<EditToolDetails>,
 	theme: Theme,
 	context: RenderContext,
@@ -520,7 +528,7 @@ function renderCollapsedEditResult(
 	return component;
 }
 
-function renderCollapsedBashResult(
+export function renderCollapsedBashResult(
 	result: ToolResult<BashToolDetails>,
 	theme: Theme,
 	context: RenderContext,
@@ -550,16 +558,7 @@ function renderCollapsedBashResult(
 	return component;
 }
 
-type LabelBuilder = (args: any, theme: Theme, cwd: string) => string;
-type CollapsedIntentResultRenderer = (
-	result: ToolResult,
-	theme: Theme,
-	context: RenderContext,
-	label: string,
-	intent: string | undefined,
-) => Component;
-
-function registerStandardTool(
+export function registerStandardTool(
 	pi: ExtensionAPI,
 	toolName: BuiltInToolName,
 	buildLabel: LabelBuilder,
@@ -567,28 +566,31 @@ function registerStandardTool(
 	pi.registerTool({
 		...getBuiltInTool(process.cwd(), toolName),
 		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return executeBuiltInTool(toolName, toolCallId, params, signal, onUpdate, ctx);
+		async execute(toolCallId: any, params: any, signal: any, onUpdate: any, ctx: any) {
+			return executeBuiltInTool(toolName, toolCallId, params as Record<string, unknown>, signal, onUpdate, ctx);
 		},
-		renderCall(args, theme, context) {
+		renderCall(args: any, theme: any, context: any) {
 			const toolTheme = theme as Theme;
-			return renderPartialCallLine(toolTheme, context as RenderContext, buildLabel(args, toolTheme, context.cwd));
+			const toolContext = context as RenderContext;
+			return renderPartialCallLine(toolTheme, toolContext, buildLabel(args, toolTheme, toolContext.cwd));
 		},
-		renderResult(result, options, theme, context) {
+		renderResult(result: any, options: any, theme: any, context: any) {
 			const toolTheme = theme as Theme;
+			const toolContext = context as RenderContext;
+			const rawContext = context as any;
 			return renderStandardToolResult(
 				toolName,
 				result as ToolResult,
 				options,
 				toolTheme,
-				context as RenderContext,
-				buildLabel(context.args, toolTheme, context.cwd),
+				toolContext,
+				buildLabel(rawContext.args, toolTheme, rawContext.cwd),
 			);
 		},
-	});
+	} as any);
 }
 
-function registerIntentTool(
+export function registerIntentTool(
 	pi: ExtensionAPI,
 	toolName: BuiltInToolName,
 	buildLabel: LabelBuilder,
@@ -599,22 +601,25 @@ function registerIntentTool(
 		parameters: withIntentParameters(getBuiltInTool(process.cwd(), toolName).parameters),
 		prepareArguments: prepareArgumentsWithIntent,
 		renderShell: "self",
-		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return executeBuiltInTool(toolName, toolCallId, stripIntent(params), signal, onUpdate, ctx);
+		async execute(toolCallId: any, params: any, signal: any, onUpdate: any, ctx: any) {
+			return executeBuiltInTool(toolName, toolCallId, stripIntent(params as Record<string, unknown>), signal, onUpdate, ctx);
 		},
-		renderCall(args, theme, context) {
-			const toolTheme = theme as Theme;
-			return renderPartialCallWithIntent(
-				toolTheme,
-				context as RenderContext,
-				buildLabel(args, toolTheme, context.cwd),
-				args.intent,
-			);
-		},
-		renderResult(result, options, theme, context) {
+		renderCall(args: any, theme: any, context: any) {
 			const toolTheme = theme as Theme;
 			const toolContext = context as RenderContext;
-			const label = buildLabel(context.args, toolTheme, context.cwd);
+			const rawArgs = args as any;
+			return renderPartialCallWithIntent(
+				toolTheme,
+				toolContext,
+				buildLabel(args, toolTheme, toolContext.cwd),
+				rawArgs.intent,
+			);
+		},
+		renderResult(result: any, options: any, theme: any, context: any) {
+			const toolTheme = theme as Theme;
+			const toolContext = context as RenderContext;
+			const rawContext = context as any;
+			const label = buildLabel(rawContext.args, toolTheme, rawContext.cwd);
 			if (!renderCollapsedResult) {
 				return renderStandardIntentToolResult(
 					toolName,
@@ -623,7 +628,7 @@ function registerIntentTool(
 					toolTheme,
 					toolContext,
 					label,
-					context.args.intent,
+					rawContext.args.intent,
 				);
 			}
 			if (options.isPartial) return resetContainer(toolContext);
@@ -634,32 +639,32 @@ function registerIntentTool(
 					toolTheme,
 					toolContext,
 					label,
-					context.args.intent,
+					rawContext.args.intent,
 				);
 			}
 			return renderExpandedResultWithHeader(toolTheme, toolContext, label, (builtInContext) => (
-				renderBuiltInToolResult(toolName, context.cwd, result as ToolResult, options, theme, builtInContext)
-			), context.args.intent);
+				renderBuiltInToolResult(toolName, rawContext.cwd, result as ToolResult, options, theme, builtInContext)
+			), rawContext.args.intent);
 		},
-	});
+	} as any);
 }
 
-function getBuiltInTool<TName extends BuiltInToolName>(cwd: string, toolName: TName): BuiltInDefinitions[TName] {
+export function getBuiltInTool<TName extends BuiltInToolName>(cwd: string, toolName: TName): BuiltInDefinitions[TName] {
 	return getBuiltInDefinitions(cwd)[toolName];
 }
 
-function executeBuiltInTool<TName extends BuiltInToolName>(
+export function executeBuiltInTool<TName extends BuiltInToolName>(
 	toolName: TName,
 	toolCallId: string,
 	params: Record<string, unknown>,
-	signal: AbortSignal,
-	onUpdate: (result: unknown) => void,
+	signal: AbortSignal | undefined,
+	onUpdate: ((result: unknown) => void) | undefined,
 	ctx: { cwd: string },
 ) {
-	return getBuiltInTool(ctx.cwd, toolName).execute(toolCallId, params, signal, onUpdate, ctx);
+	return getBuiltInTool(ctx.cwd, toolName).execute(toolCallId, params as any, signal as any, onUpdate as any, ctx as any);
 }
 
-function renderBuiltInToolResult<TName extends BuiltInToolName>(
+export function renderBuiltInToolResult<TName extends BuiltInToolName>(
 	toolName: TName,
 	cwd: string,
 	result: ToolResult,
@@ -667,10 +672,10 @@ function renderBuiltInToolResult<TName extends BuiltInToolName>(
 	theme: unknown,
 	context: RenderContext,
 ): Component | undefined {
-	return getBuiltInTool(cwd, toolName).renderResult?.(result, options, theme, context);
+	return getBuiltInTool(cwd, toolName).renderResult?.(result as any, options as any, theme as any, context as any);
 }
 
-function trimBlankLines(lines: string[]): string[] {
+export function trimBlankLines(lines: string[]): string[] {
 	let start = 0;
 	let end = lines.length;
 	while (start < end && (lines[start] ?? "").trim().length === 0) start++;
@@ -678,15 +683,15 @@ function trimBlankLines(lines: string[]): string[] {
 	return lines.slice(start, end);
 }
 
-function expandHint(theme: Theme): string {
+export function expandHint(theme: Theme): string {
 	return `${theme.fg("muted", "(")}${keyHint("app.tools.expand", "to expand")}${theme.fg("muted", ")")}`;
 }
 
-function appendExpandHint(theme: Theme, label: string): string {
+export function appendExpandHint(theme: Theme, label: string): string {
 	return `${label}${NBSP}${expandHint(theme)}`;
 }
 
-function countDiffChanges(diff: string | undefined): { additions: number; removals: number } | undefined {
+export function countDiffChanges(diff: string | undefined): { additions: number; removals: number } | undefined {
 	if (!diff) return undefined;
 	let additions = 0;
 	let removals = 0;
@@ -695,42 +700,4 @@ function countDiffChanges(diff: string | undefined): { additions: number; remova
 		if (line.startsWith("-") && !line.startsWith("---")) removals++;
 	}
 	return { additions, removals };
-}
-
-export default function toolOneLineExtension(pi: ExtensionAPI): void {
-	pi.on("tool_result", async (event) => {
-		if (!isBashToolResult(event)) return;
-		const truncation = event.details?.truncation;
-		const fullOutputPath = event.details?.fullOutputPath;
-		const content = event.content.find((part) => part.type === "text");
-		if (!truncation?.truncated || !fullOutputPath || content?.type !== "text") return;
-		const rebuilt = await rebuildHeadTruncatedBashContent(content.text ?? "", fullOutputPath, truncation);
-		return {
-			content: event.content.map((part) => part.type === "text" ? { ...part, text: rebuilt.text } : part),
-			details: { ...event.details, truncation: rebuilt.truncation },
-		};
-	});
-	registerStandardTool(pi, "read", (args, theme, cwd) => (
-		formatPathLabel(
-			theme,
-			"Read",
-			`${toFullPath(args.path, cwd)}${formatReadRange(args.offset, args.limit)}`,
-		)
-	));
-	registerIntentTool(pi, "write", (args, theme, cwd) => (
-		formatPathLabel(theme, "Write", toFullPath(args.path, cwd))
-	));
-	registerIntentTool(pi, "edit", (args, theme, cwd) => (
-		formatPathLabel(theme, "Edit", toFullPath(args.path, cwd))
-	), renderCollapsedEditResult);
-	registerIntentTool(pi, "bash", (args, theme) => formatBashLabel(theme, args.command), renderCollapsedBashResult);
-	registerStandardTool(pi, "grep", (args, theme, cwd) => (
-		formatGrepLabel(theme, args.pattern, toFullPath(args.path, cwd), args.glob)
-	));
-	registerStandardTool(pi, "find", (args, theme, cwd) => (
-		formatFindLabel(theme, args.pattern, toFullPath(args.path, cwd))
-	));
-	registerStandardTool(pi, "ls", (args, theme, cwd) => (
-		formatPathLabel(theme, "List", toFullPath(args.path, cwd))
-	));
 }

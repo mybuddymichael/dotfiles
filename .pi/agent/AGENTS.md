@@ -1,5 +1,5 @@
 - Prefer rg over grep.
-- Always use `uv` when running quick ad hoc Python scripts.
+- Always use `uv run python` when running quick ad hoc Python scripts. Don't use `python` bare.
 - For version control, always use `jj` instead of `git`.
 - When committing, use the same format as recent existing commits in that project.
 - When asking the user questions, always use the `questionnaire` tool.
