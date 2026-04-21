@@ -81,6 +81,23 @@ function renderBashResult(tool: RegisteredToolLike | undefined, text: string): s
 	);
 }
 
+function createRenderContext(args: Record<string, unknown>, expanded: boolean): Record<string, unknown> {
+	return {
+		args,
+		state: {},
+		lastComponent: undefined,
+		invalidate: () => {},
+		toolCallId: "tool-test-1",
+		cwd: process.cwd(),
+		executionStarted: true,
+		argsComplete: true,
+		isPartial: false,
+		expanded,
+		showImages: true,
+		isError: false,
+	};
+}
+
 describe("tool-one-line settled bash rendering", () => {
 	beforeAll(() => {
 		initTheme("dark");
@@ -112,5 +129,75 @@ describe("tool-one-line settled bash rendering", () => {
 		expect(rendered).toContain("01: alpha");
 		expect(rendered).toContain("03: gamma");
 		expect(rendered).not.toContain("more lines");
+	});
+});
+
+describe("tool-one-line read image rendering", () => {
+	beforeAll(() => {
+		initTheme("dark");
+	});
+
+	it("removes image attachments from collapsed read results", () => {
+		const { api, registeredTools } = createExtensionApiStub();
+		toolOneLineExtension(api);
+
+		const readTool = registeredTools.find((tool) => tool.name === "read");
+		expect(readTool?.renderResult).toBeTypeOf("function");
+
+		const result = {
+			content: [
+				{ type: "text", text: "Read image file [image/png]" },
+				{ type: "image", data: "ZmFrZQ==", mimeType: "image/png" },
+			],
+			details: {},
+			isError: false,
+		};
+
+		readTool!.renderResult!(
+			result,
+			{ isPartial: false, expanded: false },
+			createTheme(),
+			createRenderContext({ path: "image.png" }, false),
+		);
+
+		expect(result.content).toEqual([
+			{ type: "text", text: "Read image file [image/png]" },
+		]);
+	});
+
+	it("restores image attachments when the read result is expanded", () => {
+		const { api, registeredTools } = createExtensionApiStub();
+		toolOneLineExtension(api);
+
+		const readTool = registeredTools.find((tool) => tool.name === "read");
+		expect(readTool?.renderResult).toBeTypeOf("function");
+
+		const result = {
+			content: [
+				{ type: "text", text: "Read image file [image/png]" },
+				{ type: "image", data: "ZmFrZQ==", mimeType: "image/png" },
+			],
+			details: {},
+			isError: false,
+		};
+		const collapsedContext = createRenderContext({ path: "image.png" }, false);
+
+		readTool!.renderResult!(
+			result,
+			{ isPartial: false, expanded: false },
+			createTheme(),
+			collapsedContext,
+		);
+		readTool!.renderResult!(
+			result,
+			{ isPartial: false, expanded: true },
+			createTheme(),
+			{ ...collapsedContext, expanded: true },
+		);
+
+		expect(result.content).toEqual([
+			{ type: "text", text: "Read image file [image/png]" },
+			{ type: "image", data: "ZmFrZQ==", mimeType: "image/png" },
+		]);
 	});
 });

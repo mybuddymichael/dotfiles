@@ -81,6 +81,15 @@ type CollapsedIntentResultRenderer = (
 	intent: string | undefined,
 ) => Component;
 
+type CollapsedStandardResultRenderer = (
+	result: any,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+) => Component;
+
+type ExpandedStandardResultPreparer = (result: any, context: RenderContext) => void;
+
 const SPINNER_INTERVAL_MS = 80;
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
 const NBSP = "\u00A0";
@@ -558,10 +567,36 @@ export function renderCollapsedBashResult(
 	return component;
 }
 
+export function syncImageAttachmentsWithExpandedState(
+	result: ToolResult | undefined,
+	options: ToolRenderOptions,
+	context: RenderContext,
+	stateKey = "hiddenImageResultContent",
+): void {
+	if (!result || !Array.isArray(result.content)) return;
+	const content = result.content;
+	const state = context.state as SpinnerState & Record<string, unknown>;
+	const hiddenContent = state[stateKey];
+	const hasImages = content.some((part) => part?.type === "image");
+
+	if (options.expanded) {
+		if (!hasImages && Array.isArray(hiddenContent)) {
+			content.splice(0, content.length, ...hiddenContent);
+		}
+		return;
+	}
+
+	if (!hasImages) return;
+	state[stateKey] = [...content];
+	content.splice(0, content.length, ...content.filter((part) => part?.type !== "image"));
+}
+
 export function registerStandardTool(
 	pi: ExtensionAPI,
 	toolName: BuiltInToolName,
 	buildLabel: LabelBuilder,
+	renderCollapsedResult?: CollapsedStandardResultRenderer,
+	prepareExpandedResult?: ExpandedStandardResultPreparer,
 ): void {
 	pi.registerTool({
 		...getBuiltInTool(process.cwd(), toolName),
@@ -578,14 +613,31 @@ export function registerStandardTool(
 			const toolTheme = theme as Theme;
 			const toolContext = context as RenderContext;
 			const rawContext = context as any;
-			return renderStandardToolResult(
-				toolName,
-				result as ToolResult,
-				options,
-				toolTheme,
-				toolContext,
-				buildLabel(rawContext.args, toolTheme, rawContext.cwd),
-			);
+			const label = buildLabel(rawContext.args, toolTheme, rawContext.cwd);
+			if (!renderCollapsedResult) {
+				return renderStandardToolResult(
+					toolName,
+					result as ToolResult,
+					options,
+					toolTheme,
+					toolContext,
+					label,
+				);
+			}
+			if (options.isPartial) return resetContainer(toolContext);
+			stopSpinner(toolContext);
+			if (!options.expanded) {
+				return renderCollapsedResult(
+					result as ToolResult,
+					toolTheme,
+					toolContext,
+					label,
+				);
+			}
+			prepareExpandedResult?.(result as ToolResult, toolContext);
+			return renderExpandedResultWithHeader(toolTheme, toolContext, label, (builtInContext) => (
+				renderBuiltInToolResult(toolName, rawContext.cwd, result as ToolResult, options, theme, builtInContext)
+			));
 		},
 	} as any);
 }
