@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { truncateTail } from "@mariozechner/pi-coding-agent";
 import { describe, expect, it } from "vitest";
-import { rebuildHeadTruncatedBashContentFromFullOutput } from "../tool-one-line/bash-output.ts";
+import { rebuildHeadTruncatedBashContentFromFullOutput } from "../pi-simple/tool-one-line/bash-output.ts";
 
 function buildNumberedOutput(lineCount: number): string {
 	return Array.from({ length: lineCount }, (_, index) => (

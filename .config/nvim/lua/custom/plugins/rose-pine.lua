@@ -1,5 +1,5 @@
 return {
-  'rose-pine/neovim',
+  dir = '/Users/michael/files_synced_outside_of_icloud/rose-pine-neovim',
   lazy = false,
   priority = 1000,
   name = 'rose-pine',
