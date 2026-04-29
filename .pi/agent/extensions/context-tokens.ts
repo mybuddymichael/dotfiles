@@ -17,22 +17,21 @@ function formatTokens(tokens: number): string {
 
 function formatContextUsage(ctx: ExtensionContext): {
   text: string;
-  color: "dim" | "warning" | "error";
+  color: "dim" | "success" | "warning" | "error";
 } {
   const usage = ctx.getContextUsage();
   if (!usage) return { text: "?", color: "dim" };
 
   const used = usage.tokens == null ? "?" : formatTokens(usage.tokens);
   const total = formatTokens(usage.contextWindow);
-  const pct = usage.percent == null ? "?" : `${Math.round(usage.percent)}%`;
-  let color: "dim" | "warning" | "error" = "dim";
+  let color: "success" | "warning" | "error" = "success";
   if (usage.tokens != null && usage.tokens >= 100_000) {
     color = "error";
   } else if (usage.tokens != null && usage.tokens >= 75_000) {
     color = "warning";
   }
 
-  return { text: `${used}/${total} ${pct}`, color };
+  return { text: `${used}/${total}`, color };
 }
 
 function installFooter(pi: ExtensionAPI, ctx: ExtensionContext) {
