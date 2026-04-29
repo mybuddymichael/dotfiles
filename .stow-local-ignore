@@ -42,3 +42,4 @@ Thumbs\.db
 # Directories that should be handled separately or ignored
 tmux
 misc
+^raycast-scripts($|/)
