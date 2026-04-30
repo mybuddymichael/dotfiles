@@ -16,11 +16,12 @@ function formatTokens(tokens: number): string {
 }
 
 function formatContextUsage(ctx: ExtensionContext): {
-  text: string;
+  used: string;
+  total?: string;
   color: "dim" | "success" | "warning" | "error";
 } {
   const usage = ctx.getContextUsage();
-  if (!usage) return { text: "?", color: "dim" };
+  if (!usage) return { used: "?", color: "dim" };
 
   const used = usage.tokens == null ? "?" : formatTokens(usage.tokens);
   const total = formatTokens(usage.contextWindow);
@@ -31,7 +32,7 @@ function formatContextUsage(ctx: ExtensionContext): {
     color = "warning";
   }
 
-  return { text: `${used}/${total}`, color };
+  return { used, total, color };
 }
 
 function installFooter(pi: ExtensionAPI, ctx: ExtensionContext) {
@@ -44,10 +45,11 @@ function installFooter(pi: ExtensionAPI, ctx: ExtensionContext) {
       const context = formatContextUsage(ctx);
       const model = ctx.model?.id ?? "no-model";
       const thinking = pi.getThinkingLevel();
+      const total = context.total == null ? "" : theme.fg("dim", `/${context.total}`);
       const line = `${theme.fg("dim", `${path}  ${model}  ${thinking}  `)}${theme.fg(
         context.color,
-        context.text,
-      )}`;
+        context.used,
+      )}${total}`;
 
       return [truncateToWidth(line, width)];
     },

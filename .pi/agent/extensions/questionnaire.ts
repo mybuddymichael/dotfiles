@@ -7,6 +7,8 @@
 
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import {
+	Container,
+	type Component,
 	Editor,
 	type EditorTheme,
 	Key,
@@ -17,6 +19,12 @@ import {
 	wrapTextWithAnsi,
 } from "@mariozechner/pi-tui";
 import { Type } from "@sinclair/typebox";
+import {
+	resetContainer,
+	spinnerFrame,
+	startSpinner,
+	WrappedStatusText,
+} from "./pi-simple/tool-one-line/render-shared.ts";
 
 // Types
 interface QuestionOption {
@@ -47,6 +55,28 @@ interface QuestionnaireResult {
 	questions: Question[];
 	answers: Answer[];
 	cancelled: boolean;
+}
+
+class IndentedLinesText implements Component {
+	constructor(
+		private lines: string[],
+		private indent = "  ",
+	) {}
+
+	render(width: number): string[] {
+		const safeWidth = Math.max(1, Math.floor(width));
+		const indentWidth = visibleWidth(this.indent);
+		const contentWidth = Math.max(1, safeWidth - indentWidth);
+		return this.lines.flatMap((line) => {
+			const wrapped = wrapTextWithAnsi(line, contentWidth);
+			const chunks = wrapped.length > 0 ? wrapped : [""];
+			return chunks.map((chunk) => (
+				truncateToWidth(`${this.indent}${chunk}`, safeWidth, "", true)
+			));
+		});
+	}
+
+	invalidate(): void {}
 }
 
 // Schema
@@ -100,6 +130,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 		description:
 			"Ask the user one or more questions. Use for clarifying requirements, getting preferences, or confirming decisions. For single questions, shows a simple option list. For multiple questions, shows a tab-based interface.",
 		parameters: QuestionnaireParams,
+		renderShell: "self",
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
 			if (!ctx.hasUI) {
@@ -494,35 +525,56 @@ export default function questionnaire(pi: ExtensionAPI) {
 			};
 		},
 
-		renderCall(args, theme, _context) {
+		renderCall(args, theme, context) {
+			if (!context.isPartial) return resetContainer(context);
+			startSpinner(context);
 			const qs = (args.questions as Question[]) || [];
 			const count = qs.length;
-			const labels = qs.map((q) => q.label || q.id).join(", ");
-			let text = theme.fg("toolTitle", theme.bold("questionnaire "));
-			text += theme.fg("muted", `${count} question${count !== 1 ? "s" : ""}`);
-			if (labels) {
-				text += theme.fg("dim", ` (${truncateToWidth(labels, 40)})`);
-			}
-			return new Text(text, 0, 0);
+			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", `${count} questions`)}`;
+			const component = context.lastComponent instanceof WrappedStatusText
+				? context.lastComponent
+				: new WrappedStatusText();
+			component.setParts(theme.fg("accent", spinnerFrame()), label);
+			return component;
 		},
 
-		renderResult(result, _options, theme, _context) {
+		renderResult(result, _options, theme, context) {
 			const details = result.details as QuestionnaireResult | undefined;
 			if (!details) {
 				const text = result.content[0];
 				return new Text(text?.type === "text" ? text.text : "", 0, 0);
 			}
+
+			const count = details.questions.length;
+			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", `${count} questions`)}`;
+			const header = context.lastComponent instanceof WrappedStatusText
+				? context.lastComponent
+				: new WrappedStatusText();
+			header.setParts(
+				details.cancelled ? theme.fg("warning", "✕") : theme.fg("success", "✓"),
+				label,
+			);
+
+			const container = new Container();
+			container.addChild(header);
+
 			if (details.cancelled) {
-				return new Text(theme.fg("warning", "Cancelled"), 0, 0);
+				container.addChild(new IndentedLinesText([theme.fg("warning", "Cancelled")]));
+				return container;
 			}
+
 			const lines = details.answers.map((a) => {
+				const question = details.questions.find((q) => q.id === a.id);
+				const questionLabel = question?.label || a.id;
+				const styledQuestionLabel = theme.fg("accent", questionLabel);
 				if (a.wasCustom) {
-					return `${theme.fg("success", "✓ ")}${theme.fg("accent", a.id)}: ${theme.fg("muted", "(wrote) ")}${a.label}`;
+					return `${styledQuestionLabel}: ${theme.fg("muted", "(wrote) ")}${a.label}`;
 				}
 				const display = a.index ? `${a.index}. ${a.label}` : a.label;
-				return `${theme.fg("success", "✓ ")}${theme.fg("accent", a.id)}: ${display}`;
+				return `${styledQuestionLabel}: ${display}`;
 			});
-			return new Text(lines.join("\n"), 0, 0);
-		},
+			container.addChild(new IndentedLinesText(lines));
+			return container;
+		}, 
 	});
 }
