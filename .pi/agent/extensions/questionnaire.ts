@@ -123,6 +123,10 @@ function errorResult(
 	};
 }
 
+function questionCountLabel(count: number): string {
+	return `${count} ${count === 1 ? "question" : "questions"}`;
+}
+
 export default function questionnaire(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "questionnaire",
@@ -530,7 +534,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 			startSpinner(context);
 			const qs = (args.questions as Question[]) || [];
 			const count = qs.length;
-			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", `${count} questions`)}`;
+			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", questionCountLabel(count))}`;
 			const component = context.lastComponent instanceof WrappedStatusText
 				? context.lastComponent
 				: new WrappedStatusText();
@@ -546,7 +550,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 			}
 
 			const count = details.questions.length;
-			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", `${count} questions`)}`;
+			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", questionCountLabel(count))}`;
 			const header = context.lastComponent instanceof WrappedStatusText
 				? context.lastComponent
 				: new WrappedStatusText();
