@@ -563,7 +563,15 @@ export default function questionnaire(pi: ExtensionAPI) {
 			container.addChild(header);
 
 			if (details.cancelled) {
-				container.addChild(new IndentedLinesText([theme.fg("warning", "Cancelled")]));
+				const lines = [theme.fg("warning", "Cancelled")];
+				for (let i = 0; i < details.questions.length; i++) {
+					const question = details.questions[i];
+					const questionLabel = question.label || `Q${i + 1}`;
+					lines.push(
+						`${theme.fg("accent", questionLabel)}: ${theme.fg("muted", question.prompt)}`,
+					);
+				}
+				container.addChild(new IndentedLinesText(lines));
 				return container;
 			}
 
