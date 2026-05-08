@@ -23,6 +23,7 @@ import {
 	resetContainer,
 	spinnerFrame,
 	startSpinner,
+	stopSpinner,
 	WrappedStatusText,
 } from "./pi-simple/tool-one-line/render-shared.ts";
 
@@ -596,7 +597,10 @@ export default function questionnaire(pi: ExtensionAPI) {
 		},
 
 		renderCall(args, theme, context) {
-			if (!context.isPartial) return resetContainer(context);
+			if (!context.isPartial) {
+				stopSpinner(context);
+				return resetContainer(context);
+			}
 			startSpinner(context);
 			const qs = (args.questions as Question[]) || [];
 			const count = qs.length;
@@ -609,6 +613,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 		},
 
 		renderResult(result, _options, theme, context) {
+			stopSpinner(context);
 			const details = result.details as QuestionnaireResult | undefined;
 			if (!details) {
 				const text = result.content[0];
