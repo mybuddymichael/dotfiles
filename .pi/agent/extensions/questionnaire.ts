@@ -49,6 +49,7 @@ interface Answer {
 	label: string;
 	wasCustom: boolean;
 	index?: number;
+	note?: string;
 }
 
 interface QuestionnaireResult {
@@ -161,8 +162,10 @@ export default function questionnaire(pi: ExtensionAPI) {
 					// State
 					let currentTab = 0;
 					let optionIndex = 0;
-					let inputMode = false;
+					let inputMode: "custom" | "note" | null = null;
 					let inputQuestionId: string | null = null;
+					let inputOption: RenderOption | null = null;
+					let inputOptionIndex: number | undefined;
 					let cachedLines: string[] | undefined;
 					const answers = new Map<string, Answer>();
 
@@ -235,6 +238,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 						label: string,
 						wasCustom: boolean,
 						index?: number,
+						note?: string,
 					) {
 						answers.set(questionId, {
 							id: questionId,
@@ -242,16 +246,33 @@ export default function questionnaire(pi: ExtensionAPI) {
 							label,
 							wasCustom,
 							index,
+							...(note ? { note } : {}),
 						});
 					}
 
 					// Editor submit callback
 					editor.onSubmit = (value) => {
 						if (!inputQuestionId) return;
-						const trimmed = value.trim() || "(no response)";
-						saveAnswer(inputQuestionId, trimmed, trimmed, true);
-						inputMode = false;
+
+						if (inputMode === "note" && inputOption) {
+							const note = value.trim();
+							saveAnswer(
+								inputQuestionId,
+								inputOption.value,
+								inputOption.label,
+								false,
+								inputOptionIndex,
+								note || undefined,
+							);
+						} else {
+							const trimmed = value.trim() || "(no response)";
+							saveAnswer(inputQuestionId, trimmed, trimmed, true);
+						}
+
+						inputMode = null;
 						inputQuestionId = null;
+						inputOption = null;
+						inputOptionIndex = undefined;
 						editor.setText("");
 						advanceAfterAnswer();
 					};
@@ -260,8 +281,10 @@ export default function questionnaire(pi: ExtensionAPI) {
 						// Input mode: route to editor
 						if (inputMode) {
 							if (matchesKey(data, Key.escape)) {
-								inputMode = false;
+								inputMode = null;
 								inputQuestionId = null;
+								inputOption = null;
+								inputOptionIndex = undefined;
 								editor.setText("");
 								refresh();
 								return;
@@ -315,17 +338,40 @@ export default function questionnaire(pi: ExtensionAPI) {
 							return;
 						}
 
+						// Add note to prefilled option
+						if (data === "n" && q) {
+							const opt = opts[optionIndex];
+							if (!opt.isOther) {
+								const existing = answers.get(q.id);
+								inputMode = "note";
+								inputQuestionId = q.id;
+								inputOption = opt;
+								inputOptionIndex = optionIndex + 1;
+								editor.setText(
+									existing && !existing.wasCustom && existing.index === optionIndex + 1
+										? existing.note || ""
+										: "",
+								);
+								refresh();
+								return;
+							}
+						}
+
 						// Select option
 						if (matchesKey(data, Key.enter) && q) {
 							const opt = opts[optionIndex];
 							if (opt.isOther) {
-								inputMode = true;
+								inputMode = "custom";
 								inputQuestionId = q.id;
 								editor.setText("");
 								refresh();
 								return;
 							}
-							saveAnswer(q.id, opt.value, opt.label, false, optionIndex + 1);
+							const existing = answers.get(q.id);
+							const note = existing && !existing.wasCustom && existing.index === optionIndex + 1
+								? existing.note
+								: undefined;
+							saveAnswer(q.id, opt.value, opt.label, false, optionIndex + 1, note);
 							advanceAfterAnswer();
 							return;
 						}
@@ -406,10 +452,13 @@ export default function questionnaire(pi: ExtensionAPI) {
 						}
 
 						function renderOptions() {
+							const answer = q ? answers.get(q.id) : undefined;
 							for (let i = 0; i < opts.length; i++) {
 								const opt = opts[i];
 								const selected = i === optionIndex;
 								const isOther = opt.isOther === true;
+								const isAnsweredOption =
+									!isOther && answer && !answer.wasCustom && answer.index === i + 1;
 								const selectionPrefix = selected ? theme.fg("accent", "> ") : "  ";
 								const labelPrefix = `${i + 1}. `;
 								const continuationPrefix = " ".repeat(
@@ -419,8 +468,9 @@ export default function questionnaire(pi: ExtensionAPI) {
 									visibleWidth(selectionPrefix) + visibleWidth(labelPrefix) + 2,
 								);
 								const color = selected ? "accent" : "text";
-								const displayLabel =
-									isOther && inputMode ? `${opt.label} ✎` : opt.label;
+								const displayLabel = `${
+									isOther && inputMode === "custom" ? `${opt.label} ✎` : opt.label
+								}${isAnsweredOption ? " ✓" : ""}`;
 
 								addWrappedBlock(
 									displayLabel,
@@ -432,6 +482,15 @@ export default function questionnaire(pi: ExtensionAPI) {
 								if (opt.description) {
 									addWrappedBlock(
 										opt.description,
+										descriptionPrefix,
+										descriptionPrefix,
+										(s) => theme.fg("muted", s),
+									);
+								}
+
+								if (isAnsweredOption && answer.note) {
+									addWrappedBlock(
+										`note: ${answer.note}`,
 										descriptionPrefix,
 										descriptionPrefix,
 										(s) => theme.fg("muted", s),
@@ -449,7 +508,10 @@ export default function questionnaire(pi: ExtensionAPI) {
 							// Show options for reference
 							renderOptions();
 							lines.push("");
-							add(theme.fg("muted", " Your answer:"));
+							const inputLabel = inputMode === "note" && inputOption
+								? ` Note for: ${inputOption.label}`
+								: " Your answer:";
+							add(theme.fg("muted", inputLabel));
 							for (const line of editor.render(width - 2)) {
 								add(` ${line}`);
 							}
@@ -465,6 +527,9 @@ export default function questionnaire(pi: ExtensionAPI) {
 									add(
 										`${theme.fg("muted", ` ${question.label}: `)}${theme.fg("text", prefix + answer.label)}`,
 									);
+									if (answer.note) {
+										add(theme.fg("muted", `   note: ${answer.note}`));
+									}
 								}
 							}
 							lines.push("");
@@ -488,8 +553,8 @@ export default function questionnaire(pi: ExtensionAPI) {
 						lines.push("");
 						if (!inputMode) {
 							const help = isMulti
-								? " Tab/←→ navigate • ↑↓ select • Enter confirm • Esc cancel"
-								: " ↑↓ navigate • Enter select • Esc cancel";
+								? " Tab/←→ navigate • ↑↓ select • Enter confirm • n add note • Esc cancel"
+								: " ↑↓ navigate • Enter select • n add note • Esc cancel";
 							add(theme.fg("dim", help));
 						}
 						add(theme.fg("accent", "─".repeat(width)));
@@ -517,10 +582,11 @@ export default function questionnaire(pi: ExtensionAPI) {
 
 			const answerLines = result.answers.map((a) => {
 				const qLabel = questions.find((q) => q.id === a.id)?.label || a.id;
+				const note = a.note ? `\n  note: ${a.note}` : "";
 				if (a.wasCustom) {
-					return `${qLabel}: user wrote: ${a.label}`;
+					return `${qLabel}: user wrote: ${a.label}${note}`;
 				}
-				return `${qLabel}: user selected: ${a.index}. ${a.label}`;
+				return `${qLabel}: user selected: ${a.index}. ${a.label}${note}`;
 			});
 
 			return {
@@ -575,15 +641,16 @@ export default function questionnaire(pi: ExtensionAPI) {
 				return container;
 			}
 
-			const lines = details.answers.map((a) => {
+			const lines = details.answers.flatMap((a) => {
 				const question = details.questions.find((q) => q.id === a.id);
 				const questionLabel = question?.label || a.id;
 				const styledQuestionLabel = theme.fg("accent", questionLabel);
-				if (a.wasCustom) {
-					return `${styledQuestionLabel}: ${theme.fg("muted", "(wrote) ")}${a.label}`;
-				}
-				const display = a.index ? `${a.index}. ${a.label}` : a.label;
-				return `${styledQuestionLabel}: ${display}`;
+				const answerLine = a.wasCustom
+					? `${styledQuestionLabel}: ${theme.fg("muted", "(wrote) ")}${a.label}`
+					: `${styledQuestionLabel}: ${a.index ? `${a.index}. ${a.label}` : a.label}`;
+				return a.note
+					? [answerLine, theme.fg("muted", `  note: ${a.note}`)]
+					: [answerLine];
 			});
 			container.addChild(new IndentedLinesText(lines));
 			return container;
