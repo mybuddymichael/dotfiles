@@ -21,9 +21,6 @@ import {
 import { Type } from "@sinclair/typebox";
 import {
 	resetContainer,
-	spinnerFrame,
-	startSpinner,
-	stopSpinner,
 	WrappedStatusText,
 } from "./pi-simple/tool-one-line/render-shared.ts";
 
@@ -138,7 +135,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 		parameters: QuestionnaireParams,
 		renderShell: "self",
 
-		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
 			if (!ctx.hasUI) {
 				return errorResult(
 					"Error: UI not available (running in non-interactive mode)",
@@ -157,9 +154,18 @@ export default function questionnaire(pi: ExtensionAPI) {
 
 			const isMulti = questions.length > 1;
 			const totalTabs = questions.length + 1; // questions + Submit
+			let finishQuestionnaire: ((cancelled: boolean) => void) | undefined;
+			const abortQuestionnaire = () => finishQuestionnaire?.(true);
+			const setWorkingVisible = (visible: boolean) => {
+				(ctx.ui as { setWorkingVisible?: (visible: boolean) => void }).setWorkingVisible?.(visible);
+			};
+			signal?.addEventListener("abort", abortQuestionnaire, { once: true });
 
-			const result = await ctx.ui.custom<QuestionnaireResult>(
-				(tui, theme, _kb, done) => {
+			setWorkingVisible(false);
+			let result: QuestionnaireResult;
+			try {
+				result = await ctx.ui.custom<QuestionnaireResult>(
+					(tui, theme, _kb, done) => {
 					// State
 					let currentTab = 0;
 					let optionIndex = 0;
@@ -168,6 +174,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 					let inputOption: RenderOption | null = null;
 					let inputOptionIndex: number | undefined;
 					let cachedLines: string[] | undefined;
+					let submitted = false;
 					const answers = new Map<string, Answer>();
 
 					// Editor for "Type something" option
@@ -190,12 +197,17 @@ export default function questionnaire(pi: ExtensionAPI) {
 					}
 
 					function submit(cancelled: boolean) {
+						if (submitted) return;
+						submitted = true;
 						done({
 							questions,
 							answers: Array.from(answers.values()),
 							cancelled,
 						});
 					}
+
+					finishQuestionnaire = submit;
+					if (signal?.aborted) queueMicrotask(() => submit(true));
 
 					function currentQuestion(): Question | undefined {
 						return questions[currentTab];
@@ -571,8 +583,13 @@ export default function questionnaire(pi: ExtensionAPI) {
 						},
 						handleInput,
 					};
-				},
-			);
+					},
+				);
+			} finally {
+				signal?.removeEventListener("abort", abortQuestionnaire);
+				finishQuestionnaire = undefined;
+				setWorkingVisible(true);
+			}
 
 			if (result.cancelled) {
 				return {
@@ -598,22 +615,19 @@ export default function questionnaire(pi: ExtensionAPI) {
 
 		renderCall(args, theme, context) {
 			if (!context.isPartial) {
-				stopSpinner(context);
 				return resetContainer(context);
 			}
-			startSpinner(context);
 			const qs = (args.questions as Question[]) || [];
 			const count = qs.length;
 			const label = `${theme.fg("toolTitle", theme.bold("Questionnaire"))} ${theme.fg("muted", questionCountLabel(count))}`;
 			const component = context.lastComponent instanceof WrappedStatusText
 				? context.lastComponent
 				: new WrappedStatusText();
-			component.setParts(theme.fg("accent", spinnerFrame()), label);
+			component.setParts(theme.fg("accent", "?"), label);
 			return component;
 		},
 
 		renderResult(result, _options, theme, context) {
-			stopSpinner(context);
 			const details = result.details as QuestionnaireResult | undefined;
 			if (!details) {
 				const text = result.content[0];
