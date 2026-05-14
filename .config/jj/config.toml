@@ -1,7 +1,7 @@
 [ui]
 diff-formatter = ":git"
 default-command = "ta"
-pager = ["sh", "-c", "diff-so-fancy | less --tabs=2 -RFX"]
+pager = ["hunk", "pager"]
 diff-editor = ":builtin"
 
 [user]
