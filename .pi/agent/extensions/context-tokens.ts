@@ -16,8 +16,28 @@ type FooterState = {
   path: string;
   model: string;
   thinking: string;
+  fastMode: string;
   context: ContextSnapshot;
 };
+
+type FastModeState = {
+  enabled: boolean;
+};
+
+const FAST_MODE_STATE_KEY = "__piOpenAICodexFastModeState";
+
+function readFastMode(): string {
+  const globalWithState = globalThis as typeof globalThis & {
+    [FAST_MODE_STATE_KEY]?: FastModeState;
+  };
+  return globalWithState[FAST_MODE_STATE_KEY]?.enabled ? "fast" : "";
+}
+
+function readFastModeStatus(footerData?: {
+  getExtensionStatuses(): ReadonlyMap<string, string>;
+}): string {
+  return footerData?.getExtensionStatuses().get("openai-codex-fast") ?? readFastMode();
+}
 
 function formatPath(path: string): string {
   const home = process.env.HOME;
@@ -55,6 +75,7 @@ function updateFooterState(
   state.path = formatPath(ctx.cwd);
   state.model = ctx.model?.id ?? "no-model";
   state.thinking = pi.getThinkingLevel();
+  state.fastMode = readFastMode();
 
   if (options.refreshContextUsage) {
     state.context = readContextUsage(ctx);
@@ -64,7 +85,7 @@ function updateFooterState(
 function installFooter(ctx: ExtensionContext, state: FooterState) {
   if (!ctx.hasUI) return;
 
-  ctx.ui.setFooter((_tui, theme) => ({
+  ctx.ui.setFooter((_tui, theme, footerData) => ({
     invalidate() {},
     render(width: number): string[] {
       // Keep render cheap: only format the cached snapshot. In particular, do
@@ -73,7 +94,11 @@ function installFooter(ctx: ExtensionContext, state: FooterState) {
       const total = state.context.total == null
         ? ""
         : theme.fg("dim", `/${state.context.total}`);
-      const line = `${theme.fg("dim", `${state.path}  ${state.model}  ${state.thinking}  `)}${theme.fg(
+      const currentFastMode = readFastModeStatus(footerData);
+      const fastMode = currentFastMode
+        ? `${theme.fg("success", currentFastMode)}${theme.fg("dim", "  ")}`
+        : "";
+      const line = `${theme.fg("dim", `${state.path}  ${state.model}  ${state.thinking}  `)}${fastMode}${theme.fg(
         state.context.color,
         state.context.used,
       )}${total}`;
@@ -92,6 +117,7 @@ export default function (pi: ExtensionAPI) {
     // extension runtime is not initialized yet. This is populated on
     // session_start / model_select / thinking_level_select.
     thinking: "?",
+    fastMode: readFastMode(),
     context: { used: "?", color: "dim" },
   };
   let installed = false;
