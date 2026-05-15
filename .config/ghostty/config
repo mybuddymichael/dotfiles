@@ -4,7 +4,7 @@ window-padding-y = 20
 macos-titlebar-style = hidden
 
 font-family = JetBrains Mono
-font-style = Medium
+font-style = semibold
 font-thicken = true
 font-thicken-strength = 255
 adjust-underline-thickness = 1
