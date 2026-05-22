@@ -108,7 +108,6 @@ set -gx VISUAL nvim
 
 abbr -a jjs jj status
 abbr -a jjc jj commit
-abbr -a jjd jj diff
 abbr -a n nvim
 abbr -a bxb bunx --bun
 abbr -a oc opencode
