@@ -12,8 +12,11 @@ type ContextSnapshot = {
   color: ContextColor;
 };
 
+type PiProfile = "work" | "personal";
+
 type FooterState = {
   path: string;
+  profile: PiProfile;
   model: string;
   thinking: string;
   fastMode: string;
@@ -36,7 +39,19 @@ function readFastMode(): string {
 function readFastModeStatus(footerData?: {
   getExtensionStatuses(): ReadonlyMap<string, string>;
 }): string {
-  return footerData?.getExtensionStatuses().get("openai-codex-fast") ?? readFastMode();
+  return (
+    footerData?.getExtensionStatuses().get("openai-codex-fast") ??
+    readFastMode()
+  );
+}
+
+function detectPiProfile(): PiProfile {
+  const agentDir = process.env.PI_CODING_AGENT_DIR ?? "";
+  return agentDir.includes(".pi-work") ? "work" : "personal";
+}
+
+function formatProfile(profile: PiProfile): string {
+  return profile === "work" ? "WORK" : "personal";
 }
 
 function formatPath(path: string): string {
@@ -73,6 +88,7 @@ function updateFooterState(
   options: { refreshContextUsage: boolean },
 ) {
   state.path = formatPath(ctx.cwd);
+  state.profile = detectPiProfile();
   state.model = ctx.model?.id ?? "no-model";
   state.thinking = pi.getThinkingLevel();
   state.fastMode = readFastMode();
@@ -91,14 +107,19 @@ function installFooter(ctx: ExtensionContext, state: FooterState) {
       // Keep render cheap: only format the cached snapshot. In particular, do
       // not call ctx.getContextUsage() here, because footer render can happen
       // frequently while the TUI is otherwise idle.
-      const total = state.context.total == null
-        ? ""
-        : theme.fg("dim", `/${state.context.total}`);
+      const total =
+        state.context.total == null
+          ? ""
+          : theme.fg("dim", `/${state.context.total}`);
       const currentFastMode = readFastModeStatus(footerData);
       const fastMode = currentFastMode
         ? `${theme.fg("success", currentFastMode)}${theme.fg("dim", "  ")}`
         : "";
-      const line = `${theme.fg("dim", `${state.path}  ${state.model}  ${state.thinking}  `)}${fastMode}${theme.fg(
+      const profile = theme.fg(
+        state.profile === "work" ? "warning" : "success",
+        formatProfile(state.profile),
+      );
+      const line = `${profile}${theme.fg("dim", `  ${state.path}  ${state.model}  ${state.thinking}  `)}${fastMode}${theme.fg(
         state.context.color,
         state.context.used,
       )}${total}`;
@@ -112,6 +133,7 @@ function installFooter(ctx: ExtensionContext, state: FooterState) {
 export default function (pi: ExtensionAPI) {
   const state: FooterState = {
     path: "",
+    profile: detectPiProfile(),
     model: "no-model",
     // Do not call action methods while the extension factory is running; the
     // extension runtime is not initialized yet. This is populated on
