@@ -35,5 +35,8 @@
     "command": "~/.claude/statusline.sh"
   },
   "extraKnownMarketplaces": {},
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "theme": "light",
+  "verbose": true,
+  "autoCompactEnabled": false
 }
