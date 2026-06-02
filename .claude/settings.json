@@ -1,7 +1,4 @@
 {
-  "env": {
-    "DISABLE_AUTOUPDATER": "1"
-  },
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
@@ -13,7 +10,8 @@
       "Bash(jj diff:*)",
       "Bash(jj log:*)",
       "Bash(jj show:*)",
-      "Bash(jj status:*)"
+      "Bash(jj status:*)",
+      "mcp__pencil"
     ],
     "deny": []
   },
