@@ -13,6 +13,7 @@ ThemeManager.license = "MIT - https://opensource.org/licenses/MIT"
 ThemeManager.logger = hs.logger.new(ThemeManager.name)
 
 ThemeManager.piSettingsPath = os.getenv("HOME") and (os.getenv("HOME") .. "/.pi/agent/settings.json") or nil
+ThemeManager.piWorkSettingsPath = os.getenv("HOME") and (os.getenv("HOME") .. "/.pi-work/agent/settings.json") or nil
 ThemeManager.lightTheme = "rose-pine-dawn"
 ThemeManager.darkTheme = "rose-pine-moon"
 ThemeManager.reloadSketchybarOnAppearanceChange = true
@@ -75,10 +76,9 @@ function ThemeManager:_replaceThemeSetting(contents, theme)
 	return updated, count > 0
 end
 
-function ThemeManager:_syncPiTheme(appearance)
-	local path = self.piSettingsPath
+function ThemeManager:_syncPiThemeFile(path, appearance)
 	if not path or path == "" then
-		return false, "ThemeManager.piSettingsPath is not configured"
+		return false, "pi settings path is not configured"
 	end
 
 	if not fileExists(path) then
@@ -104,7 +104,7 @@ function ThemeManager:_syncPiTheme(appearance)
 			return false, string.format("failed writing %s: %s", path, tostring(writeErr))
 		end
 
-		self.logger.i(string.format("updated pi theme to %s (%s appearance)", desiredTheme, appearance))
+		self.logger.i(string.format("updated pi theme to %s in %s (%s appearance)", desiredTheme, path, appearance))
 		return true
 	end
 
@@ -120,6 +120,30 @@ function ThemeManager:_syncPiTheme(appearance)
 	end
 
 	self.logger.w(string.format("theme key missing in %s; rewrote file via hs.json", path))
+	return true
+end
+
+function ThemeManager:_piSettingsPaths()
+	return {
+		self.piSettingsPath,
+		self.piWorkSettingsPath,
+	}
+end
+
+function ThemeManager:_syncPiTheme(appearance)
+	local errors = {}
+
+	for _, path in ipairs(self:_piSettingsPaths()) do
+		local ok, err = self:_syncPiThemeFile(path, appearance)
+		if not ok then
+			table.insert(errors, err)
+		end
+	end
+
+	if #errors > 0 then
+		return false, table.concat(errors, "; ")
+	end
+
 	return true
 end
 
