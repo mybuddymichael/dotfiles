@@ -1,7 +1,7 @@
 import { pathToFileURL } from "node:url";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync, realpathSync } from "node:fs";
 
 type Component = {
 	render(width: number): string[];
@@ -40,9 +40,17 @@ function piDistCandidates(): string[] {
 		join(homedir(), ".bun/install/global/node_modules/@mariozechner/pi-coding-agent/dist"),
 	];
 
-	const argvEntry = process.argv[1];
-	if (argvEntry?.includes("/node_modules/")) {
-		candidates.unshift(dirname(argvEntry));
+	const argvEntries = [process.argv[1]];
+	if (process.argv[1]) {
+		try {
+			argvEntries.unshift(realpathSync(process.argv[1]));
+		} catch {}
+	}
+
+	for (const argvEntry of argvEntries) {
+		if (argvEntry?.includes("/node_modules/")) {
+			candidates.unshift(dirname(argvEntry));
+		}
 	}
 
 	return candidates;
@@ -80,6 +88,10 @@ async function importTuiPackage(): Promise<any> {
 	} catch {}
 
 	const candidates = [
+		...piDistCandidates().flatMap((distDir) => [
+			join(dirname(distDir), "node_modules/@earendil-works/pi-tui/dist/index.js"),
+			join(dirname(dirname(distDir)), "pi-tui/dist/index.js"),
+		]),
 		join(homedir(), ".bun/install/global/node_modules/@earendil-works/pi-tui/dist/index.js"),
 		join(homedir(), ".bun/install/global/node_modules/@mariozechner/pi-tui/dist/index.js"),
 	];
