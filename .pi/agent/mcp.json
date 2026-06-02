@@ -1,0 +1,15 @@
+{
+  "settings": {
+    "autoAuth": true
+  },
+  "mcpServers": {
+    "figma": {
+      "url": "https://mcp.figma.com/mcp",
+      "auth": "oauth",
+      "oauth": {
+        "scope": "mcp:connect",
+        "clientName": "Claude Code"
+      }
+    }
+  }
+}
