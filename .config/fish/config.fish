@@ -124,7 +124,7 @@ abbr -a wcs env CLAUDE_CONFIG_DIR=$HOME/.claude-work claude --model sonnet
 abbr -a wco env CLAUDE_CONFIG_DIR=$HOME/.claude-work claude --model opus
 abbr -a wo env OPENCODE_CONFIG_DIR=$HOME/.config/opencode-work opencode
 abbr -a me mise exec --
-abbr -a mepi mise exec node@24.14.1 -- pi
+abbr -a mepi mise exec -- pi
 abbr -a amr amp -m rush
 abbr -a ams amp -m smart
 abbr -a amd amp -m deep
