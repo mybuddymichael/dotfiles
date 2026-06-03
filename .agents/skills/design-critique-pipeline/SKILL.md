@@ -1,46 +1,135 @@
 ---
 name: design-critique-pipeline
-description: Run the full UI critique pipeline on a component — visual design, interaction design, and UI copy — and return a consolidated severity-ranked report. Use when the user asks to "critique this component," "review this UI end-to-end," "run the design critique pipeline," "audit this screen," or shares a component file/path and asks for a full design review. Accepts a file path as argument, or falls back to the most recently edited component. Distinct from the individual critique skills (functional-minimalism-critique, essential-human-interfaces, content-design-critique) — those run a single lens; this skill orchestrates all three. Do NOT trigger for single-lens requests ("just check the copy," "is the layout aligned") — defer to the matching individual skill.
+description: >-
+  Runs a full design critique across UI design, interaction design, and content design, then creates a self-contained DocuSketch°-style HTML report. Use when the user asks for an end-to-end UI review, design critique, screen audit, component critique, or shares a screenshot, URL, file path, code snippet, Figma/spec link, or flow and wants broad design feedback rather than one lens only.
 ---
 
 # Design Critique Pipeline
 
-Run the full UI review pipeline on a component. Accepts a file path as argument, or uses the most recently edited component.
+## Overview
 
-## Steps
+Run a full design critique across three lenses:
 
-1. **Resolve the target.** Read the target component and any related files it imports. If no path was provided, identify the most recently edited component file in the working tree.
-2. **Visual design audit.** Run the `functional-minimalism-critique` skill. Evaluate hierarchy, alignment, information architecture, affordances, typography, color, and reduction. Flag Critical / Warning / Info issues.
-3. **Interaction design audit.** Run the `essential-human-interfaces` skill. Evaluate wayfinding, feedback, visibility, consistency, affordance, progressive disclosure, mental models, mapping, and grouping. Flag issues by impact on the user's ability to complete their task.
-4. **Copy audit.** Run the `content-design-critique` skill on every user-facing string in the component. It applies product-agnostic UI writing principles — sentence case, active voice, no directional language, clear empty-state guidance, actionable errors — and ranks findings as Blocking / Confusing / Needs finesse.
-5. **Consolidated report.** Output a single report with all findings grouped by severity (Critical > Warning > Info), then by lens within each severity tier. For each finding, include the file, line, the principle violated, what's wrong, and a concrete fix. When mapping `content-design-critique` findings: Blocking → Critical, Confusing → Warning, Needs finesse → Info.
-6. **Offer to implement.** Ask whether to apply the fixes automatically. Default to no — surface the findings first so the user can prioritize.
+- `ui-design-critique` — visual composition, hierarchy, layout, typography, color, density, affordance, reduction.
+- `interaction-design-critique` — wayfinding, feedback, visibility, states, consistency, mental models, mapping, flow behavior.
+- `content-design-critique` — UI copy, labels, empty states, errors, tone, specificity, sentence case.
 
-## Output structure
+The output is critique/reporting only: a self-contained DocuSketch°-style HTML artifact plus a short chat summary and file path.
 
-```
-## Design Critique — <component name>
+## When to use
 
-### Critical
-- **[file:line] Principle violated** (lens)
-  Issue: ...
-  Fix: ...
+Use this skill when the user asks for:
 
-### Warning
-- ...
+- “critique this component/screen/UI”
+- “review this design end-to-end”
+- “audit this screen”
+- “run the design critique pipeline”
+- broad feedback on a screenshot, URL, local path, code snippet, Figma/spec link, or flow description
 
-### Info
-- ...
+## When not to use
 
-### What's working
-- 2–3 bullets noting solid patterns worth preserving.
+- The user asks for one lens only. Use the matching individual skill.
+- The user asks to implement fixes. Do not edit source files; offer implementation as a follow-up after the report.
+- The user asks for DocuSketch design-system compliance specifically. Use the project’s design-system reviewer/check workflow if available; this skill uses DocuSketch-style artifact presentation, not a compliance audit.
+- The target is clearly non-UI backend logic, tests, migrations, or build configuration. Say it is not a UI critique target and stop.
 
-### Next steps
-- A short ordered list of recommended fixes, highest-impact first.
-```
+## Core workflow
 
-## Judgment calls
+### 1. Resolve the critique target
 
-- If the component is small (e.g. a single button or input), don't pad the report — return only the lenses that surfaced findings.
-- If the file isn't a UI component (server-only logic, utility, test), say so and stop rather than manufacturing critique.
-- If the user has explicitly asked for only one lens, defer to the matching individual skill instead of running the full pipeline.
+Accept any combination of:
+
+- screenshot or image attachment
+- URL
+- local file or directory path
+- pasted code or markup
+- raw UI strings
+- Figma/design/spec link
+- flow description or screen sequence
+
+If multiple inputs are provided, treat them as one target unless the user asks for comparison.
+
+Inspect what is available:
+
+- For paths, read relevant UI files and nearby styles/components.
+- For directories, inspect representative UI files; ask the user to narrow scope if the directory is too large to review usefully.
+- For screenshots, critique visible evidence and label inferred behavior.
+- For URLs or Figma links, inspect only if available tooling permits. If inaccessible, list them as provided but not inspected and ask for a screenshot/export/code only if critique would otherwise be impossible.
+- If there is no usable target, ask for one instead of manufacturing critique.
+
+Checkpoint: record inspected evidence and limitations for the HTML report.
+
+### 2. Run the three critique lenses
+
+Use the individual skills as lens contracts:
+
+1. Run `ui-design-critique` for visual/UI findings.
+2. Run `interaction-design-critique` for behavior/flow findings.
+3. Run `content-design-critique` for user-facing copy findings.
+
+Do not duplicate their full workflows here. Apply each lens to the same resolved target and preserve lens tags in the findings.
+
+### 3. Normalize severity
+
+The pipeline report uses:
+
+- **Critical** — likely blocks the user, causes wrong action, hides essential state/action, or materially damages trust.
+- **Warning** — creates friction, ambiguity, cognitive load, or weakens the design but does not block the primary task.
+- **Info** — polish, consistency, minor reduction, or low-risk improvement.
+
+Map content severities:
+
+- Blocking → Critical
+- Confusing → Warning
+- Needs finesse → Info
+
+If a finding depends on missing runtime/flow context, keep the severity conservative and use an evidence-basis label.
+
+### 4. Create the HTML artifact
+
+Before writing the artifact, read `docusketch-html-report.md` in this skill directory and follow it.
+
+Required behavior:
+
+1. Write `/tmp/design-critiques/<slug>-<YYYYMMDD-HHMMSS>.html`.
+2. Make the report fully self-contained.
+3. Include target evidence and limitations.
+4. Include findings grouped by `Critical`, `Warning`, and `Info`.
+5. Include evidence basis for every finding: `Direct`, `Inferred`, `Needs runtime check`, or `Not inspected`.
+6. Include source references only when available.
+7. Include patterns observed and what’s working/no action.
+8. Lightly validate the generated HTML.
+9. Open it in the browser best-effort.
+
+### 5. Respond in chat
+
+Return only:
+
+- artifact path
+- whether browser opening succeeded or failed
+- 3–5 top findings or “no findings” summary
+- reminder that no source files were changed
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| “A chat critique is enough.” | This suite’s contract is an HTML artifact. Chat is only the summary. |
+| “The URL probably shows the screen.” | If the URL was not inspected, list it as not inspected. Do not invent visual evidence. |
+| “The component is small, so I can skip one lens.” | Small targets still need lens consideration; omit empty findings, not the lens pass. |
+| “I should fix the obvious issues while I’m here.” | These skills critique only. Source edits require a separate explicit user request. |
+| “I can use the DocuSketch design system as a checklist.” | The artifact should look DocuSketch-like; this is not a design-system compliance audit unless explicitly requested. |
+
+## Verification
+
+Before finishing, confirm with evidence:
+
+- [ ] Target inputs were resolved, inspected where possible, and limitations recorded.
+- [ ] UI, interaction, and content lenses were considered.
+- [ ] Content severities were mapped into `Critical / Warning / Info`.
+- [ ] `docusketch-html-report.md` was read before writing HTML.
+- [ ] HTML file exists under `/tmp/design-critiques/`.
+- [ ] HTML contains `<!doctype html>`, `<title>`, and a findings or no-findings section.
+- [ ] HTML has no external stylesheet or script dependencies.
+- [ ] Browser open was attempted best-effort, or failure was reported with the path.
+- [ ] Final response includes the artifact path and states that no source files were changed.

@@ -2,23 +2,6 @@
 
 Specific guidance for evaluating common UI components through functional minimalism principles.
 
-## Price Display
-
-**Evaluate:**
-- Is price the dominant element through scale, not weight?
-- Is there context (bids, original price, status)?
-- Is the currency symbol proportional or oversized?
-
-**Rams approach:**
-- Light weight at large size reads as confident, not shouty
-- Price should be 2-3x the size of surrounding text minimum
-- Supporting context (bids, reserve status) on same visual plane
-
-**Common issues:**
-- Bold price competing with bold title
-- Price isolated without validation context
-- Currency symbol same size as numerals
-
 ## Buttons & CTAs
 
 **Evaluate:**

@@ -1,185 +1,132 @@
 ---
 name: content-design-critique
-description: Audit UI copy against a principled checklist and return a structured critique with specific rewrites. Use when the user explicitly asks to review, audit, critique, or check UI writing, microcopy, interface text, button labels, error messages, empty states, tooltips, onboarding copy, modal copy, or any other user-facing strings in an interface. Trigger phrases include "review this copy," "check this content," "check the UI writing," "audit these strings," "critique the microcopy," "how's the content." Trigger when the user's goal is evaluation, not just generation. Do NOT auto-trigger when generating UI copy or content as part of another task — only when the user asks for a review.
+description: >-
+  Reviews UI copy and microcopy, then creates a self-contained DocuSketch°-style HTML report with specific rewrites. Use when the user asks to review, audit, or critique interface text, button labels, errors, empty states, onboarding copy, tooltips, modals, forms, pasted strings, screenshots, URLs, Figma/spec links, or code with user-facing strings.
 ---
 
-# Content design critique
+# Content Design Critique
 
-You are reviewing user-interface text against a set of principles. Your job is to be specific, honest, and useful — flag what violates a principle, briefly explain why, and offer a concrete rewrite.
+## Overview
 
-## Principles
+Review user-facing interface text for clarity, specificity, actionability, tone, and consistency. Create a self-contained DocuSketch°-style HTML report by default, with concrete rewrites for every issue.
 
-These are the rules. Every piece of UI content under review gets measured against them.
+## When to use
 
-### 1. Show, don't tell
+Use this skill when the user asks to review or critique:
 
-Let the interface demonstrate through interaction rather than telling a user what to do with text. If the UI already communicates something through layout, affordance, or state change, the text is redundant.
+- UI copy or microcopy
+- button labels, headings, field labels, helper text, tooltips
+- empty states, errors, confirmations, toasts, banners, onboarding
+- pasted strings, screenshots, URLs, Figma/spec links, local UI files, or code with rendered text
 
-### 2. Use the active voice
+## When not to use
 
-Avoid passive constructions.
+- The user wants new copy generated without critique. Help normally; do not auto-trigger this review workflow.
+- The user asks about visual design. Use `ui-design-critique`.
+- The user asks about UX flow or behavior. Use `interaction-design-critique`.
+- The user wants all lenses. Use `design-critique-pipeline`.
+- The user wants source edits. Do critique/reporting only and offer implementation as a follow-up.
+- The text is legal/compliance copy and the issue depends on legal requirements. Note the constraint instead of rewriting as if unconstrained.
 
-- ✗ "Your account could not be found"
-- ✓ "We couldn't find your account"
+## Core workflow
 
-### 3. Speak as the platform, not the user
+### 1. Resolve the target
 
-Avoid impersonating the user, or using first-person singular possessive pronouns.
+Accept raw strings, screenshots/images, URL, local path, directory path, pasted code, Figma/spec link, spreadsheet-like lists, or flow descriptions.
 
-- ✗ "Go to My Settings"
-- ✓ "Go to your settings"
+Inspect available evidence:
 
-### 4. Use common nouns
+- For code, extract rendered user-facing strings. Ignore variable names, comments, and non-rendered text unless the user asks otherwise.
+- For paths, read nearby component docs/examples if they affect copy patterns.
+- For screenshots, review visible copy only.
+- For URLs/Figma links, inspect only if tooling permits. Otherwise list as provided but not inspected.
+- If component-specific copy guidance exists in the current project, apply it and cite the source. If not, continue with this skill’s principles.
+- If there are no reviewable strings, ask for copy, screenshot, or relevant UI file.
 
-Don't create proper nouns for product elements. A common noun is normally more friendly and accessible.
+Checkpoint: record inspected strings/evidence, uninspected inputs, and copy-scope limitations.
 
-- ✗ "Log into your ProductName User Account"
-- ✓ "Log into your account"
+### 2. Evaluate the content lens
 
-### 5. Be brief
+Use this compact checklist. Not every principle applies to every string.
 
-Remove extraneous words. Note: this principle is dependent on context. Some contexts (modals, dialogs, banners) use full sentences. Other contexts (buttons, headers, field labels, toasts) do not require full sentences.
+- **Clear action** — users know what happens next and what to do.
+- **Specificity** — vague nouns, generic errors, and ambiguous CTAs are replaced with concrete information.
+- **Brevity** — remove words that do not change meaning.
+- **Active voice** — prefer direct, active constructions.
+- **User-centered voice** — speak as the product/platform, not as the user; avoid unnecessary “we.”
+- **Front-loaded meaning** — the first words carry the message.
+- **Errors need exits** — say how to recover, retry, or choose a different path.
+- **Empty states onboard** — explain what appears here and give one clear next action.
+- **Sentence case** — use sentence case unless a product term is intentionally proper-nouned.
+- **No directional language** — avoid “click,” “tap,” “below,” “left,” “green button”; use “select,” “open,” “go to.”
+- **Tone fits the moment** — no marketing copy inside task UI; match stakes and emotional state.
+- **Name things once** — terminology stays consistent across surfaces.
 
-Button:
+### 3. Assign content severity
 
-- ✗ "Click here to save your changes"
-- ✓ "Save changes"
+Individual content-design reports use:
 
-Toast:
+- **Blocking** — misleading, missing, or contradictory copy may stop task completion or cause the wrong action.
+- **Confusing** — users can continue, but copy creates friction, doubt, or trust loss.
+- **Needs finesse** — polish issue: wordiness, tone, sentence case, or minor consistency.
 
-- ✗ "Your invoice has been successfully sent"
-- ✓ "Invoice sent"
+Every finding also needs an evidence basis: `Direct`, `Inferred`, `Needs runtime check`, or `Not inspected`.
 
-Confirmation modal:
+### 4. Write rewrites
 
-- ✗ "Are you sure you want to delete this project? If you delete this project, you will lose access to all your files and tasks on this project."
-- ✓ "Deleting this project will also delete all its files and tasks."
+For each finding, include:
 
-### 6. Be direct
+- original copy
+- principle violated
+- why it matters in this UI moment
+- rewrite
+- severity
+- evidence basis
+- source when available
 
-Cut hedging words, like "might," "perhaps," "we think," "it seems like." Avoid "please"—don't apologize in UI content, except in very occasional, highly critical circumstances. Instead, give the user the most relevant information and offer a solution or action if possible.
+If a string is already good, do not manufacture critique. Capture good patterns under “What’s working.”
 
-- ✗ "Please review the following errors before submitting"
-- ✓ "3 errors need to be fixed before you can submit. [Include: links to errors]"
+### 5. Create the HTML artifact
 
-### 7. Front-load information
+Before writing HTML, read `../design-critique-pipeline/docusketch-html-report.md` and follow it.
 
-Put the most important word or concept first. Users scan beginnings.
+Required report content:
 
-- ✗ "Your export is ready to download"
-- ✓ "Export ready. [CTA: Download]"
+- title and target metadata
+- target evidence and limitations
+- severity sections: `Blocking`, `Confusing`, `Needs finesse`
+- finding cards tagged `Content`
+- original, issue, rewrite, evidence basis, and source when available
+- repeated copy patterns
+- what’s working/no action
 
-### 8. Be specific
+Lightly validate the file, then open it in the browser best-effort.
 
-Prioritize direct, specific information, and where possible, offer the user an action or solution.
+### 6. Respond in chat
 
-- ✗ "This bill can't be paid. Either it requires approvals, or you don't have the required permissions."
-- ✓ "This bill needs to be approved by [name of user]. [CTA: Resend for approval]"
-
-### 9. Empty states are onboarding
-
-Empty states tell the user how to populate the screen or container, and briefly explain the value. The typical empty state header reads "Add [name of entity]," and the body copy explains what the entity is or does. Body copy should not be more than 3 lines.
-
-- ✗
-  Header: "No invoices found"
-  Body: "You don't have any invoices yet."
-- ✓
-  Header: "Add an invoice"
-  Body: "Track what clients owe and when payments are due. Create your first invoice to get started."
-
-### 10. Errors need exits
-
-Lead with what the user can do, not what went wrong technically.
-
-- ✗ "Error 403: Authentication failed due to invalid credentials"
-- ✓ "Try again" or "Use a different email"
-
-### 11. Use sentence case
-
-All UI content uses sentence case. This includes headers, buttons, field labels. Navigation-level features (e.g. Change Orders, Purchase Orders, Client Updates, Lead Activities) can be capitalized as proper nouns. User titles (e.g. subs/vendors) do not need to be capitalized.
-
-If a navigation-level feature name is also a common noun (e.g. invoices, bills, documents, files), determine whether the term needs to be capitalized based on context. If the term is being used as a common noun as part of a sentence, it does not need to be capitalized. If the product treats the feature name as a formal proper noun, capitalize it consistently.
-
-### 12. Don't use directional language
-
-A user might be using the product on their phone or using an assistive technology. Avoid terms that assume a screen type, direction, proximity, or color: "click," "tap," "below," "to the right." Instead use "select," "choose," "go to," "open."
-
-- ✗ "Click the menu on the left"
-- ✓ "Open the menu"
-
-- ✗ "Tap the green button to continue"
-- ✓ "Select Continue"
-
-### 13. Use product tone
-
-The tone should be appropriate to UI content. Don't use marketing or benefit-selling language - you don't need to upsell the product to the user, as they're already using it. Instead, prioritize direct, informational content, with clear outcomes and actions.
-
-Empty state:
-
-- ✗
-  Header: "Use the Schedule to stay on top of your project"
-  Body: "Keep your whole team aligned and moving forward together."
-- ✓
-  Header: "Add a Schedule item"
-  Body: "Get a full view of your job from start to finish. Create your first item to get started."
-
----
-
-## How to conduct the review
-
-### Input
-
-The user will share UI content. This might be:
-
-- Raw strings (button labels, headlines, body text, error messages)
-- A screenshot or mockup
-- A code snippet with embedded copy (JSX, HTML, etc.)
-- A spreadsheet or list of strings
-
-If the input is code, extract the user-facing strings and review those. Ignore variable names, comments, and non-rendered text.
-
-### Check component guidelines
-
-If the user's input references a specific component or pattern (e.g. toast, banner, item header, tooltip, popover, empty state), check any available project documentation, design system docs, Storybook, component guidelines, or nearby implementation examples for content guidance. If you find relevant guidance, apply it and cite the file or source. If no component-specific guidance is available, say so briefly and continue using the principles in this skill.
-
-### Output format
-
-Start with a one-line summary of overall quality — don't pad it, just say where things stand.
-
-Then for each piece of copy that has an issue, use this structure:
-
-```
-**[Original copy or string]**
-Principle violated: [Name — e.g., "Challenge every word"]
-Why: [One sentence explaining the problem in context]
-Rewrite: [Your suggested replacement]
-```
-
-Group findings by screen, component, or logical section if the input is large enough to warrant it.
-
-After the individual callouts, end with:
-
-- **Patterns** — if you see the same violation repeating (e.g., hedging throughout, or company-centric voice everywhere), call it out once as a systemic note rather than flagging every instance individually.
-
-### Severity scale
-
-Organize output based on severity. There are three levels of severity:
-
-1. Blocking - the user can't complete their goal, or might take the wrong action because the content is misleading, missing, or contradictory. E.g. errors with no exit, ambiguous CTAs on important workflows.
-2. Confusing - the user can complete their goal, but the content creates friction or erodes trust. E.g. passive voice, vague empty states, hedging on error messages.
-3. Needs finesse - e.g. wordiness, doesn't use sentence case correctly, tone is slightly off.
-
-### Judgment calls
-
-Not every principle applies to every string. Use judgment:
-
-- A single "OK" button doesn't need a front-loading critique.
-- Legal or compliance copy (terms acceptance, cookie banners) plays by different rules — note where principles conflict with regulatory requirements rather than just flagging violations.
-- Placeholder text and dev-only strings aren't worth reviewing unless the user specifically asks.
-- If the copy is good, note this and move on. Don't manufacture critique.
-
-If principles conflict, prioritize the user's ability to complete their goal. E.g. If an error message needs more words to provide a real exit, prioritize clarity over the principle "Be brief."
-
-### Tone of the critique
-
-Be direct and specific, indicating which principles are broken and what changes the user could make. Avoid softening language in the critique itself (no hedging).
+Return only the artifact path, browser-open status, top findings summary, and confirmation that no source files were changed.
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| “This is only one button label, so no artifact is needed.” | The skill contract requires the HTML artifact; keep it brief for small inputs. |
+| “I should rewrite everything to sound nicer.” | Critique only strings that violate a principle or materially improve task clarity. |
+| “The code contains identifiers that look user-facing.” | Review rendered strings, not implementation names, unless the user asks for naming critique. |
+| “Legal copy is wordy, so I’ll simplify it aggressively.” | Compliance text may have constraints. Flag the tradeoff and avoid unsupported rewrites. |
+| “I can patch the string while I’m here.” | Do not edit source files in critique mode. |
+
+## Verification
+
+Before finishing, confirm:
+
+- [ ] Reviewable user-facing strings were identified or missing input was requested.
+- [ ] Component/project copy guidance was checked when discoverable and relevant.
+- [ ] Findings use `Blocking / Confusing / Needs finesse`.
+- [ ] Each finding has a concrete rewrite unless the finding is a pattern-level note.
+- [ ] Each finding has evidence basis.
+- [ ] `../design-critique-pipeline/docusketch-html-report.md` was read.
+- [ ] HTML exists in `/tmp/design-critiques/` and is self-contained.
+- [ ] HTML contains `<!doctype html>`, `<title>`, and findings or no-findings section.
+- [ ] Browser open was attempted best-effort.
+- [ ] Final chat includes artifact path and says no source files were changed.
