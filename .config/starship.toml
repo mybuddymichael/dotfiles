@@ -56,9 +56,32 @@ ignore_timeout = true
 command = '''
 status=$(jj st --no-pager 2>/dev/null)
 
+base_info=$(jj log --no-graph -r 'heads(first_ancestors(@) & bookmarks())' -T 'commit_id ++ "\t" ++ local_bookmarks.map(|b| b.name()).join(",") ++ "\n"' 2>/dev/null | head -n1)
+
+if [ -n "$base_info" ]; then
+  base_rev=$(printf '%s' "$base_info" | cut -f1)
+  base_names=$(printf '%s' "$base_info" | cut -f2-)
+  always_show_ahead=false
+else
+  base_rev='root()'
+  base_names='root'
+  always_show_ahead=true
+fi
+
+ahead_count=$(jj log -r "${base_rev}..@ & ~empty() & (~description('') | @)" --count 2>/dev/null)
+case "$ahead_count" in
+  ''|*[!0-9]*) ahead_count=0 ;;
+esac
+
+base_segment="${base_names}"
+if [ "$ahead_count" -gt 0 ] || [ "$always_show_ahead" = true ]; then
+  base_segment="${base_segment}+${ahead_count}"
+fi
+base_segment="\033[37m${base_segment}\033[0m"
+
 # Check if working copy is clean
 if echo "$status" | grep -q "The working copy has no changes"; then
-  printf "\033[37mG\033[0m"  # Green for clean
+  printf '%b' "$base_segment"
 else
   # Parse the working copy changes section
   changes=$(echo "$status" | sed -n '/Working copy changes:/,/Working copy/p' | grep "^[AMDR] ")
@@ -78,13 +101,17 @@ else
   fi
   
   if [ "$deleted_count" -gt 0 ]; then
-    colored="${colored} \033[4;31m-${deleted_count}\033[0m"
+    colored="${colored} \033[4;31mD${deleted_count}\033[0m"
   fi
   
   if [ "$renamed_count" -gt 0 ]; then
     colored="${colored} \033[4;35m→${renamed_count}\033[0m"
   fi
   
-  printf "$colored"
+  if [ -n "$colored" ]; then
+    printf '%b' "$base_segment ${colored# }"
+  else
+    printf '%b' "$base_segment"
+  fi
 fi
 '''
