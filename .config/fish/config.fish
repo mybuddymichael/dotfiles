@@ -124,14 +124,14 @@ abbr -a wcs env CLAUDE_CONFIG_DIR=$HOME/.claude-work claude --model sonnet
 abbr -a wco env CLAUDE_CONFIG_DIR=$HOME/.claude-work claude --model opus
 abbr -a wo env OPENCODE_CONFIG_DIR=$HOME/.config/opencode-work opencode
 abbr -a me mise exec --
-abbr -a mepi mise exec -- pi
+abbr -a mepi mise exec node@24 -- pi
 abbr -a amr amp -m rush
 abbr -a ams amp -m smart
 abbr -a amd amp -m deep
 abbr -a amb amp -m bombadil
-abbr -a wpi env PI_CODING_AGENT_DIR="$HOME/.pi-work/agent" mise exec -- pi --models openai-codex/gpt-5.5:medium
-abbr -a ppi mise exec -- pi --models openai-codex/gpt-5.5:medium
-abbr -a opi mise exec -- pi --models opencode-go/glm-5.1,opencode-go/kimi-k2.5
+abbr -a wpi env PI_CODING_AGENT_DIR="$HOME/.pi-work/agent" mise exec node@24 -- pi --models openai-codex/gpt-5.5:medium
+abbr -a ppi mise exec node@24 -- pi --models openai-codex/gpt-5.5:medium
+abbr -a opi mise exec node@24 -- pi --models opencode-go/glm-5.1,opencode-go/kimi-k2.5
 
 # Colors.
 
