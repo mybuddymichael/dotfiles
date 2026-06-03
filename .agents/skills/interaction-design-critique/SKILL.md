@@ -110,7 +110,7 @@ Before finishing, confirm:
 - [ ] Findings use `Critical / Warning / Info`.
 - [ ] Each finding has evidence basis.
 - [ ] `../design-critique-pipeline/docusketch-html-report.md` was read.
-- [ ] HTML exists in `/tmp/design-critiques/` and is self-contained.
+- [ ] HTML exists in `/tmp/design-critiques/` and follows the self-contained artifact rules in the report recipe, with only approved Google Fonts and Lucide imports.
 - [ ] HTML contains `<!doctype html>`, `<title>`, and findings or no-findings section.
 - [ ] Browser open was attempted best-effort.
 - [ ] Final chat includes artifact path and says no source files were changed.

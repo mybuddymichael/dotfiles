@@ -92,7 +92,7 @@ Before writing the artifact, read `docusketch-html-report.md` in this skill dire
 Required behavior:
 
 1. Write `/tmp/design-critiques/<slug>-<YYYYMMDD-HHMMSS>.html`.
-2. Make the report fully self-contained.
+2. Make the report self-contained except for the allowed Google Fonts and Lucide imports defined in `docusketch-html-report.md`.
 3. Include target evidence and limitations.
 4. Include findings grouped by `Critical`, `Warning`, and `Info`.
 5. Include evidence basis for every finding: `Direct`, `Inferred`, `Needs runtime check`, or `Not inspected`.
@@ -130,6 +130,6 @@ Before finishing, confirm with evidence:
 - [ ] `docusketch-html-report.md` was read before writing HTML.
 - [ ] HTML file exists under `/tmp/design-critiques/`.
 - [ ] HTML contains `<!doctype html>`, `<title>`, and a findings or no-findings section.
-- [ ] HTML has no external stylesheet or script dependencies.
+- [ ] HTML has no external dependencies except the allowed IBM Plex Sans Google Fonts stylesheet and Lucide CDN script.
 - [ ] Browser open was attempted best-effort, or failure was reported with the path.
 - [ ] Final response includes the artifact path and states that no source files were changed.

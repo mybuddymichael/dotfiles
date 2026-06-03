@@ -5,14 +5,17 @@ Use this file whenever a design critique skill creates its required HTML artifac
 ## Required artifact behavior
 
 1. Write a self-contained HTML file to `/tmp/design-critiques/<slug>-<YYYYMMDD-HHMMSS>.html`.
-2. Do not link external stylesheets, scripts, fonts, or images required for the report chrome. Inline CSS in a `<style>` block.
+2. Do not link external design-system stylesheets or images required for the report chrome. Inline report CSS in a `<style>` block. Allowed external assets:
+   - IBM Plex Sans from Google Fonts.
+   - Lucide icons from `https://unpkg.com/lucide@latest/dist/umd/lucide.js`.
 3. If target evidence includes a local image and embedding is practical, embed it as a data URI or include a local `file://` reference with a clear label. If embedding is not practical, list it in Target evidence instead.
 4. Lightly validate before opening:
    - file exists
    - contains `<!doctype html>`
    - contains `<title>`
    - contains at least one severity section or a clear “No findings” section
-   - contains no external `<link rel="stylesheet">` or external `<script src=...>`
+   - contains no external `<link rel="stylesheet">` except the IBM Plex Sans Google Fonts stylesheet
+   - contains no external `<script src=...>` except the Lucide CDN script
 5. Open the file best-effort:
    - macOS: `open <path>`
    - Linux: `xdg-open <path>`
@@ -22,20 +25,36 @@ Use this file whenever a design critique skill creates its required HTML artifac
 
 ## Visual direction
 
-The report should look like a DocuSketch° artifact, not a generic Markdown export.
+The report should look like the DocuSketch° exploration pages, especially `docusketch-design-system/explorations/estimating-workflows/index.html`.
 
-Use:
+Use the same primitives and rhythm:
 
-- Warm page background.
-- IBM Plex Sans-style system stack.
-- Dark olive/ash text.
-- White report cards with fine neutral borders and soft radius.
-- Small uppercase metadata pills.
-- Calm severity badges.
-- Dense but readable finding cards.
-- Clear separation between summary, target evidence, findings, patterns, and no-action/working sections.
+- IBM Plex Sans from Google Fonts.
+- Lucide icons for small semantic markers.
+- Warm page background matching `--background-warm-prod`.
+- Outer `.canvas` with generous vertical padding and max width.
+- `.canvas-header` with uppercase eyebrow, large 40/44 title, and muted lede.
+- Optional `.page-toc` using numbered cards for long reports.
+- `.section`, `.section-head`, `.section-kicker`, `.section-title`, and `.section-copy` for report sections.
+- White panels/cards using `--bg-white-default`, `--stroke-neutral-default`, `--r-card`, and token spacing.
+- Badge/chip primitives modeled after `.chip`, `.model-badge`, and `.horizon-badge`.
+- Button primitives modeled after `.btn`, `.btn.primary`, `.btn.secondary`, and `.btn.ghost` only when actions/links are needed.
+- Dense but readable table/list patterns for findings.
 
 Do not run a DocuSketch design-system compliance audit unless the user explicitly asks for that. This recipe supplies report style and artifact structure only.
+
+## Embedded token subset
+
+Generated artifacts must be self-contained except for the allowed Google Fonts and Lucide imports. Do not import `colors_and_type.css` or `web-shell.css`; instead embed a practical subset of their tokens and primitives in the report CSS.
+
+Include at least:
+
+- colors: `--background-warm-prod`, `--bg-white-default`, `--bg-neutral-dark`, `--bg-warning-light`, `--bg-progress-light`, `--bg-success-light`, `--stroke-neutral-default`, `--text-black`, `--text-secondary`, status colors
+- typography: `--t-h1`, `--t-h2`, `--t-h3`, `--t-body-lg`, `--t-body`, `--t-body-sm`, `--t-body-bold`, `--t-btn-md`, `--t-cap-md`, `--t-cap-rg`, `--t-label`
+- spacing: `--sp-xxs`, `--sp-xs`, `--sp-xs2`, `--sp-s`, `--sp-ms`, `--sp-m`, `--sp-l`, `--sp-xl`, `--sp-xxxl`
+- radius: `--r-s`, `--r-ms`, `--r-card`, `--r-card-large`, `--r-round`, `--r-btn-standalone`
+- line widths: `--lw-xs`, `--lw-s`, `--lw-m`
+- icon sizes: `--is-xs`, `--is-s`, `--is-ms`
 
 ## Severity labels
 
@@ -73,7 +92,7 @@ Use source references only when available: `src/File.tsx:42`, `pasted copy line 
 Every report should include:
 
 1. Header with title, target, date/time, lens, and scope metadata.
-2. Summary card with the most important conclusion first.
+2. Summary panel with the most important conclusion first.
 3. Target evidence section:
    - inspected files, images, strings, URLs, or descriptions
    - provided-but-not-inspected inputs
@@ -85,7 +104,7 @@ Every report should include:
 
 ## Compact skeleton
 
-Adapt this skeleton. Keep it self-contained.
+Adapt this skeleton. Keep the report CSS inline. Use Lucide icons sparingly; call `lucide.createIcons()` after the body content.
 
 ```html
 <!doctype html>
@@ -94,45 +113,79 @@ Adapt this skeleton. Keep it self-contained.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DocuSketch° design critique — TARGET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
 :root {
-  --neutral-white:#FFFFFF; --neutral-light:#F9F9F5; --neutral-warm:#F4F3EA;
-  --neutral-stroke:#E2E0D3; --neutral-ash:#1A1905; --text-secondary:#5D5E52;
-  --eucalyptus:#C0BC90; --eucalyptus-dark:#6F6D41; --eucalyptus-light:#E6E4D2;
-  --red:#E92F2F; --red-light:#FFD6BD; --yellow:#DFBB3A; --yellow-light:#FEF2C3;
-  --blue:#549CD3; --blue-light:#D4E6F4; --green:#64B56E; --green-light:#EBFAC1;
-  --shadow:0 10px 30px rgba(26,25,5,.08),0 1px 2px rgba(26,25,5,.05);
-  --font:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  --mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+  color-scheme: light;
+  --bg-white-default:#FFFFFF; --background-warm:#F9F9F5; --background-warm-prod:#EDEBDD;
+  --bg-neutral-dark:#E2E0D3; --bg-neutral-light:#F9F9F5;
+  --bg-accent:#C0BC90; --text-on-accent:#1A1905;
+  --bg-warning:#DFBB3A; --bg-warning-light:#FEF2C3;
+  --bg-progress:#549CD3; --bg-progress-light:#D4E6F4;
+  --bg-success:#64B56E; --bg-success-light:#EBFAC1;
+  --bg-error:#E92F2F; --bg-error-light:#FFD6BD;
+  --stroke-neutral-default:#E2E0D3; --text-black:#1A1905; --text-secondary:#5D5E52;
+  --chartreuse-base:#E5DF00;
+  --ff-sans:'IBM Plex Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --ff-mono:'JetBrains Mono','IBM Plex Mono','SF Mono',Consolas,monospace;
+  --t-h1:600 24px/28px var(--ff-sans); --t-h2:600 18px/24px var(--ff-sans); --t-h3:600 16px/20px var(--ff-sans);
+  --t-body-lg:400 18px/24px var(--ff-sans); --t-body:400 16px/20px var(--ff-sans); --t-body-bold:700 16px/20px var(--ff-sans); --t-body-sm:400 14px/18px var(--ff-sans);
+  --t-btn-md:600 14px/18px var(--ff-sans); --t-cap-md:500 12px/14px var(--ff-sans); --t-cap-rg:400 12px/14px var(--ff-sans); --t-label:500 10px/14px var(--ff-sans);
+  --sp-xxs:4px; --sp-xs:8px; --sp-xs2:12px; --sp-s:16px; --sp-ms:24px; --sp-m:32px; --sp-l:48px; --sp-xl:64px; --sp-xxxl:112px;
+  --r-s:8px; --r-ms:12px; --r-card:16px; --r-card-large:24px; --r-round:9999px; --r-btn-standalone:12px;
+  --lw-xs:.5px; --lw-s:1px; --lw-m:2px; --is-xs:8px; --is-s:16px; --is-ms:24px;
+  --ease-standard:cubic-bezier(.2,0,0,1);
 }
-*{box-sizing:border-box} body{margin:0;background:var(--neutral-light);color:var(--neutral-ash);font-family:var(--font);line-height:1.45}
-.page{max-width:1180px;margin:0 auto;padding:48px 32px 96px}.hero{display:grid;gap:14px;padding-bottom:22px;border-bottom:1px solid var(--neutral-stroke);margin-bottom:24px}
-.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);font-weight:600}.hero h1{font-size:30px;line-height:34px;margin:0;font-weight:600;letter-spacing:-.02em}.lead{max-width:820px;font-size:17px;color:var(--text-secondary);margin:0}
-.meta{display:flex;flex-wrap:wrap;gap:8px}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--neutral-stroke);background:#fff;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary)}
-.grid{display:grid;gap:18px}.card{background:#fff;border:1px solid var(--neutral-stroke);border-radius:22px;padding:22px;box-shadow:var(--shadow)}.card h2{font-size:18px;line-height:24px;margin:0 0 12px;font-weight:600}.card p{margin:0;color:var(--text-secondary)}
-.section{margin-top:26px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section h2{font-size:22px;line-height:28px;margin:0;font-weight:600}.count{color:var(--text-secondary);font-size:13px}
-.finding{background:#fff;border:1px solid var(--neutral-stroke);border-radius:18px;padding:18px;margin-bottom:12px}.finding h3{font-size:16px;margin:0 0 8px;font-weight:600}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.tag{font-size:12px;border-radius:999px;padding:4px 8px;background:var(--neutral-warm);color:var(--text-secondary);font-weight:600}.tag.critical,.tag.blocking{background:var(--red-light);color:#4A1404}.tag.warning,.tag.confusing{background:var(--yellow-light);color:#5F3100}.tag.info,.tag.finesse{background:var(--blue-light);color:#0B3855}.tag.ok{background:var(--green-light);color:#243805}
-.dl{display:grid;grid-template-columns:110px 1fr;gap:8px 14px}.dt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-secondary);font-weight:600}.dd{margin:0}.code{font-family:var(--mono);font-size:13px;background:var(--neutral-light);border:1px solid var(--neutral-stroke);border-radius:10px;padding:10px;overflow:auto}.empty{border-style:dashed;color:var(--text-secondary)}
-@media(max-width:760px){.page{padding:28px 18px 72px}.dl{grid-template-columns:1fr}.dt{margin-top:8px}}
+*{box-sizing:border-box} html,body{margin:0;padding:0;font-family:var(--ff-sans);-webkit-font-smoothing:antialiased} body{background:var(--background-warm-prod);color:var(--text-black);min-height:100vh;padding:var(--sp-l) var(--sp-ms) var(--sp-xxxl)} a{color:inherit}.canvas{max-width:1480px;margin:0 auto}.canvas-header{max-width:980px;margin-bottom:var(--sp-l)}.canvas-eyebrow{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:var(--sp-xs)}.canvas-title{font:600 40px/44px var(--ff-sans);letter-spacing:0;margin:0 0 var(--sp-xs2);max-width:900px}.canvas-lede{font:var(--t-body-lg);color:var(--text-secondary);max-width:760px;margin:0}.meta-row{display:flex;flex-wrap:wrap;gap:var(--sp-xxs);margin-top:var(--sp-s)}
+.page-toc{margin:0 0 var(--sp-xl);padding:var(--sp-s) 0;border-top:var(--lw-xs) solid var(--stroke-neutral-default);border-bottom:var(--lw-xs) solid var(--stroke-neutral-default)}.page-toc-label{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:var(--sp-xs2)}.page-toc-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-xs);margin:0;padding:0;list-style:none}.page-toc-list a{min-height:76px;display:grid;grid-template-columns:32px minmax(0,1fr);gap:var(--sp-xs);align-items:start;padding:var(--sp-xs2);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-ms);background:color-mix(in oklab,var(--bg-white-default) 72%,transparent);text-decoration:none}.toc-number{font:var(--t-cap-md);color:var(--text-secondary)}.toc-title{display:block;font:var(--t-body-bold);color:var(--text-black);margin-bottom:var(--sp-xxs)}.toc-desc{display:block;font:var(--t-cap-rg);color:var(--text-secondary)}
+.section{margin-top:var(--sp-xl);scroll-margin-top:var(--sp-l)}.section-head{display:grid;grid-template-columns:minmax(0,920px);gap:var(--sp-xs2);margin-bottom:var(--sp-ms)}.section-kicker-row{display:flex;align-items:center;gap:var(--sp-xs);flex-wrap:wrap;margin-bottom:var(--sp-xs)}.section-kicker{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}.section-title{font:600 30px/34px var(--ff-sans);margin:0;letter-spacing:0}.section-copy{max-width:760px;font:var(--t-body);color:var(--text-secondary);margin:0}.panel{background:var(--bg-white-default);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-card);padding:var(--sp-s)}.panel h3{font:var(--t-h3);margin:0 0 var(--sp-xs)}.panel p{font:var(--t-body-sm);color:var(--text-secondary);margin:0}.report-grid{display:grid;gap:var(--sp-s)}
+.chip,.model-badge,.horizon-badge{display:inline-flex;align-items:center;gap:var(--sp-xxs);white-space:nowrap}.chip{min-height:24px;padding:0 var(--sp-xs);border-radius:var(--r-round);background:var(--bg-neutral-dark);color:var(--text-black);font:var(--t-cap-md)}.model-badge{min-height:22px;padding:0 var(--sp-xs);border-radius:var(--r-round);border:var(--lw-xs) solid var(--stroke-neutral-default);background:transparent;color:var(--text-black);font:var(--t-cap-md)}.horizon-badge{min-height:24px;padding:0 var(--sp-xs);border-radius:var(--r-s);border:var(--lw-xs) solid var(--stroke-neutral-default);font:var(--t-label);letter-spacing:.08em;text-transform:uppercase}.horizon-badge.critical,.horizon-badge.blocking{background:var(--bg-error-light);color:#4A1404;border-color:color-mix(in oklab,var(--bg-error) 32%,var(--stroke-neutral-default))}.horizon-badge.warning,.horizon-badge.confusing{background:var(--bg-warning-light);color:var(--text-black);border-color:color-mix(in oklab,var(--bg-warning) 32%,var(--stroke-neutral-default))}.horizon-badge.info,.horizon-badge.finesse{background:var(--bg-progress-light);color:var(--text-black);border-color:color-mix(in oklab,var(--bg-progress) 24%,var(--stroke-neutral-default))}.horizon-badge.ok{background:var(--bg-success-light);color:#243805;border-color:color-mix(in oklab,var(--bg-success) 34%,var(--stroke-neutral-default))}
+.finding{background:var(--bg-white-default);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-card);padding:var(--sp-s);display:grid;gap:var(--sp-xs)}.finding-title{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-s)}.finding-title h3{font:var(--t-h3);margin:0}.finding-meta{display:flex;flex-wrap:wrap;gap:var(--sp-xxs)}.finding dl{display:grid;grid-template-columns:132px minmax(0,1fr);gap:var(--sp-xs) var(--sp-s);margin:0;padding-top:var(--sp-xs);border-top:var(--lw-xs) solid var(--stroke-neutral-default)}.finding dt{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}.finding dd{font:var(--t-body-sm);margin:0;color:var(--text-black)}.code{font-family:var(--ff-mono);font-size:13px;background:var(--background-warm);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-s);padding:var(--sp-xs2);overflow:auto}.empty{border-style:dashed;color:var(--text-secondary)}[data-lucide]{width:var(--is-s);height:var(--is-s);stroke-width:2;flex:0 0 auto}
+@media(max-width:900px){body{padding:var(--sp-ms) var(--sp-s) var(--sp-xl)}.canvas-title{font:var(--t-h1)}.page-toc-list{grid-template-columns:1fr}.finding dl{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<main class="page">
-  <header class="hero">
-    <div class="eyebrow">DocuSketch° design critique</div>
-    <h1>TARGET</h1>
-    <p class="lead">One-sentence outcome summary.</p>
-    <div class="meta"><span class="pill">Lens: full pipeline</span><span class="pill">Generated: DATE</span></div>
+<main class="canvas">
+  <header class="canvas-header">
+    <div class="canvas-eyebrow">DocuSketch° · design critique</div>
+    <h1 class="canvas-title">TARGET</h1>
+    <p class="canvas-lede">One-sentence outcome summary with the highest-impact design read.</p>
+    <div class="meta-row">
+      <span class="model-badge"><i data-lucide="layers"></i> Lens: full pipeline</span>
+      <span class="model-badge"><i data-lucide="calendar"></i> Generated: DATE</span>
+      <span class="model-badge"><i data-lucide="file-search"></i> Evidence: N inputs</span>
+    </div>
   </header>
 
-  <section class="card"><h2>Summary</h2><p>Highest-impact conclusion first.</p></section>
-  <section class="section"><div class="section-head"><h2>Target evidence</h2></div><div class="card"><p>Inputs inspected and limitations.</p></div></section>
-  <section class="section"><div class="section-head"><h2>Critical</h2><span class="count">N findings</span></div><!-- finding cards --></section>
-  <section class="section"><div class="section-head"><h2>Warning</h2><span class="count">N findings</span></div><!-- finding cards --></section>
-  <section class="section"><div class="section-head"><h2>Info</h2><span class="count">N findings</span></div><!-- finding cards --></section>
-  <section class="section"><div class="section-head"><h2>Patterns observed</h2></div><div class="card"><p>Systemic notes.</p></div></section>
-  <section class="section"><div class="section-head"><h2>What’s working</h2></div><div class="card"><p>Patterns to preserve.</p></div></section>
+  <nav class="page-toc" aria-label="Page sections">
+    <div class="page-toc-label">On this report</div>
+    <ol class="page-toc-list">
+      <li><a href="#summary"><span class="toc-number">01</span><span><span class="toc-title">Summary</span><span class="toc-desc">Overall read and target evidence.</span></span></a></li>
+      <li><a href="#critical"><span class="toc-number">02</span><span><span class="toc-title">Critical</span><span class="toc-desc">Issues that block or mislead.</span></span></a></li>
+      <li><a href="#working"><span class="toc-number">03</span><span><span class="toc-title">What’s working</span><span class="toc-desc">Patterns to preserve.</span></span></a></li>
+    </ol>
+  </nav>
+
+  <section class="section" id="summary">
+    <div class="section-head"><div><div class="section-kicker-row"><span class="section-kicker">Review summary</span><span class="horizon-badge info">Info</span></div><h2 class="section-title">Highest-impact read</h2></div><p class="section-copy">Concise synthesis of the critique.</p></div>
+    <div class="report-grid"><div class="panel"><h3>Target evidence</h3><p>Inputs inspected and limitations.</p></div></div>
+  </section>
+
+  <section class="section" id="critical">
+    <div class="section-head"><div><div class="section-kicker-row"><span class="section-kicker">Findings</span><span class="horizon-badge critical">Critical</span></div><h2 class="section-title">Critical</h2></div><p class="section-copy">Findings that block, mislead, or materially damage the experience.</p></div>
+    <article class="finding">
+      <div class="finding-title"><h3>Finding title</h3><span class="horizon-badge critical">Critical</span></div>
+      <div class="finding-meta"><span class="chip"><i data-lucide="eye"></i> UI</span><span class="model-badge">Evidence: Direct</span><span class="model-badge">Source: screenshot header</span></div>
+      <dl><dt>Principle</dt><dd>Hierarchy</dd><dt>Issue</dt><dd>What is wrong from the user’s perspective.</dd><dt>Fix</dt><dd>Concrete change to make.</dd></dl>
+    </article>
+  </section>
+
+  <section class="section" id="working"><div class="section-head"><div><div class="section-kicker-row"><span class="section-kicker">No action</span><span class="horizon-badge ok">Working</span></div><h2 class="section-title">What’s working</h2></div></div><div class="panel"><p>Patterns worth preserving.</p></div></section>
 </main>
+<script>if (window.lucide) window.lucide.createIcons();</script>
 </body>
 </html>
 ```
