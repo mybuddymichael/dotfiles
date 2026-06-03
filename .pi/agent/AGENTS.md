@@ -2,7 +2,4 @@
 - Always use `uv run python` when running quick ad hoc Python scripts. Don't use `python` bare.
 - For version control, always use `jj` instead of `git`.
 - When committing, use the same format as recent existing commits in that project.
-- When asking the user questions, always use the `questionnaire` tool.
-- When asking questions, always provide a "recommended" option.
-- When asking questions, always provide a way for the user to type an ad hoc answer.
 - When looking at a GitHub project, use `gh api`.
