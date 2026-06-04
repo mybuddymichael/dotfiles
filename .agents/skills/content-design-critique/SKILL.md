@@ -43,7 +43,7 @@ Inspect available evidence:
 - If component-specific copy guidance exists in the current project, apply it and cite the source. If not, continue with this skill’s principles.
 - If there are no reviewable strings, ask for copy, screenshot, or relevant UI file.
 
-Checkpoint: record inspected strings/evidence, uninspected inputs, and copy-scope limitations.
+Checkpoint: record inspected strings/evidence, uninspected inputs, copy-scope limitations, and any screenshot/image/rendered regions that can support focused unannotated crops of visible copy in the findings.
 
 ### 2. Evaluate the content lens
 
@@ -97,10 +97,13 @@ Required report content:
 - severity sections: `Blocking`, `Confusing`, `Needs finesse`
 - finding cards tagged `Content`
 - original, issue, rewrite, evidence basis, and source when available
+- focused unannotated visual evidence for each finding that references visible rendered copy, labels, controls, or message regions, unless the finding includes an explicit `No visual evidence` reason
 - repeated copy patterns
 - what’s working/no action
 
-Lightly validate the file, then open it in the browser best-effort.
+Keep critique labels/captions outside images; do not add reviewer-drawn boxes, arrows, highlights, or labels to the image.
+
+Lightly validate the file, including the visual-evidence exit gate from the report recipe, then open it in the browser best-effort.
 
 ### 6. Respond in chat
 
@@ -115,6 +118,8 @@ Return only the artifact path, browser-open status, top findings summary, and co
 | “The code contains identifiers that look user-facing.” | Review rendered strings, not implementation names, unless the user asks for naming critique. |
 | “Legal copy is wordy, so I’ll simplify it aggressively.” | Compliance text may have constraints. Flag the tradeoff and avoid unsupported rewrites. |
 | “I can patch the string while I’m here.” | Do not edit source files in critique mode. |
+| “Content critique is about words, so visual evidence is unnecessary.” | If the copy appears in a screenshot or rendered artifact, include a focused unannotated crop so the reader sees the UI moment and surrounding context. |
+| “I’ll highlight the text inside the screenshot.” | Do not alter the original visual evidence. Put the explanation in the caption or finding text. |
 
 ## Verification
 
@@ -125,6 +130,8 @@ Before finishing, confirm:
 - [ ] Findings use `Blocking / Confusing / Needs finesse`.
 - [ ] Each finding has a concrete rewrite unless the finding is a pattern-level note.
 - [ ] Each finding has evidence basis.
+- [ ] Each finding that references visible rendered copy/control/message region includes inline visual evidence or an explicit `No visual evidence` reason.
+- [ ] Visual evidence uses unannotated original screenshots/crops, with critique labels outside the image.
 - [ ] `../design-critique-pipeline/docusketch-html-report.md` was read.
 - [ ] HTML exists in `/tmp/design-critiques/` and follows the self-contained artifact rules in the report recipe, with only approved Google Fonts and Lucide imports.
 - [ ] HTML contains `<!doctype html>`, `<title>`, and findings or no-findings section.

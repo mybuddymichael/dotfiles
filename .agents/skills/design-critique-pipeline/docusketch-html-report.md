@@ -9,14 +9,21 @@ Use this file whenever a design critique skill creates its required HTML artifac
    - IBM Plex Sans from Google Fonts.
    - Lucide icons from `https://unpkg.com/lucide@latest/dist/umd/lucide.js`.
 3. If target evidence includes a local image and embedding is practical, embed it as a data URI or include a local `file://` reference with a clear label. If embedding is not practical, list it in Target evidence instead.
-4. Lightly validate before opening:
+4. Strongly prefer inline visual evidence for findings:
+   - Each finding that refers to a visible UI element, region, layout relationship, or rendered string should include a focused unannotated crop or relevant unannotated screenshot region from the original visual artifact.
+   - Embed visual evidence as a `data:` image when practical so the HTML remains self-contained.
+   - Use larger unannotated context images only when a tight crop would hide the issue.
+   - Put explanatory labels, source references, and critique captions outside the image. Do not draw reviewer boxes, arrows, highlights, or labels onto the image.
+   - If visual evidence would not make sense or cannot be captured, include an explicit `No visual evidence` reason in the finding.
+5. Lightly validate before opening:
    - file exists
    - contains `<!doctype html>`
    - contains `<title>`
    - contains at least one severity section or a clear “No findings” section
    - contains no external `<link rel="stylesheet">` except the IBM Plex Sans Google Fonts stylesheet
    - contains no external `<script src=...>` except the Lucide CDN script
-5. Open the file best-effort:
+   - every finding that references a visible UI element/region/string includes inline visual evidence or an explicit `No visual evidence` reason
+6. Open the file best-effort:
    - macOS: `open <path>`
    - Linux: `xdg-open <path>`
    - Windows PowerShell: `Start-Process <path>`
@@ -87,6 +94,39 @@ Each finding includes one evidence-basis label:
 
 Use source references only when available: `src/File.tsx:42`, `pasted copy line 3`, `screenshot: header`, etc. Do not invent file/line references.
 
+## Visual evidence for findings
+
+Visual evidence is strongly encouraged because critique is easier to understand when the reader can see the exact UI surface being discussed.
+
+For each finding:
+
+1. Decide whether the finding refers to something visible: a button, label, text block, input, icon, card, spacing relationship, navigation item, empty state, modal, or screenshot region.
+2. If yes, do your best to include a focused unannotated image excerpt from the original artifact.
+3. Prefer the smallest crop that still makes the issue recognizable. If context is necessary, include a larger unannotated region instead.
+4. Keep critique explanation outside the image in a caption or finding text. Do not add reviewer-drawn boxes, arrows, highlights, or labels onto the image.
+5. Embed the excerpt as a `data:` image when practical. Use local referenced assets only as a fallback and label that the report is not fully self-contained.
+6. If visual evidence is not useful or not available, include a visible line in the finding: `No visual evidence: REASON`.
+
+Acceptable `No visual evidence` reasons include:
+
+- source was code-only or raw strings with no rendered visual artifact
+- URL/Figma/prototype could not be inspected
+- issue depends on hover, focus, motion, loading, timing, or another runtime state that was not captured
+- finding is a pattern across many small instances where one crop would mislead
+- target element is not visible in the available screenshot
+- crop would expose sensitive/private information and redaction is unavailable
+
+Recommended figure pattern:
+
+```html
+<figure class="evidence-figure">
+  <img src="data:image/png;base64,..." alt="Focused crop of the Save changes button" loading="lazy">
+  <figcaption><strong>Visual evidence:</strong> Focused crop from screenshot header. No reviewer annotations added.</figcaption>
+</figure>
+```
+
+Use plain, factual alt text that identifies the excerpt. Do not put the critique conclusion in the alt text.
+
 ## Required HTML structure
 
 Every report should include:
@@ -143,7 +183,7 @@ Adapt this skeleton. Keep the report CSS inline. Use Lucide icons sparingly; cal
 .page-toc{margin:0 0 var(--sp-xl);padding:var(--sp-s) 0;border-top:var(--lw-xs) solid var(--stroke-neutral-default);border-bottom:var(--lw-xs) solid var(--stroke-neutral-default)}.page-toc-label{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:var(--sp-xs2)}.page-toc-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-xs);margin:0;padding:0;list-style:none}.page-toc-list a{min-height:76px;display:grid;grid-template-columns:32px minmax(0,1fr);gap:var(--sp-xs);align-items:start;padding:var(--sp-xs2);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-ms);background:color-mix(in oklab,var(--bg-white-default) 72%,transparent);text-decoration:none}.toc-number{font:var(--t-cap-md);color:var(--text-secondary)}.toc-title{display:block;font:var(--t-body-bold);color:var(--text-black);margin-bottom:var(--sp-xxs)}.toc-desc{display:block;font:var(--t-cap-rg);color:var(--text-secondary)}
 .section{margin-top:var(--sp-xl);scroll-margin-top:var(--sp-l)}.section-head{display:grid;grid-template-columns:minmax(0,920px);gap:var(--sp-xs2);margin-bottom:var(--sp-ms)}.section-kicker-row{display:flex;align-items:center;gap:var(--sp-xs);flex-wrap:wrap;margin-bottom:var(--sp-xs)}.section-kicker{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}.section-title{font:600 30px/34px var(--ff-sans);margin:0;letter-spacing:0}.section-copy{max-width:760px;font:var(--t-body);color:var(--text-secondary);margin:0}.panel{background:var(--bg-white-default);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-card);padding:var(--sp-s)}.panel h3{font:var(--t-h3);margin:0 0 var(--sp-xs)}.panel p{font:var(--t-body-sm);color:var(--text-secondary);margin:0}.report-grid{display:grid;gap:var(--sp-s)}
 .chip,.model-badge,.horizon-badge{display:inline-flex;align-items:center;gap:var(--sp-xxs);white-space:nowrap}.chip{min-height:24px;padding:0 var(--sp-xs);border-radius:var(--r-round);background:var(--bg-neutral-dark);color:var(--text-black);font:var(--t-cap-md)}.model-badge{min-height:22px;padding:0 var(--sp-xs);border-radius:var(--r-round);border:var(--lw-xs) solid var(--stroke-neutral-default);background:transparent;color:var(--text-black);font:var(--t-cap-md)}.horizon-badge{min-height:24px;padding:0 var(--sp-xs);border-radius:var(--r-s);border:var(--lw-xs) solid var(--stroke-neutral-default);font:var(--t-label);letter-spacing:.08em;text-transform:uppercase}.horizon-badge.critical,.horizon-badge.blocking{background:var(--bg-error-light);color:#4A1404;border-color:color-mix(in oklab,var(--bg-error) 32%,var(--stroke-neutral-default))}.horizon-badge.warning,.horizon-badge.confusing{background:var(--bg-warning-light);color:var(--text-black);border-color:color-mix(in oklab,var(--bg-warning) 32%,var(--stroke-neutral-default))}.horizon-badge.info,.horizon-badge.finesse{background:var(--bg-progress-light);color:var(--text-black);border-color:color-mix(in oklab,var(--bg-progress) 24%,var(--stroke-neutral-default))}.horizon-badge.ok{background:var(--bg-success-light);color:#243805;border-color:color-mix(in oklab,var(--bg-success) 34%,var(--stroke-neutral-default))}
-.finding{background:var(--bg-white-default);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-card);padding:var(--sp-s);display:grid;gap:var(--sp-xs)}.finding-title{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-s)}.finding-title h3{font:var(--t-h3);margin:0}.finding-meta{display:flex;flex-wrap:wrap;gap:var(--sp-xxs)}.finding dl{display:grid;grid-template-columns:132px minmax(0,1fr);gap:var(--sp-xs) var(--sp-s);margin:0;padding-top:var(--sp-xs);border-top:var(--lw-xs) solid var(--stroke-neutral-default)}.finding dt{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}.finding dd{font:var(--t-body-sm);margin:0;color:var(--text-black)}.code{font-family:var(--ff-mono);font-size:13px;background:var(--background-warm);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-s);padding:var(--sp-xs2);overflow:auto}.empty{border-style:dashed;color:var(--text-secondary)}[data-lucide]{width:var(--is-s);height:var(--is-s);stroke-width:2;flex:0 0 auto}
+.finding{background:var(--bg-white-default);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-card);padding:var(--sp-s);display:grid;gap:var(--sp-xs)}.finding-title{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-s)}.finding-title h3{font:var(--t-h3);margin:0}.finding-meta{display:flex;flex-wrap:wrap;gap:var(--sp-xxs)}.finding dl{display:grid;grid-template-columns:132px minmax(0,1fr);gap:var(--sp-xs) var(--sp-s);margin:0;padding-top:var(--sp-xs);border-top:var(--lw-xs) solid var(--stroke-neutral-default)}.finding dt{font:var(--t-label);letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}.finding dd{font:var(--t-body-sm);margin:0;color:var(--text-black)}.evidence-figure{margin:var(--sp-xs) 0 0;padding:var(--sp-xs2);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-ms);background:var(--background-warm)}.evidence-figure img{display:block;max-width:100%;height:auto;border-radius:var(--r-s);border:var(--lw-xs) solid var(--stroke-neutral-default);background:var(--bg-white-default)}.evidence-figure figcaption{margin-top:var(--sp-xs);font:var(--t-body-sm);color:var(--text-secondary)}.no-visual-evidence{font:var(--t-body-sm);color:var(--text-secondary);padding:var(--sp-xs);border-radius:var(--r-s);background:var(--background-warm)}.code{font-family:var(--ff-mono);font-size:13px;background:var(--background-warm);border:var(--lw-xs) solid var(--stroke-neutral-default);border-radius:var(--r-s);padding:var(--sp-xs2);overflow:auto}.empty{border-style:dashed;color:var(--text-secondary)}[data-lucide]{width:var(--is-s);height:var(--is-s);stroke-width:2;flex:0 0 auto}
 @media(max-width:900px){body{padding:var(--sp-ms) var(--sp-s) var(--sp-xl)}.canvas-title{font:var(--t-h1)}.page-toc-list{grid-template-columns:1fr}.finding dl{grid-template-columns:1fr}}
 </style>
 </head>
@@ -179,6 +219,7 @@ Adapt this skeleton. Keep the report CSS inline. Use Lucide icons sparingly; cal
     <article class="finding">
       <div class="finding-title"><h3>Finding title</h3><span class="horizon-badge critical">Critical</span></div>
       <div class="finding-meta"><span class="chip"><i data-lucide="eye"></i> UI</span><span class="model-badge">Evidence: Direct</span><span class="model-badge">Source: screenshot header</span></div>
+      <figure class="evidence-figure"><img src="data:image/png;base64,..." alt="Focused crop of the relevant UI element"><figcaption><strong>Visual evidence:</strong> Focused crop from screenshot header. No reviewer annotations added.</figcaption></figure>
       <dl><dt>Principle</dt><dd>Hierarchy</dd><dt>Issue</dt><dd>What is wrong from the user’s perspective.</dd><dt>Fix</dt><dd>Concrete change to make.</dd></dl>
     </article>
   </section>

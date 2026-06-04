@@ -57,7 +57,7 @@ Inspect what is available:
 - For URLs or Figma links, inspect only if available tooling permits. If inaccessible, list them as provided but not inspected and ask for a screenshot/export/code only if critique would otherwise be impossible.
 - If there is no usable target, ask for one instead of manufacturing critique.
 
-Checkpoint: record inspected evidence and limitations for the HTML report.
+Checkpoint: record inspected evidence and limitations for the HTML report. If visual artifacts are available, identify which screenshot/image/rendered regions can support focused unannotated crops in the findings.
 
 ### 2. Run the three critique lenses
 
@@ -67,7 +67,7 @@ Use the individual skills as lens contracts:
 2. Run `interaction-design-critique` for behavior/flow findings.
 3. Run `content-design-critique` for user-facing copy findings.
 
-Do not duplicate their full workflows here. Apply each lens to the same resolved target and preserve lens tags in the findings.
+Do not duplicate their full workflows here. Apply each lens to the same resolved target, preserve lens tags in the findings, and preserve any visual references or `No visual evidence` reasons from the lens passes.
 
 ### 3. Normalize severity
 
@@ -95,11 +95,14 @@ Required behavior:
 2. Make the report self-contained except for the allowed Google Fonts and Lucide imports defined in `docusketch-html-report.md`.
 3. Include target evidence and limitations.
 4. Include findings grouped by `Critical`, `Warning`, and `Info`.
-5. Include evidence basis for every finding: `Direct`, `Inferred`, `Needs runtime check`, or `Not inspected`.
-6. Include source references only when available.
-7. Include patterns observed and what’s working/no action.
-8. Lightly validate the generated HTML.
-9. Open it in the browser best-effort.
+5. For each finding that references a visible UI element, region, layout relationship, or rendered string, strongly prefer an inline focused unannotated crop or screenshot region from the original visual artifact.
+6. Keep critique labels/captions outside images; do not add reviewer-drawn boxes, arrows, highlights, or labels to the image.
+7. If a finding has no visual reference, include an explicit `No visual evidence` reason.
+8. Include evidence basis for every finding: `Direct`, `Inferred`, `Needs runtime check`, or `Not inspected`.
+9. Include source references only when available.
+10. Include patterns observed and what’s working/no action.
+11. Lightly validate the generated HTML, including the visual-evidence exit gate from `docusketch-html-report.md`.
+12. Open it in the browser best-effort.
 
 ### 5. Respond in chat
 
@@ -118,6 +121,8 @@ Return only:
 | “The URL probably shows the screen.” | If the URL was not inspected, list it as not inspected. Do not invent visual evidence. |
 | “The component is small, so I can skip one lens.” | Small targets still need lens consideration; omit empty findings, not the lens pass. |
 | “I should fix the obvious issues while I’m here.” | These skills critique only. Source edits require a separate explicit user request. |
+| “The text explains the issue, so visual evidence is optional.” | If the issue points at visible UI and a visual artifact is available, include a focused unannotated crop or explain why no visual evidence is available. |
+| “I’ll add arrows/boxes so the reader knows what I mean.” | Keep the original visual artifact unannotated. Explain the target in the caption or finding text instead. |
 | “I can use the DocuSketch design system as a checklist.” | The artifact should look DocuSketch-like; this is not a design-system compliance audit unless explicitly requested. |
 
 ## Verification
@@ -130,6 +135,8 @@ Before finishing, confirm with evidence:
 - [ ] `docusketch-html-report.md` was read before writing HTML.
 - [ ] HTML file exists under `/tmp/design-critiques/`.
 - [ ] HTML contains `<!doctype html>`, `<title>`, and a findings or no-findings section.
+- [ ] Each finding that references a visible UI element/region/string includes inline visual evidence or an explicit `No visual evidence` reason.
+- [ ] Visual evidence uses unannotated original screenshots/crops, with critique labels outside the image.
 - [ ] HTML has no external dependencies except the allowed IBM Plex Sans Google Fonts stylesheet and Lucide CDN script.
 - [ ] Browser open was attempted best-effort, or failure was reported with the path.
 - [ ] Final response includes the artifact path and states that no source files were changed.
