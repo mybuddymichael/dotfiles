@@ -9,10 +9,11 @@ Use this file whenever a design critique skill creates its required HTML artifac
    - IBM Plex Sans from Google Fonts.
    - Lucide icons from `https://unpkg.com/lucide@latest/dist/umd/lucide.js`.
 3. If target evidence includes a local image and embedding is practical, embed it as a data URI or include a local `file://` reference with a clear label. If embedding is not practical, list it in Target evidence instead.
-4. Strongly prefer inline visual evidence for findings:
-   - Each finding that refers to a visible UI element, region, layout relationship, or rendered string should include a focused unannotated crop or relevant unannotated screenshot region from the original visual artifact.
-   - Embed visual evidence as a `data:` image when practical so the HTML remains self-contained.
-   - Use larger unannotated context images only when a tight crop would hide the issue.
+4. Strongly prefer sufficient inline visual evidence for findings:
+   - Each finding that refers to a visible UI element, region, layout relationship, or rendered string should include the minimum set of unannotated visual excerpts needed to substantiate the claim.
+   - Do not limit a finding to one image by default. Include one crop, multiple crops, or a larger context image plus focused crops depending on what makes the evidence clear.
+   - Embed visual evidence as `data:` images when practical so the HTML remains self-contained.
+   - Use larger unannotated context images only when tight crops would hide the issue.
    - Put explanatory labels, source references, and critique captions outside the image. Do not draw reviewer boxes, arrows, highlights, or labels onto the image.
    - If visual evidence would not make sense or cannot be captured, include an explicit `No visual evidence` reason in the finding.
 5. Lightly validate before opening:
@@ -22,7 +23,7 @@ Use this file whenever a design critique skill creates its required HTML artifac
    - contains at least one severity section or a clear “No findings” section
    - contains no external `<link rel="stylesheet">` except the IBM Plex Sans Google Fonts stylesheet
    - contains no external `<script src=...>` except the Lucide CDN script
-   - every finding that references a visible UI element/region/string includes inline visual evidence or an explicit `No visual evidence` reason
+   - every finding that references a visible UI element/region/string includes enough inline visual evidence to substantiate the claim, or an explicit `No visual evidence` reason
 6. Open the file best-effort:
    - macOS: `open <path>`
    - Linux: `xdg-open <path>`
@@ -101,20 +102,30 @@ Visual evidence is strongly encouraged because critique is easier to understand 
 For each finding:
 
 1. Decide whether the finding refers to something visible: a button, label, text block, input, icon, card, spacing relationship, navigation item, empty state, modal, or screenshot region.
-2. If yes, do your best to include a focused unannotated image excerpt from the original artifact.
-3. Prefer the smallest crop that still makes the issue recognizable. If context is necessary, include a larger unannotated region instead.
-4. Keep critique explanation outside the image in a caption or finding text. Do not add reviewer-drawn boxes, arrows, highlights, or labels onto the image.
-5. Embed the excerpt as a `data:` image when practical. Use local referenced assets only as a fallback and label that the report is not fully self-contained.
-6. If visual evidence is not useful or not available, include a visible line in the finding: `No visual evidence: REASON`.
+2. If yes, do your best to include the minimum set of unannotated image excerpts from the original artifact needed to make the evidence clear.
+3. Prefer the smallest crop or set of crops that still makes the issue recognizable. If context is necessary, include a larger unannotated region plus focused crops as needed.
+4. Use multiple images when the issue depends on comparison, sequence, repetition, before/after states, spatial relationships across distant regions, or multiple affected controls/messages.
+5. For repeated patterns, include 2–3 representative examples rather than every instance.
+6. Keep critique explanation outside images in captions or finding text. Do not add reviewer-drawn boxes, arrows, highlights, or labels onto images.
+7. Embed excerpts as `data:` images when practical. Use local referenced assets only as a fallback and label that the report is not fully self-contained.
+8. If visual evidence is not useful or not available, include a visible line in the finding: `No visual evidence: REASON`.
 
 Acceptable `No visual evidence` reasons include:
 
 - source was code-only or raw strings with no rendered visual artifact
 - URL/Figma/prototype could not be inspected
 - issue depends on hover, focus, motion, loading, timing, or another runtime state that was not captured
-- finding is a pattern across many small instances where one crop would mislead
+- finding is a pattern across many small instances where representative crops would mislead
 - target element is not visible in the available screenshot
 - crop would expose sensitive/private information and redaction is unavailable
+
+Use multiple visual excerpts when useful:
+
+- comparison issue: include the controls, states, or regions being compared
+- sequence/flow issue: include each relevant step or state
+- repeated pattern: include 2–3 representative examples
+- layout relationship: include a wider context crop plus focused crops if needed
+- content inconsistency: include each conflicting label or message
 
 Recommended figure pattern:
 
@@ -125,7 +136,7 @@ Recommended figure pattern:
 </figure>
 ```
 
-Use plain, factual alt text that identifies the excerpt. Do not put the critique conclusion in the alt text.
+Use one `<figure>` per excerpt, or one `<figure>` containing a small visual set if the excerpts are tightly related. Use plain, factual alt text that identifies each excerpt. Do not put the critique conclusion in the alt text.
 
 ## Required HTML structure
 

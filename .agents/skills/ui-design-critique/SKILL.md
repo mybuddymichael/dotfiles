@@ -80,7 +80,8 @@ Required report content:
 - severity sections: `Critical`, `Warning`, `Info`
 - finding cards tagged `UI`
 - principle, issue, fix, evidence basis, and source when available
-- focused unannotated visual evidence for each finding that references a visible UI element, region, or layout relationship, unless the finding includes an explicit `No visual evidence` reason
+- enough focused unannotated visual evidence for each finding that references a visible UI element, region, or layout relationship to substantiate the claim, unless the finding includes an explicit `No visual evidence` reason
+- multiple visual excerpts when comparison, repetition, spatial relationship, or multiple affected controls require more than one image
 - patterns observed
 - what’s working/no action
 
@@ -109,7 +110,7 @@ Do not let these references override the required HTML artifact workflow.
 | “This is just a small component, so no HTML report is needed.” | The skill contract requires the artifact even for small critiques; keep the report short instead. |
 | “I should mention copy and flow issues too.” | Note only visual issues here unless they directly affect visual comprehension; route broader review to the pipeline. |
 | “I can fix spacing while I’m looking at the file.” | Do not edit source files in critique mode. |
-| “The prose is clear enough without screenshots.” | Visual design critique should show the surface being discussed whenever a visual artifact is available. Include a focused unannotated crop or explain why not. |
+| “The prose is clear enough without screenshots.” | Visual design critique should show the surface being discussed whenever a visual artifact is available. Include enough focused unannotated crops to substantiate the claim or explain why not. |
 | “Annotations will make the crop clearer.” | Do not alter the original visual evidence. Put the explanation in the caption or finding text. |
 
 ## Verification
@@ -120,7 +121,7 @@ Before finishing, confirm:
 - [ ] The visual checklist was applied selectively and findings are not padded.
 - [ ] Findings use `Critical / Warning / Info`.
 - [ ] Each finding has evidence basis.
-- [ ] Each finding that references a visible UI element/region/layout relationship includes inline visual evidence or an explicit `No visual evidence` reason.
+- [ ] Each finding that references a visible UI element/region/layout relationship includes enough inline visual evidence to substantiate the claim, or an explicit `No visual evidence` reason.
 - [ ] Visual evidence uses unannotated original screenshots/crops, with critique labels outside the image.
 - [ ] `../design-critique-pipeline/docusketch-html-report.md` was read.
 - [ ] HTML exists in `/tmp/design-critiques/` and follows the self-contained artifact rules in the report recipe, with only approved Google Fonts and Lucide imports.

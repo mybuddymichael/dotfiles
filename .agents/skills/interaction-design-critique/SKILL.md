@@ -83,7 +83,8 @@ Required report content:
 - severity sections: `Critical`, `Warning`, `Info`
 - finding cards tagged `Interaction`
 - principle, issue, fix, evidence basis, and source when available
-- focused unannotated visual evidence for each finding that references a visible control, affordance, state, region, or flow step, unless the finding includes an explicit `No visual evidence` reason
+- enough focused unannotated visual evidence for each finding that references a visible control, affordance, state, region, or flow step to substantiate the claim, unless the finding includes an explicit `No visual evidence` reason
+- multiple visual excerpts when comparison, sequence, state changes, spatial relationship, or multiple affected controls require more than one image
 - systemic patterns
 - what’s working/no action
 
@@ -103,7 +104,7 @@ Return only the artifact path, browser-open status, top findings summary, and co
 | “Visual hierarchy is weak, so I’ll critique typography here.” | Stay on interaction unless visual treatment affects affordance, feedback, or state comprehension. |
 | “The flow probably has a back button elsewhere.” | If the exit is not in evidence, say it is unobserved instead of assuming it exists. |
 | “I should fix the handlers while reading the file.” | This skill reports critique only; edits require a separate request. |
-| “This is a behavior issue, so screenshots do not matter.” | If the behavior issue is about a visible control, state, affordance, or flow step, include a focused unannotated visual reference or explain why one is unavailable. |
+| “This is a behavior issue, so screenshots do not matter.” | If the behavior issue is about a visible control, state, affordance, or flow step, include enough focused unannotated visual references to substantiate the claim or explain why they are unavailable. |
 | “I’ll mark the screenshot with arrows.” | Do not alter the original visual evidence. Put the explanation in the caption or finding text. |
 
 ## Verification
@@ -114,7 +115,7 @@ Before finishing, confirm:
 - [ ] The interaction checklist was applied selectively and findings are not padded.
 - [ ] Findings use `Critical / Warning / Info`.
 - [ ] Each finding has evidence basis.
-- [ ] Each finding that references a visible UI element/region/state includes inline visual evidence or an explicit `No visual evidence` reason.
+- [ ] Each finding that references a visible UI element/region/state includes enough inline visual evidence to substantiate the claim, or an explicit `No visual evidence` reason.
 - [ ] Visual evidence uses unannotated original screenshots/crops, with critique labels outside the image.
 - [ ] `../design-critique-pipeline/docusketch-html-report.md` was read.
 - [ ] HTML exists in `/tmp/design-critiques/` and follows the self-contained artifact rules in the report recipe, with only approved Google Fonts and Lucide imports.

@@ -97,7 +97,8 @@ Required report content:
 - severity sections: `Blocking`, `Confusing`, `Needs finesse`
 - finding cards tagged `Content`
 - original, issue, rewrite, evidence basis, and source when available
-- focused unannotated visual evidence for each finding that references visible rendered copy, labels, controls, or message regions, unless the finding includes an explicit `No visual evidence` reason
+- enough focused unannotated visual evidence for each finding that references visible rendered copy, labels, controls, or message regions to substantiate the claim, unless the finding includes an explicit `No visual evidence` reason
+- multiple visual excerpts when conflicting copy, repeated patterns, sequence, or multiple affected messages require more than one image
 - repeated copy patterns
 - what’s working/no action
 
@@ -118,7 +119,7 @@ Return only the artifact path, browser-open status, top findings summary, and co
 | “The code contains identifiers that look user-facing.” | Review rendered strings, not implementation names, unless the user asks for naming critique. |
 | “Legal copy is wordy, so I’ll simplify it aggressively.” | Compliance text may have constraints. Flag the tradeoff and avoid unsupported rewrites. |
 | “I can patch the string while I’m here.” | Do not edit source files in critique mode. |
-| “Content critique is about words, so visual evidence is unnecessary.” | If the copy appears in a screenshot or rendered artifact, include a focused unannotated crop so the reader sees the UI moment and surrounding context. |
+| “Content critique is about words, so visual evidence is unnecessary.” | If the copy appears in a screenshot or rendered artifact, include enough focused unannotated crops so the reader sees the UI moment and any necessary surrounding context. |
 | “I’ll highlight the text inside the screenshot.” | Do not alter the original visual evidence. Put the explanation in the caption or finding text. |
 
 ## Verification
@@ -130,7 +131,7 @@ Before finishing, confirm:
 - [ ] Findings use `Blocking / Confusing / Needs finesse`.
 - [ ] Each finding has a concrete rewrite unless the finding is a pattern-level note.
 - [ ] Each finding has evidence basis.
-- [ ] Each finding that references visible rendered copy/control/message region includes inline visual evidence or an explicit `No visual evidence` reason.
+- [ ] Each finding that references visible rendered copy/control/message region includes enough inline visual evidence to substantiate the claim, or an explicit `No visual evidence` reason.
 - [ ] Visual evidence uses unannotated original screenshots/crops, with critique labels outside the image.
 - [ ] `../design-critique-pipeline/docusketch-html-report.md` was read.
 - [ ] HTML exists in `/tmp/design-critiques/` and follows the self-contained artifact rules in the report recipe, with only approved Google Fonts and Lucide imports.
