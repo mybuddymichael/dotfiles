@@ -106,6 +106,7 @@ set -gx VISUAL nvim
 
 # Set abbreviations
 
+abbr -a jjl jj --limit 20
 abbr -a jjs jj status
 abbr -a jjc jj commit
 abbr -a n nvim
