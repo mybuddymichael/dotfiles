@@ -41,6 +41,7 @@ fish/fishd*
 .pi/agent/settings.json
 .pi/agent/mcp-cache.json
 .pi/agent/mcp-oauth/
+.pi/agent/trust.json
 
 .config/jj/repos
 .config/gh/hosts.yml
