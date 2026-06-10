@@ -1,0 +1,17 @@
+[tools]
+bun = "latest"
+deno = "latest"
+eza = "latest"
+gh = "latest"
+go = "latest"
+jj = "latest"
+jjui = "latest"
+node = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:@tobilu/qmd" = "latest"
+pnpm = "latest"
+uv = "0.11.2"
+watchexec = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node"]
