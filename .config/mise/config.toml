@@ -1,7 +1,11 @@
 [tools]
 bun = "latest"
 deno = "latest"
+eza = "latest"
+gh = "latest"
 go = "latest"
+jj = "latest"
+jjui = "latest"
 node = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:@tobilu/qmd" = "latest"
