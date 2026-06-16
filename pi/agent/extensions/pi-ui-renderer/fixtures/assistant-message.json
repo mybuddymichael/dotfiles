@@ -1,0 +1,6 @@
+{
+  "surface": "message",
+  "role": "assistant",
+  "width": 100,
+  "content": "Here is **markdown** with `code` and a list:\n\n1. first\n2. second"
+}

@@ -1,0 +1,11 @@
+{
+  "surface": "tool",
+  "tool": "bash",
+  "mode": "execute",
+  "cwd": "../../../../..",
+  "width": 100,
+  "expanded": "both",
+  "args": {
+    "command": "printf 'hello from pi-ui-render\\n'"
+  }
+}

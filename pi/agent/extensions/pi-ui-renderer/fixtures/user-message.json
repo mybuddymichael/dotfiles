@@ -1,0 +1,6 @@
+{
+  "surface": "message",
+  "role": "user",
+  "width": 80,
+  "content": "Please render **this user message**."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "pi-ui-renderer",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "pi-ui-render": "./src/cli.mjs"
+  },
+  "scripts": {
+    "render": "node ./src/cli.mjs",
+    "smoke": "node ./src/cli.mjs ./fixtures/bash-execute.json --extensions-dir .. --metadata && node ./src/cli.mjs ./fixtures/assistant-message.json --extensions-dir .. --metadata",
+    "validate": "node ./src/validate.mjs"
+  }
+}
