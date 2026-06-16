@@ -7,6 +7,7 @@ dotfiles.root = "."
 "nikitabobko/tap" = "latest"
 
 [bootstrap.packages]
+"brew:btop" = "latest"
 "brew:diff-so-fancy" = "latest"
 "brew:felixkratz/formulae/borders" = "latest"
 "brew:ffmpeg" = "latest"

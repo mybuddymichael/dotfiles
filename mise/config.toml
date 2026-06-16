@@ -1,7 +1,6 @@
 [tools]
 atuin = "latest"
 bat = "latest"
-btop = "latest"
 bun = "latest"
 deno = "latest"
 difftastic = "latest"
