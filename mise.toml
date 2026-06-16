@@ -48,6 +48,26 @@ dotfiles.root = "."
 # - unsupported Homebrew cask artifact types in current mise package backend
 # - obsolete sketchybar state
 
+[bootstrap.macos.dock]
+orientation = "right"
+autohide = true
+tilesize = 256
+show_recents = false
+
+[bootstrap.macos.defaults]
+"com.apple.spaces" = { spans-displays = true }
+"com.apple.dock" = { expose-group-apps = true, autohide-time-modifier = 0.0 }
+"NSGlobalDomain" = { AppleKeyboardUIMode = 2, ApplePressAndHoldEnabled = false, AppleShowScrollBars = "WhenScrolling" }
+
+[bootstrap.hooks.post-defaults]
+run = "killall Dock || true; killall SystemUIServer || true"
+
+[bootstrap.hooks.pre-user]
+run = "fish_path=\"/opt/homebrew/bin/fish\"; if [ -x /usr/local/bin/fish ] && [ ! -x \"$fish_path\" ]; then fish_path=\"/usr/local/bin/fish\"; fi; grep -qFx \"$fish_path\" /etc/shells || printf '%s\\n' \"$fish_path\" | sudo tee -a /etc/shells >/dev/null"
+
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/fish"
+
 [dotfiles]
 "~/.config/mise/config.toml" = { source = "mise/config.toml", mode = "symlink" }
 "~/.config/git" = { source = "git", mode = "symlink" }
