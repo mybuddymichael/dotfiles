@@ -10,3 +10,4 @@ dotfiles.root = "."
 "~/.config/atuin/config.toml" = { source = "atuin/config.toml", mode = "symlink" }
 "~/.config/btop" = { source = "btop", mode = "symlink-each" }
 "~/.pi" = { source = "pi", mode = "symlink" }
+"~/.hammerspoon" = { source = "hammerspoon", mode = "symlink" }
