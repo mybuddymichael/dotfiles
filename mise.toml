@@ -91,3 +91,14 @@ run = "killall Dock || true; killall SystemUIServer || true"
 
 [bootstrap.hooks.pre-user]
 run = "fish_path=\"/opt/homebrew/bin/fish\"; if [ -x /usr/local/bin/fish ] && [ ! -x \"$fish_path\" ]; then fish_path=\"/usr/local/bin/fish\"; fi; grep -qFx \"$fish_path\" /etc/shells || printf '%s\\n' \"$fish_path\" | sudo tee -a /etc/shells >/dev/null"
+
+[bootstrap.macos.launchd.agents.borders]
+program = "/Users/michael/.config/borders/bordersrc"
+run_at_load = true
+keep_alive = true
+environment = { PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin" }
+stdout_path = "/opt/homebrew/var/log/borders/borders.out.log"
+stderr_path = "/opt/homebrew/var/log/borders/borders.err.log"
+
+[bootstrap.hooks.final]
+run = "launchctl bootout gui/$(id -u) /Users/michael/Library/LaunchAgents/homebrew.mxcl.borders.plist 2>/dev/null || true; rm -f /Users/michael/Library/LaunchAgents/homebrew.mxcl.borders.plist"

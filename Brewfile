@@ -11,7 +11,6 @@ brew "difftastic"
 brew "eza"
 brew "fd"
 brew "felixkratz/formulae/borders", restart_service: :changed
-brew "felixkratz/formulae/sketchybar"
 brew "ffmpeg"
 brew "fish"
 brew "fzf"

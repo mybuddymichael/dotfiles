@@ -11,20 +11,6 @@ after-login-command = []
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = []
 
-# exec-on-workspace-change = [
-#   '/bin/bash',
-#   '-c',
-#   'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-# ]
-
-# on-focus-changed = [
-#   'exec-and-forget sketchybar --trigger aerospace_mode_changed',
-#   'exec-and-forget sketchybar --trigger aerospace_workspace_change',
-# ]
-# on-mode-changed = [
-#   'exec-and-forget sketchybar --trigger aerospace_mode_changed',
-# ]
-
 # Start AeroSpace at login
 start-at-login = true
 
@@ -254,10 +240,6 @@ o = 'built-in'
 # [[on-window-detected]]
 # check-further-callbacks = true
 # run = 'layout floating'
-
-[[on-window-detected]]
-check-further-callbacks = true
-run = ['exec-and-forget sketchybar --trigger aerospace_workspace_change']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
