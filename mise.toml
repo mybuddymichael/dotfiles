@@ -8,3 +8,4 @@ dotfiles.root = "."
 "~/.config/fish" = { source = "fish", mode = "symlink" }
 "~/.config/ghostty" = { source = "ghostty", mode = "symlink" }
 "~/.config/atuin/config.toml" = { source = "atuin/config.toml", mode = "symlink" }
+"~/.config/btop" = { source = "btop", mode = "symlink-each" }
