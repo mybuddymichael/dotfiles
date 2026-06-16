@@ -44,4 +44,5 @@ fish/fishd*
 .pi/agent/trust.json
 
 .config/jj/repos
+jj/repos
 .config/gh/hosts.yml

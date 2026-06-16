@@ -3,3 +3,5 @@ dotfiles.root = "."
 
 [dotfiles]
 "~/.config/mise/config.toml" = { source = "mise/config.toml", mode = "symlink" }
+"~/.config/git" = { source = "git", mode = "symlink" }
+"~/.config/jj" = { source = "jj", mode = "symlink" }
