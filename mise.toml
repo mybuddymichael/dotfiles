@@ -7,3 +7,4 @@ dotfiles.root = "."
 "~/.config/jj" = { source = "jj", mode = "symlink" }
 "~/.config/fish" = { source = "fish", mode = "symlink" }
 "~/.config/ghostty" = { source = "ghostty", mode = "symlink" }
+"~/.config/atuin/config.toml" = { source = "atuin/config.toml", mode = "symlink" }
