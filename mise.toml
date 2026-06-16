@@ -23,3 +23,4 @@ dotfiles.root = "."
 "~/.config/amp/settings.json" = { source = "amp/settings.json", mode = "symlink" }
 "~/.config/hunk/config.toml" = { source = "hunk/config.toml", mode = "symlink" }
 "~/.config/tide/config" = { source = "tide/config", mode = "symlink" }
+"~/.config/confetti.scpt" = { source = "confetti/confetti.scpt", mode = "symlink" }
