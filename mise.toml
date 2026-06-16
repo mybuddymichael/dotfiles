@@ -1,6 +1,66 @@
 [settings]
 dotfiles.root = "."
 
+[bootstrap.brew.taps]
+"felixkratz/formulae" = "latest"
+"mybuddymichael/tap" = "latest"
+"nikitabobko/tap" = "latest"
+"oven-sh/bun" = "latest"
+
+[bootstrap.packages]
+"brew:atuin" = "latest"
+"brew:bat" = "latest"
+"brew:btop" = "latest"
+"brew:diff-so-fancy" = "latest"
+"brew:difftastic" = "latest"
+"brew:fd" = "latest"
+"brew:felixkratz/formulae/borders" = "latest"
+"brew:ffmpeg" = "latest"
+"brew:fish" = "latest"
+"brew:fzf" = "latest"
+"brew:git" = "latest"
+"brew:git-cliff" = "latest"
+"brew:gnupg" = "latest"
+"brew:ical-buddy" = "latest"
+"brew:mas" = "latest"
+"brew:mise" = "latest"
+"brew:mybuddymichael/tap/sift-things" = "latest"
+"brew:neovim" = "latest"
+"brew:opencode" = "latest"
+"brew:oxipng" = "latest"
+"brew:pngquant" = "latest"
+"brew:prettyping" = "latest"
+"brew:ripgrep" = "latest"
+"brew:starship" = "latest"
+"brew:stow" = "latest"
+"brew:tree" = "latest"
+"brew:wget" = "latest"
+"brew:zoxide" = "latest"
+"brew-cask:1password" = "latest"
+"brew-cask:anki" = "latest"
+"brew-cask:arc" = "latest"
+"brew-cask:audio-hijack" = "latest"
+"brew-cask:batfi" = "latest"
+"brew-cask:chatgpt" = "latest"
+"brew-cask:claude" = "latest"
+"brew-cask:cleanshot" = "latest"
+"brew-cask:figma" = "latest"
+"brew-cask:granola" = "latest"
+"brew-cask:jordanbaird-ice" = "latest"
+"brew-cask:keyboard-maestro" = "latest"
+"brew-cask:leader-key" = "latest"
+"brew-cask:loopback" = "latest"
+"brew-cask:raycast" = "latest"
+"brew-cask:screen-studio" = "latest"
+"brew-cask:signal" = "latest"
+"brew-cask:spotify" = "latest"
+
+# Intentionally not duplicated here:
+# - developer CLIs already managed by mise/config.toml [tools]
+# - MAS apps, until post-Apple-ID bootstrap behavior is proven
+# - unsupported Homebrew cask artifact types in current mise package backend
+# - obsolete sketchybar state
+
 [dotfiles]
 "~/.config/mise/config.toml" = { source = "mise/config.toml", mode = "symlink" }
 "~/.config/git" = { source = "git", mode = "symlink" }
