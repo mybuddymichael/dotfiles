@@ -18,3 +18,4 @@ dotfiles.root = "."
 "~/.config/jjui" = { source = "jjui", mode = "symlink" }
 "~/.config/starship.toml" = { source = "starship.toml", mode = "symlink" }
 "~/.config/nvim" = { source = "nvim", mode = "symlink" }
+"~/.config/opencode" = { source = "opencode", mode = "symlink" }
