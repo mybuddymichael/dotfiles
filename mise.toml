@@ -20,3 +20,4 @@ dotfiles.root = "."
 "~/.config/nvim" = { source = "nvim", mode = "symlink" }
 "~/.config/opencode" = { source = "opencode", mode = "symlink" }
 "~/.config/gh/config.yml" = { source = "gh/config.yml", mode = "symlink" }
+"~/.config/amp/settings.json" = { source = "amp/settings.json", mode = "symlink" }
