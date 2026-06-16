@@ -11,3 +11,5 @@ dotfiles.root = "."
 "~/.config/btop" = { source = "btop", mode = "symlink-each" }
 "~/.pi" = { source = "pi", mode = "symlink" }
 "~/.hammerspoon" = { source = "hammerspoon", mode = "symlink" }
+"~/.aerospace.toml" = { source = "aerospace/aerospace.toml", mode = "symlink" }
+"~/.aerospace-debug.toml" = { source = "aerospace/aerospace-debug.toml", mode = "symlink" }
