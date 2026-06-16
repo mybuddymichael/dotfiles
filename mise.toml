@@ -15,3 +15,4 @@ dotfiles.root = "."
 "~/.aerospace-debug.toml" = { source = "aerospace/aerospace-debug.toml", mode = "symlink" }
 "~/.agents" = { source = "agents", mode = "symlink" }
 "~/.config/borders" = { source = "borders", mode = "symlink" }
+"~/.config/jjui" = { source = "jjui", mode = "symlink" }
