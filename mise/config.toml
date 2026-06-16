@@ -12,6 +12,8 @@ node = "latest"
 pnpm = "latest"
 uv = "0.11.2"
 watchexec = "latest"
+yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
+experimental = true
