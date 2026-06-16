@@ -22,3 +22,4 @@ dotfiles.root = "."
 "~/.config/gh/config.yml" = { source = "gh/config.yml", mode = "symlink" }
 "~/.config/amp/settings.json" = { source = "amp/settings.json", mode = "symlink" }
 "~/.config/hunk/config.toml" = { source = "hunk/config.toml", mode = "symlink" }
+"~/.config/tide/config" = { source = "tide/config", mode = "symlink" }
