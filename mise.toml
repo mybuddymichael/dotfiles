@@ -6,3 +6,4 @@ dotfiles.root = "."
 "~/.config/git" = { source = "git", mode = "symlink" }
 "~/.config/jj" = { source = "jj", mode = "symlink" }
 "~/.config/fish" = { source = "fish", mode = "symlink" }
+"~/.config/ghostty" = { source = "ghostty", mode = "symlink" }
