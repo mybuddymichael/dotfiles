@@ -1,6 +1,31 @@
 [settings]
 dotfiles.root = "."
 
+[dotfiles]
+"~/.config/mise/config.toml" = { source = "mise/config.toml", mode = "symlink" }
+"~/.config/git" = { source = "git", mode = "symlink" }
+"~/.config/jj" = { source = "jj", mode = "symlink" }
+"~/.config/fish" = { source = "fish", mode = "symlink" }
+"~/.config/ghostty" = { source = "ghostty", mode = "symlink" }
+"~/.config/atuin/config.toml" = { source = "atuin/config.toml", mode = "symlink" }
+"~/.config/btop" = { source = "btop", mode = "symlink-each" }
+"~/.pi" = { source = "pi", mode = "symlink" }
+"~/.hammerspoon" = { source = "hammerspoon", mode = "symlink" }
+"~/.aerospace.toml" = { source = "aerospace/aerospace.toml", mode = "symlink" }
+"~/.aerospace-debug.toml" = { source = "aerospace/aerospace-debug.toml", mode = "symlink" }
+"~/.agents" = { source = "agents", mode = "symlink" }
+"~/.config/borders" = { source = "borders", mode = "symlink" }
+"~/.config/jjui" = { source = "jjui", mode = "symlink" }
+"~/.config/starship.toml" = { source = "starship.toml", mode = "symlink" }
+"~/.config/nvim" = { source = "nvim", mode = "symlink" }
+"~/.config/opencode" = { source = "opencode", mode = "symlink" }
+"~/.config/gh/config.yml" = { source = "gh/config.yml", mode = "symlink" }
+"~/.config/amp/settings.json" = { source = "amp/settings.json", mode = "symlink" }
+"~/.config/hunk/config.toml" = { source = "hunk/config.toml", mode = "symlink" }
+"~/.config/tide/config" = { source = "tide/config", mode = "symlink" }
+"~/.config/confetti.scpt" = { source = "confetti/confetti.scpt", mode = "symlink" }
+"~/.claude" = { source = "claude", mode = "symlink" }
+
 [bootstrap.brew.taps]
 "felixkratz/formulae" = "latest"
 "mybuddymichael/tap" = "latest"
@@ -16,7 +41,6 @@ dotfiles.root = "."
 "brew:gnupg" = "latest"
 "brew:ical-buddy" = "latest"
 "brew:mas" = "latest"
-"brew:mise" = "latest"
 "brew:mybuddymichael/tap/sift-things" = "latest"
 "brew:pngquant" = "latest"
 "brew:prettyping" = "latest"
@@ -48,8 +72,11 @@ dotfiles.root = "."
 # - unsupported Homebrew cask artifact types in current mise package backend
 # - obsolete sketchybar state
 
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/fish"
+
 [bootstrap.macos.dock]
-orientation = "right"
+orientation = "left"
 autohide = true
 tilesize = 256
 show_recents = false
@@ -64,31 +91,3 @@ run = "killall Dock || true; killall SystemUIServer || true"
 
 [bootstrap.hooks.pre-user]
 run = "fish_path=\"/opt/homebrew/bin/fish\"; if [ -x /usr/local/bin/fish ] && [ ! -x \"$fish_path\" ]; then fish_path=\"/usr/local/bin/fish\"; fi; grep -qFx \"$fish_path\" /etc/shells || printf '%s\\n' \"$fish_path\" | sudo tee -a /etc/shells >/dev/null"
-
-[bootstrap.user]
-login_shell = "/opt/homebrew/bin/fish"
-
-[dotfiles]
-"~/.config/mise/config.toml" = { source = "mise/config.toml", mode = "symlink" }
-"~/.config/git" = { source = "git", mode = "symlink" }
-"~/.config/jj" = { source = "jj", mode = "symlink" }
-"~/.config/fish" = { source = "fish", mode = "symlink" }
-"~/.config/ghostty" = { source = "ghostty", mode = "symlink" }
-"~/.config/atuin/config.toml" = { source = "atuin/config.toml", mode = "symlink" }
-"~/.config/btop" = { source = "btop", mode = "symlink-each" }
-"~/.pi" = { source = "pi", mode = "symlink" }
-"~/.hammerspoon" = { source = "hammerspoon", mode = "symlink" }
-"~/.aerospace.toml" = { source = "aerospace/aerospace.toml", mode = "symlink" }
-"~/.aerospace-debug.toml" = { source = "aerospace/aerospace-debug.toml", mode = "symlink" }
-"~/.agents" = { source = "agents", mode = "symlink" }
-"~/.config/borders" = { source = "borders", mode = "symlink" }
-"~/.config/jjui" = { source = "jjui", mode = "symlink" }
-"~/.config/starship.toml" = { source = "starship.toml", mode = "symlink" }
-"~/.config/nvim" = { source = "nvim", mode = "symlink" }
-"~/.config/opencode" = { source = "opencode", mode = "symlink" }
-"~/.config/gh/config.yml" = { source = "gh/config.yml", mode = "symlink" }
-"~/.config/amp/settings.json" = { source = "amp/settings.json", mode = "symlink" }
-"~/.config/hunk/config.toml" = { source = "hunk/config.toml", mode = "symlink" }
-"~/.config/tide/config" = { source = "tide/config", mode = "symlink" }
-"~/.config/confetti.scpt" = { source = "confetti/confetti.scpt", mode = "symlink" }
-"~/.claude" = { source = "claude", mode = "symlink" }
