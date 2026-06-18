@@ -49,6 +49,8 @@ abbr -a jjc jj commit
 abbr -a n nvim
 abbr -a bxb bunx --bun
 abbr -a oc opencode
+abbr -a pcx env CODEX_HOME=$HOME/.codex-personal codex
+abbr -a wcx env CODEX_HOME=$HOME/.codex-work codex
 abbr -a c4h codex --model gpt-5.4 -c 'model_reasoning_effort="high"'
 abbr -a c4m codex --model gpt-5.4 -c 'model_reasoning_effort="medium"'
 abbr -a c4l codex --model gpt-5.4 -c 'model_reasoning_effort="low"'

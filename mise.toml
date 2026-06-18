@@ -25,6 +25,10 @@ dotfiles.root = "."
 "~/.config/tide/config" = { source = "tide/config", mode = "symlink" }
 "~/.config/confetti.scpt" = { source = "confetti/confetti.scpt", mode = "symlink" }
 "~/.claude" = { source = "claude", mode = "symlink" }
+"~/.codex-personal/config.toml" = { source = "codex/personal/config.toml", mode = "symlink" }
+"~/.codex-work/config.toml" = { source = "codex/work/config.toml", mode = "symlink" }
+"~/.codex-personal/AGENTS.md" = { source = "codex/AGENTS.md", mode = "symlink" }
+"~/.codex-work/AGENTS.md" = { source = "codex/AGENTS.md", mode = "symlink" }
 
 [bootstrap.brew.taps]
 "felixkratz/formulae" = "latest"

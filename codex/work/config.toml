@@ -1,0 +1,12 @@
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+personality = "pragmatic"
+plan_mode_reasoning_effort = "high"
+approvals_reviewer = "user"
+cli_auth_credentials_store = "file"
+
+[projects."/Users/michael/files_synced_outside_of_icloud/ds-wiki"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 1

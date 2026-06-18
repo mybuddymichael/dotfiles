@@ -1,0 +1,9 @@
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+personality = "pragmatic"
+plan_mode_reasoning_effort = "high"
+approvals_reviewer = "user"
+cli_auth_credentials_store = "file"
+
+[projects."/Users/michael/dotfiles"]
+trust_level = "trusted"
