@@ -1,0 +1,49 @@
+{
+  "name": "pi-simple",
+  "version": "0.1.0",
+  "description": "UI and tool rendering customizations to make Pi simpler.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mybuddymichael/pi-simple.git"
+  },
+  "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "files": [
+    "index.ts",
+    "assistant-style",
+    "startup-header",
+    "status-message-style",
+    "tool-one-line",
+    "user-message-style",
+    "README.md"
+  ],
+  "exports": {
+    ".": "./index.ts"
+  },
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@mariozechner/pi-ai": "^0.67.68",
+    "@mariozechner/pi-coding-agent": "^0.67.68",
+    "@mariozechner/pi-tui": "^0.67.68",
+    "@types/node": "^24.3.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.4"
+  }
+}
