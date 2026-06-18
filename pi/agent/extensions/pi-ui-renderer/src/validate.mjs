@@ -32,4 +32,12 @@ const bash = run("bash-execute.json");
 assertContains("bash tool", bash, "Run");
 assertContains("bash tool", bash, "hello from pi-ui-render");
 
+const footer = run("footer.json");
+assertContains("footer", footer, "personal");
+assertContains("footer", footer, "nono");
+assertContains("footer", footer, "gpt-5.5");
+assertContains("footer", footer, "medium");
+assertContains("footer", footer, "fast");
+assertContains("footer", footer, "42.0k");
+
 console.error("pi-ui-render validation passed");

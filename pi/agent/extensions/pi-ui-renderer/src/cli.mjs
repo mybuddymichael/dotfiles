@@ -26,7 +26,7 @@ function parseArgs(argv) {
 }
 
 function usage() {
-  return `Usage: pi-ui-render <fixture.json> [--extensions-dir DIR] [--metadata]\n\nRenders Pi UI surfaces as ANSI terminal text. Supports tool and message rendering.\n\nDefault extensions dir: ~/.pi/agent/extensions\nEnv override: PI_UI_RENDER_EXTENSIONS_DIR\n`;
+  return `Usage: pi-ui-render <fixture.json> [--extensions-dir DIR] [--metadata]\n\nRenders Pi UI surfaces as ANSI terminal text. Supports tool, message, and footer rendering.\n\nDefault extensions dir: ~/.pi/agent/extensions\nEnv override: PI_UI_RENDER_EXTENSIONS_DIR\n`;
 }
 
 async function importFromCandidates(specifier, candidates) {
@@ -98,12 +98,21 @@ function assertObject(value, name) {
 
 function validateFixture(fixture) {
   assertObject(fixture, "fixture");
-  if (!["tool", "message"].includes(fixture.surface)) die(`fixture.surface must be "tool" or "message"`);
+  if (!["tool", "message", "footer"].includes(fixture.surface)) die(`fixture.surface must be "tool", "message", or "footer"`);
   if (fixture.width !== undefined && (!Number.isInteger(fixture.width) || fixture.width < 1)) die(`fixture.width must be a positive integer`);
   if (fixture.cwd !== undefined && typeof fixture.cwd !== "string") die(`fixture.cwd must be a string`);
   if (fixture.theme !== undefined && typeof fixture.theme !== "string") die(`fixture.theme must be a string`);
   const expanded = fixture.expanded ?? false;
   if (![true, false, "both"].includes(expanded)) die(`fixture.expanded must be true, false, or "both"`);
+
+  if (fixture.surface === "footer") {
+    if (fixture.statuses !== undefined && (typeof fixture.statuses !== "object" || fixture.statuses === null || Array.isArray(fixture.statuses))) die(`fixture.statuses must be an object`);
+    if (fixture.gitBranch !== undefined && typeof fixture.gitBranch !== "string" && fixture.gitBranch !== null) die(`fixture.gitBranch must be a string or null`);
+    if (fixture.thinkingLevel !== undefined && typeof fixture.thinkingLevel !== "string") die(`fixture.thinkingLevel must be a string`);
+    if (fixture.contextUsage !== undefined) assertObject(fixture.contextUsage, "fixture.contextUsage");
+    if (fixture.model !== undefined) assertObject(fixture.model, "fixture.model");
+    return { mode: undefined, expanded, slot: undefined };
+  }
 
   if (fixture.surface === "tool") {
     if (typeof fixture.tool !== "string" || fixture.tool.length === 0) die(`fixture.tool must be a non-empty string`);
@@ -209,7 +218,7 @@ function mergeTool(base, override) {
   };
 }
 
-async function loadSurfaces({ cwd, extensionsDir, metadata, theme }) {
+async function loadSurfaces({ cwd, extensionsDir, metadata, theme, uiState }) {
   const pi = await importPi();
   const toolsModule = await importToolsModule();
   const loaderModule = await importExtensionLoaderModule();
@@ -241,9 +250,9 @@ async function loadSurfaces({ cwd, extensionsDir, metadata, theme }) {
     getSessionName: () => undefined, setLabel: () => {}, getActiveTools: () => [...byName.keys()],
     getAllTools: () => [...byName.values()].map((tool) => ({ name: tool.name, description: tool.description, parameters: tool.parameters, promptGuidelines: tool.promptGuidelines, sourceInfo: {} })),
     setActiveTools: () => {}, refreshTools: () => {}, getCommands: () => [], setModel: async () => false,
-    getThinkingLevel: () => "off", setThinkingLevel: () => {},
+    getThinkingLevel: () => uiState.thinkingLevel ?? "off", setThinkingLevel: () => {},
   });
-  const sessionStartCtx = makeCtx(cwd, theme);
+  const sessionStartCtx = makeCtx(cwd, theme, uiState);
   sessionStartCtx.mode = "tui";
   sessionStartCtx.hasUI = true;
   for (const extension of loaded.extensions ?? []) {
@@ -291,7 +300,7 @@ async function loadSurfaces({ cwd, extensionsDir, metadata, theme }) {
   return { tools: byName, messageRenderers };
 }
 
-function makeCtx(cwd, theme) {
+function makeCtx(cwd, theme, uiState = createUiState()) {
   return {
     cwd,
     mode: "print",
@@ -299,25 +308,54 @@ function makeCtx(cwd, theme) {
     ui: {
       theme,
       notify: (message, level = "info") => console.error(`notification(${level}): ${message}`),
-      setStatus: () => {}, setWidget: () => {}, setTitle: () => {}, setEditorText: () => {},
+      setStatus: (key, value) => {
+        if (value === undefined) uiState.statuses.delete(key);
+        else uiState.statuses.set(key, value);
+      }, setWidget: () => {}, setTitle: () => {}, setEditorText: () => {},
       getEditorText: () => "", pasteToEditor: () => {}, getToolsExpanded: () => false, setToolsExpanded: () => {},
       setEditorComponent: () => {}, getEditorComponent: () => undefined, addAutocompleteProvider: () => {},
-      setFooter: () => {}, setWorkingMessage: () => {}, setWorkingVisible: () => {}, setWorkingIndicator: () => {},
+      setFooter: (factory) => { uiState.footerFactory = factory; }, setWorkingMessage: () => {}, setWorkingVisible: () => {}, setWorkingIndicator: () => {},
       getAllThemes: () => [], getTheme: () => undefined, setTheme: () => ({ success: false, error: "theme switching is unavailable in pi-ui-render" }),
     },
     sessionManager: { getEntries: () => [], getBranch: () => [], getLeafId: () => null, getSessionFile: () => undefined },
     modelRegistry: undefined,
-    model: undefined,
+    model: uiState.model,
     signal: undefined,
     isIdle: () => true,
     abort: () => {},
     hasPendingMessages: () => false,
     shutdown: () => {},
-    getContextUsage: () => undefined,
+    getContextUsage: () => uiState.contextUsage,
     compact: () => {},
     getSystemPrompt: () => "",
     isProjectTrusted: () => false,
   };
+}
+
+function createUiState(fixture = {}) {
+  return {
+    statuses: new Map(Object.entries(fixture.statuses ?? {}).filter(([, value]) => typeof value === "string")),
+    footerFactory: undefined,
+    gitBranch: fixture.gitBranch ?? null,
+    thinkingLevel: fixture.thinkingLevel ?? "off",
+    contextUsage: fixture.contextUsage,
+    model: fixture.model,
+  };
+}
+
+function renderFooter(uiState, theme, width) {
+  const footerData = {
+    getGitBranch: () => uiState.gitBranch,
+    getExtensionStatuses: () => uiState.statuses,
+    onBranchChange: () => () => {},
+  };
+  const tui = { requestRender: () => {} };
+  if (uiState.footerFactory) {
+    const component = uiState.footerFactory(tui, theme, footerData);
+    return renderComponent(component, width);
+  }
+  const line = [...uiState.statuses.values()].filter(Boolean).join("  ");
+  return line ? renderComponent({ render: () => [line], invalidate: () => {} }, width) : "";
 }
 
 async function executeTool(tool, args, cwd, theme) {
@@ -351,7 +389,11 @@ async function main() {
   try { themeModule.initTheme(themeName, false); } catch (error) { die(`failed to initialize theme ${themeName ?? "<default>"}: ${error.message}`); }
   const theme = themeModule.theme;
 
-  const surfaces = await loadSurfaces({ cwd, extensionsDir: argv.extensionsDir, metadata: argv.metadata, theme });
+  const uiState = createUiState(fixture);
+  const surfaces = await loadSurfaces({ cwd, extensionsDir: argv.extensionsDir, metadata: argv.metadata, theme, uiState });
+  for (const [key, value] of Object.entries(fixture.statuses ?? {})) {
+    if (typeof value === "string") uiState.statuses.set(key, value);
+  }
 
   const renderTool = (expandedValue) => {
     const tool = surfaces.tools.get(fixture.tool);
@@ -411,7 +453,9 @@ async function main() {
   };
 
   let renderOne;
-  if (fixture.surface === "tool") {
+  if (fixture.surface === "footer") {
+    renderOne = () => renderFooter(uiState, theme, width);
+  } else if (fixture.surface === "tool") {
     const tool = surfaces.tools.get(fixture.tool);
     if (!tool) die(`tool not found: ${fixture.tool}`);
     renderTool.args = fixture.args ?? fixture.call?.args ?? {};
@@ -434,7 +478,7 @@ async function main() {
     output = renderOne(expanded);
   }
   if (argv.metadata) {
-    const subject = fixture.surface === "tool" ? `tool=${fixture.tool} mode=${mode} slot=${slot}` : `message=${fixture.customType ? `custom:${fixture.customType}` : fixture.role}`;
+    const subject = fixture.surface === "tool" ? `tool=${fixture.tool} mode=${mode} slot=${slot}` : fixture.surface === "footer" ? `footer statuses=${[...uiState.statuses.keys()].join(",")}` : `message=${fixture.customType ? `custom:${fixture.customType}` : fixture.role}`;
     console.error(`surface=${fixture.surface} ${subject} width=${width} expanded=${expanded} theme=${theme.name ?? themeName ?? "default"} cwd=${cwd}`);
   }
   process.stdout.write(output.endsWith("\n") ? output : `${output}\n`);

@@ -50,6 +50,7 @@ Before editing or before final validation, list which surfaces the change can af
 | Custom message renderer | `surface: "message", customType: "..."` |
 | Tool renderer or tool override | `surface: "tool"` |
 | Built-in tool override | `surface: "tool"` with the actual tool name, e.g. `bash`, `read`, `edit` |
+| Footer or status line | `surface: "footer"` with `statuses`, `model`, `thinkingLevel`, `contextUsage`, and `gitBranch` as needed |
 | Collapsed/expanded behavior | `expanded: "both"` |
 | Execution-sensitive output | `mode: "execute"` |
 | Deterministic visual state | `mode: "fixture"` |
@@ -109,6 +110,21 @@ Custom message fixture example:
 }
 ```
 
+Footer/status-line fixture example:
+
+```json
+{
+  "surface": "footer",
+  "cwd": ".",
+  "width": 120,
+  "gitBranch": "main",
+  "thinkingLevel": "medium",
+  "model": { "provider": "openai-codex", "id": "gpt-5.5" },
+  "contextUsage": { "tokens": 42000, "contextWindow": 200000 },
+  "statuses": { "openai-codex-fast": "fast" }
+}
+```
+
 ### 3. Render through the same extension loading path Pi uses
 
 From this dotfiles repo before stow, run:
@@ -127,7 +143,7 @@ Requirements:
 
 - Preserve ANSI output. Do not pipe through tools that strip color/style unless doing a secondary plain-text sanity check.
 - Use `cat -v` only as an inspection aid; raw ANSI stdout is the source of truth.
-- Confirm relevant global extensions loaded. In this setup, message rendering should include `pi-simple` chrome such as `AGENT`, `USER`, `┃`, and `╱╱╱` when validating user/assistant messages.
+- Confirm relevant global extensions loaded. In this setup, message rendering should include `pi-simple` chrome such as `AGENT`, `USER`, `┃`, and `╱╱╱` when validating user/assistant messages; footer rendering should include custom-footer markers such as profile, nono state, model, thinking level, fast-mode status, and context usage.
 - Do not validate only against base Pi components when global extensions affect the surface.
 
 ### 4. Inspect the rendered output against the intended UI
@@ -139,6 +155,7 @@ Check concrete markers, not vibes:
 - ANSI styling is present where color/style matters.
 - Collapsed and expanded states differ correctly when `expanded: "both"` is used.
 - Executed tool output appears where Pi would show it.
+- Footer/status-line fixtures exercise `ctx.ui.setStatus()` and `ctx.ui.setFooter()` through extension `session_start` hooks, with mock `footerData` for branch and extension statuses.
 - Width-sensitive wrapping/padding looks correct at the fixture width.
 
 If output is wrong, fix the extension or renderer, then rerun. Do not finalize based on a stale or mismatching render.

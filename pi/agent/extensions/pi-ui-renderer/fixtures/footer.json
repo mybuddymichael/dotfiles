@@ -1,0 +1,18 @@
+{
+  "surface": "footer",
+  "cwd": "../../../../..",
+  "width": 120,
+  "gitBranch": "main",
+  "thinkingLevel": "medium",
+  "model": {
+    "provider": "openai-codex",
+    "id": "gpt-5.5"
+  },
+  "contextUsage": {
+    "tokens": 42000,
+    "contextWindow": 200000
+  },
+  "statuses": {
+    "openai-codex-fast": "fast"
+  }
+}

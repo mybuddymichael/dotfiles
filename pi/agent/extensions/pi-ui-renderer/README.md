@@ -57,9 +57,25 @@ Custom message fixture:
 }
 ```
 
+Footer/status-line fixture:
+
+```json
+{
+  "surface": "footer",
+  "width": 120,
+  "cwd": ".",
+  "gitBranch": "main",
+  "thinkingLevel": "medium",
+  "model": { "provider": "openai-codex", "id": "gpt-5.5" },
+  "contextUsage": { "tokens": 42000, "contextWindow": 200000 },
+  "statuses": { "openai-codex-fast": "fast" }
+}
+```
+
 - Tool `mode: "fixture"` renders a supplied `result` object.
 - Tool `mode: "execute"` executes the selected tool with `args`, including mutating tools.
 - Message rendering supports built-in user/assistant messages and extension `registerMessageRenderer` custom renderers.
+- Footer rendering runs extension `session_start` hooks, captures `ctx.ui.setStatus()` and `ctx.ui.setFooter()`, and renders the registered footer component with mock `footerData`.
 - `expanded` defaults to `false`; use `true` or `"both"` to inspect expanded output.
 - stdout is the ANSI render. Use `--metadata` for diagnostics on stderr.
 
@@ -73,4 +89,4 @@ Run:
 npm run validate
 ```
 
-The validation checks that global extension patches are active, including the `pi-simple` assistant message chrome (`AGENT`, `┃`, and `╱╱╱`) and tool renderer styling.
+The validation checks that global extension patches are active, including the `pi-simple` assistant message chrome (`AGENT`, `┃`, and `╱╱╱`), tool renderer styling, and the custom footer/status-line surface.
