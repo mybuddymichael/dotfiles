@@ -296,6 +296,28 @@ describe("tool-one-line settled bash rendering", () => {
 		expect(rendered).toContain("ctrl-o to expand");
 		expect(rendered).not.toContain("01: alpha");
 	});
+
+	it("preserves ANSI SGR sequences in expanded settled bash output", () => {
+		const { api, registeredTools } = createExtensionApiStub();
+		toolOneLineExtension(api);
+
+		const bashTool = registeredTools.find((tool) => tool.name === "bash");
+		expect(bashTool?.renderResult).toBeTypeOf("function");
+		const rendered = normalizeRenderedText(
+			bashTool!.renderResult!(
+				{ content: [{ type: "text", text: "\x1b[31mred\x1b[0m normal\n\x1b[32mgreen\x1b[0m" }], details: {}, isError: false },
+				{ isPartial: false, expanded: true },
+				createTheme(),
+				createRenderContext(
+					{ command: "printf colors", intent: "test ANSI output" },
+					true,
+				),
+			),
+		);
+
+		expect(rendered).toContain("\x1b[31mred\x1b[0m normal");
+		expect(rendered).toContain("\x1b[32mgreen\x1b[0m");
+	});
 });
 
 describe("tool-one-line read image rendering", () => {

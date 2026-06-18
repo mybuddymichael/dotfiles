@@ -565,6 +565,19 @@ export function renderCollapsedBashResult(
 	return renderToolWithIntent(theme, context, `${label}${outputSummary}`, intent);
 }
 
+export function renderExpandedBashResult(
+	result: ToolResult<BashToolDetails>,
+	theme: Theme,
+	context: RenderContext,
+	label: string,
+	intent: string | undefined,
+): Component {
+	const component = resetContainer(context);
+	component.addChild(renderToolWithIntent(theme, { ...context, lastComponent: undefined }, label, intent));
+	addBashOutputPreview(component, result, theme, { ...context, lastComponent: undefined, expanded: true }, true);
+	return component;
+}
+
 export function renderPartialBashResult(
 	result: ToolResult<BashToolDetails>,
 	theme: Theme,
