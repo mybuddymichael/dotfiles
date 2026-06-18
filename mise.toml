@@ -47,30 +47,38 @@ dotfiles.root = "."
 "brew:stow" = "latest"
 "brew:tree" = "latest"
 "brew:wget" = "latest"
-"brew-cask:1password" = "latest"
-"brew-cask:anki" = "latest"
-"brew-cask:arc" = "latest"
-"brew-cask:audio-hijack" = "latest"
-"brew-cask:batfi" = "latest"
-"brew-cask:chatgpt" = "latest"
-"brew-cask:claude" = "latest"
-"brew-cask:cleanshot" = "latest"
-"brew-cask:figma" = "latest"
-"brew-cask:granola" = "latest"
-"brew-cask:jordanbaird-ice" = "latest"
-"brew-cask:keyboard-maestro" = "latest"
-"brew-cask:leader-key" = "latest"
-"brew-cask:loopback" = "latest"
-"brew-cask:raycast" = "latest"
-"brew-cask:screen-studio" = "latest"
-"brew-cask:signal" = "latest"
-"brew-cask:spotify" = "latest"
 
 # Intentionally not duplicated here:
+# - GUI apps managed by [bootstrap.hooks.post-packages] via `brew install --cask`
+#   because mise's brew-cask backend currently misdetects Homebrew `.metadata`
+#   as extra Caskroom versions and can corrupt app bundles while reconciling.
 # - developer CLIs already managed by mise/config.toml [tools]
 # - MAS apps, until post-Apple-ID bootstrap behavior is proven
 # - unsupported Homebrew cask artifact types in current mise package backend
 # - obsolete sketchybar state
+
+# [bootstrap.hooks.post-packages]
+# run = '''
+# HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask \
+#   1password \
+#   arc \
+#   audio-hijack \
+#   batfi \
+#   chatgpt \
+#   claude \
+#   cleanshot \
+#   figma \
+#   granola \
+#   jordanbaird-ice \
+#   keyboard-maestro \
+#   leader-key \
+#   loopback \
+#   netnewswire \
+#   raycast \
+#   screen-studio \
+#   signal \
+#   spotify
+# '''
 
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/fish"
