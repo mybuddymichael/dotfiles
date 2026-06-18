@@ -1,0 +1,8 @@
+{
+  "name": "dead-simple-mcp",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0"
+  }
+}
