@@ -45,10 +45,12 @@ function createTheme(): RenderThemeLike {
 	};
 }
 
+function normalizeRenderedLines(component: RenderComponentLike): string[] {
+	return component.render(120).map((line) => line.trimEnd());
+}
+
 function normalizeRenderedText(component: RenderComponentLike): string {
-	return component
-		.render(120)
-		.map((line) => line.trimEnd())
+	return normalizeRenderedLines(component)
 		.join("\n")
 		.trim();
 }
@@ -151,6 +153,29 @@ describe("tool-one-line lifecycle icons", () => {
 		expect(rendered).toContain("line 2");
 		expect(rendered).not.toContain("Run");
 		expect(rendered).not.toContain("test streaming output");
+	});
+
+	it("starts partial bash output with a blank separator line", () => {
+		const { api, registeredTools } = createExtensionApiStub();
+		toolOneLineExtension(api);
+
+		const bashTool = registeredTools.find((tool) => tool.name === "bash");
+		expect(bashTool?.renderResult).toBeTypeOf("function");
+		const renderedLines = normalizeRenderedLines(
+			bashTool!.renderResult!(
+				{ content: [{ type: "text", text: "line 1\nline 2" }], details: {}, isError: false },
+				{ isPartial: true, expanded: false },
+				createTheme(),
+				createRenderContext(
+					{ command: "printf 'line 1\\nline 2\\n'", intent: "test streaming output spacing" },
+					false,
+					{ isPartial: true },
+				),
+			),
+		);
+
+		expect(renderedLines[0]).toBe("");
+		expect(renderedLines[1]).toContain("line 1");
 	});
 
 	it("renders empty partial bash updates as empty so the call header is not duplicated", () => {
