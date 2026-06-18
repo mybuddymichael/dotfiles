@@ -14,9 +14,12 @@ type ContextSnapshot = {
 
 type PiProfile = "work" | "personal";
 
+type NonoSandboxState = "sandboxed" | "unsandboxed";
+
 type FooterState = {
   path: string;
   profile: PiProfile;
+  sandbox: NonoSandboxState;
   model: string;
   thinking: string;
   fastMode: string;
@@ -50,8 +53,14 @@ function detectPiProfile(): PiProfile {
   return agentDir.includes(".pi-work") ? "work" : "personal";
 }
 
+function detectNonoSandbox(): NonoSandboxState {
+  // nono injects NONO_CAP_FILE into sandboxed processes. Outside nono this is
+  // unset, which makes it a cheap, synchronous status-line check.
+  return process.env.NONO_CAP_FILE ? "sandboxed" : "unsandboxed";
+}
+
 function formatProfile(profile: PiProfile): string {
-  return profile === "work" ? "WORK" : "personal";
+  return profile === "work" ? "work" : "personal";
 }
 
 function formatPath(path: string): string {
@@ -63,6 +72,34 @@ function formatTokens(tokens: number): string {
   if (tokens >= 1_000_000) return `${(tokens / 1_000_000).toFixed(1)}M`;
   if (tokens >= 1_000) return `${(tokens / 1_000).toFixed(1)}k`;
   return `${tokens}`;
+}
+
+function fgColorAsBg(
+  theme: { getFgAnsi?: (color: any) => string },
+  color: string,
+  text: string,
+): string {
+  try {
+    const ansi = theme.getFgAnsi?.(color) ?? "";
+    if (!ansi) return text;
+    return `${ansi.replace(/\[38;/g, "[48;")}${text}\x1b[49m`;
+  } catch {
+    return text;
+  }
+}
+
+function bgColorAsFg(
+  theme: { getBgAnsi?: (color: any) => string },
+  color: string,
+  text: string,
+): string {
+  try {
+    const ansi = theme.getBgAnsi?.(color) ?? "";
+    if (!ansi) return text;
+    return `${ansi.replace(/\[48;/g, "[38;")}${text}\x1b[39m`;
+  } catch {
+    return text;
+  }
 }
 
 function readContextUsage(ctx: ExtensionContext): ContextSnapshot {
@@ -89,6 +126,7 @@ function updateFooterState(
 ) {
   state.path = formatPath(ctx.cwd);
   state.profile = detectPiProfile();
+  state.sandbox = detectNonoSandbox();
   state.model = ctx.model?.id ?? "no-model";
   state.thinking = pi.getThinkingLevel();
   state.fastMode = readFastMode();
@@ -119,7 +157,15 @@ function installFooter(ctx: ExtensionContext, state: FooterState) {
         state.profile === "work" ? "warning" : "success",
         formatProfile(state.profile),
       );
-      const line = `${profile}${theme.fg("dim", `  ${state.path}  ${state.model}  ${state.thinking}  `)}${fastMode}${theme.fg(
+      const sandbox =
+        state.sandbox === "sandboxed"
+          ? theme.fg("dim", "✓ nono")
+          : fgColorAsBg(
+              theme,
+              "error",
+              bgColorAsFg(theme, "selectedBg", " ✗ nono "),
+            );
+      const line = `${profile}${theme.fg("dim", "  ")}${sandbox}${theme.fg("dim", `  ${state.path}  ${state.model}  ${state.thinking}  `)}${fastMode}${theme.fg(
         state.context.color,
         state.context.used,
       )}${total}`;
@@ -134,6 +180,7 @@ export default function (pi: ExtensionAPI) {
   const state: FooterState = {
     path: "",
     profile: detectPiProfile(),
+    sandbox: detectNonoSandbox(),
     model: "no-model",
     // Do not call action methods while the extension factory is running; the
     // extension runtime is not initialized yet. This is populated on
