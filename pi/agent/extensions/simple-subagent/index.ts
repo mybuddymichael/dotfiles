@@ -172,6 +172,8 @@ function renderDetails(details: SubagentDetails, options: { expanded: boolean; i
 		let text = header;
 		const activity = details.activity.slice(-MAX_COLLAPSED_ACTIVITY);
 		const skipped = details.activity.length - activity.length;
+		const hasBody = skipped > 0 || activity.length > 0 || !!details.errorMessage || !!usage;
+		if (hasBody) text += "\n";
 		if (skipped > 0) text += `\n  ${theme.fg("muted", `… ${skipped} earlier items`)}`;
 		for (const item of activity) text += `\n  ${theme.fg("muted", "→ ")}${formatToolCall(item, theme)}`;
 		if (details.errorMessage) text += `\n  ${theme.fg("error", compactText(details.errorMessage, 120))}`;
@@ -350,10 +352,8 @@ export default function simpleSubagentExtension(pi: ExtensionAPI): void {
 			};
 		},
 
-		renderCall(args: any, theme: any, context: any) {
-			if (!context.isPartial) return new Text("", 0, 0);
-			const title = titleFromInstructions(args.instructions ?? "", args.title);
-			return new Text(`${theme.fg("accent", "?")} ${theme.fg("toolTitle", theme.bold("Subagent"))} ${theme.fg("accent", title)}`, 0, 0);
+		renderCall(_args: any, _theme: any, _context: any) {
+			return new Text("", 0, 0);
 		},
 
 		renderResult(result: any, options: any, theme: any, _context: any) {

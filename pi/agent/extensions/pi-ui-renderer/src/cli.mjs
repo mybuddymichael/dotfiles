@@ -39,7 +39,7 @@ async function importFromCandidates(specifier, candidates) {
 
 function piPackageCandidates() {
   const candidates = [
-    join(homedir(), ".local/share/mise/installs/npm-earendil-works-pi-coding-agent/0.79.5/lib/node_modules/@earendil-works/pi-coding-agent/dist/index.js"),
+    join(homedir(), ".local/share/mise/installs/npm-earendil-works-pi-coding-agent/0.79.6/lib/node_modules/@earendil-works/pi-coding-agent/dist/index.js"),
     join(homedir(), ".bun/install/global/node_modules/@earendil-works/pi-coding-agent/dist/index.js"),
     join(homedir(), ".bun/install/global/node_modules/@mariozechner/pi-coding-agent/dist/index.js"),
   ];
