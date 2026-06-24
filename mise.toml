@@ -112,5 +112,13 @@ environment = { PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/
 stdout_path = "/opt/homebrew/var/log/borders/borders.out.log"
 stderr_path = "/opt/homebrew/var/log/borders/borders.err.log"
 
+[bootstrap.macos.launchd.agents.import-monologue-journal-notes]
+program = "/Users/michael/dotfiles/bin/import-monologue-journal-notes"
+run_at_load = true
+start_interval = 900
+environment = { HOME = "/Users/michael", PATH = "/Users/michael/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin" }
+stdout_path = "/Users/michael/Library/Logs/import-monologue-journal-notes.out.log"
+stderr_path = "/Users/michael/Library/Logs/import-monologue-journal-notes.err.log"
+
 [bootstrap.hooks.final]
 run = "launchctl bootout gui/$(id -u) /Users/michael/Library/LaunchAgents/homebrew.mxcl.borders.plist 2>/dev/null || true; rm -f /Users/michael/Library/LaunchAgents/homebrew.mxcl.borders.plist"

@@ -1,0 +1,263 @@
+#!/usr/bin/env python3
+"""Import Monologue voice journal entries into the Obsidian journal vault."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
+
+VAULT_DIR = Path("/Users/michael/files_synced_outside_of_icloud/journal")
+DEFAULT_DAYS = 7
+SETTLE_SECONDS = 120
+TRIGGER_RE = re.compile(
+    r"^\s*(journal note|quick note|personal note|journal entry)\b[\s\.\:\-\—\,\;\!]*",
+    re.IGNORECASE,
+)
+FRONTMATTER_ID_RE = re.compile(r"^monologue_note_id\s*:\s*['\"]?([^'\"\s]+)['\"]?\s*$", re.MULTILINE)
+BAD_TITLE_RE = re.compile(r"^\s*(untitled|new note|note)\s*$", re.IGNORECASE)
+CONTROL_RE = re.compile(r"[\x00-\x1f\x7f]")
+
+
+@dataclass(frozen=True)
+class NoteListItem:
+    note_id: str
+    title: str
+    created_at: datetime
+    updated_at: datetime | None
+
+
+@dataclass(frozen=True)
+class ImportResult:
+    note_id: str
+    path: Path
+    dry_run: bool
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dry-run", action="store_true", help="Report imports without writing files")
+    parser.add_argument("--days", type=int, default=DEFAULT_DAYS, help=f"Rolling lookback window in days (default: {DEFAULT_DAYS})")
+    parser.add_argument("--vault", type=Path, default=VAULT_DIR, help=f"Journal vault path (default: {VAULT_DIR})")
+    return parser.parse_args()
+
+
+def log(message: str) -> None:
+    print(message, flush=True)
+
+
+def parse_monologue_time(value: str) -> datetime:
+    if value.endswith("Z"):
+        value = value[:-1] + "+00:00"
+    return datetime.fromisoformat(value).astimezone()
+
+
+def monologue_executable() -> str:
+    found = shutil.which("monologue")
+    if found:
+        return found
+    fallback = Path("/Users/michael/.local/bin/monologue")
+    if fallback.exists():
+        return str(fallback)
+    raise RuntimeError("monologue executable not found on PATH or at /Users/michael/.local/bin/monologue")
+
+
+def run_monologue(args: list[str]) -> dict:
+    env = os.environ.copy()
+    env.setdefault("HOME", "/Users/michael")
+    proc = subprocess.run(
+        [monologue_executable(), *args],
+        check=False,
+        text=True,
+        capture_output=True,
+        env=env,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"monologue {' '.join(args)} failed with code {proc.returncode}: {proc.stderr.strip()}")
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"monologue {' '.join(args)} returned invalid JSON: {exc}") from exc
+
+
+def existing_monologue_ids(notes_dir: Path) -> set[str]:
+    ids: set[str] = set()
+    if not notes_dir.exists():
+        return ids
+    for path in notes_dir.glob("*.md"):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        if not text.startswith("---"):
+            continue
+        end = text.find("\n---", 3)
+        if end == -1:
+            continue
+        frontmatter = text[3:end]
+        match = FRONTMATTER_ID_RE.search(frontmatter)
+        if match:
+            ids.add(match.group(1))
+    return ids
+
+
+def list_recent_notes(days: int) -> list[NoteListItem]:
+    start = (datetime.now().astimezone() - timedelta(days=days)).isoformat(timespec="seconds")
+    data = run_monologue(["notes", "all", "-created-after", start, "-limit", "100"])
+    items: list[NoteListItem] = []
+    for raw in data.get("items", []):
+        note_id = raw.get("note_id")
+        created_at = raw.get("created_at")
+        if not note_id or not created_at:
+            continue
+        updated_raw = raw.get("updated_at")
+        items.append(
+            NoteListItem(
+                note_id=note_id,
+                title=raw.get("title") or "",
+                created_at=parse_monologue_time(created_at),
+                updated_at=parse_monologue_time(updated_raw) if updated_raw else None,
+            )
+        )
+    items.sort(key=lambda item: item.created_at)
+    return items
+
+
+def full_note(note_id: str) -> dict:
+    return run_monologue(["notes", "get", note_id])
+
+
+def capitalize_initial_letter(value: str) -> str:
+    for index, char in enumerate(value):
+        if char.isalpha():
+            return f"{value[:index]}{char.upper()}{value[index + 1:]}"
+    return value
+
+
+def strip_trigger(transcript: str) -> tuple[str | None, str]:
+    match = TRIGGER_RE.match(transcript or "")
+    if not match:
+        return None, transcript
+    stripped = transcript[match.end() :].strip()
+    stripped = re.sub(r"\n{3,}", "\n\n", stripped)
+    stripped = capitalize_initial_letter(stripped)
+    return match.group(1).lower(), stripped
+
+
+def title_from_transcript(transcript: str) -> str:
+    words = re.findall(r"\S+", transcript)
+    return " ".join(words[:10])
+
+
+def sanitize_filename_part(value: str) -> str:
+    value = CONTROL_RE.sub(" ", value)
+    value = value.replace("/", "-").replace(":", " -")
+    value = re.sub(r"\s+", " ", value).strip()
+    value = value.strip(". ")
+    return value[:120].rstrip()
+
+
+def filename_for(note: NoteListItem, transcript: str) -> str:
+    local_created = note.created_at.astimezone()
+    timestamp = local_created.strftime("%Y-%m-%d %H%M")
+    title = note.title.strip()
+    if not title or BAD_TITLE_RE.match(title):
+        title = title_from_transcript(transcript)
+    title = sanitize_filename_part(title)
+    return f"{timestamp} {title}.md" if title else f"{timestamp}.md"
+
+
+def unique_path(notes_dir: Path, preferred_name: str, note_id: str) -> Path:
+    preferred = notes_dir / preferred_name
+    if not preferred.exists():
+        return preferred
+    stem = preferred.stem
+    suffix = preferred.suffix
+    with_id = notes_dir / f"{stem} {note_id[:8]}{suffix}"
+    if not with_id.exists():
+        return with_id
+    counter = 2
+    while True:
+        candidate = notes_dir / f"{stem} {note_id[:8]}-{counter}{suffix}"
+        if not candidate.exists():
+            return candidate
+        counter += 1
+
+
+def write_note(path: Path, note_id: str, transcript: str, dry_run: bool) -> None:
+    content = f"---\nmonologue_note_id: {note_id}\n---\n\n{transcript.strip()}\n"
+    if dry_run:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("x", encoding="utf-8") as file:
+        file.write(content)
+
+
+def import_note(note: NoteListItem, notes_dir: Path, dry_run: bool) -> ImportResult | None:
+    data = full_note(note.note_id)
+    transcript = data.get("transcript") or ""
+    trigger, stripped = strip_trigger(transcript)
+    if not trigger:
+        return None
+    if not stripped:
+        raise RuntimeError(f"note_id={note.note_id} matched trigger but has empty transcript after stripping")
+    path = unique_path(notes_dir, filename_for(note, stripped), note.note_id)
+    write_note(path, note.note_id, stripped, dry_run)
+    return ImportResult(note_id=note.note_id, path=path, dry_run=dry_run)
+
+
+def main() -> int:
+    args = parse_args()
+    notes_dir = args.vault / "notes"
+    now = datetime.now().astimezone()
+
+    imported_ids = existing_monologue_ids(notes_dir)
+    recent_notes = list_recent_notes(args.days)
+
+    checked = len(recent_notes)
+    already_imported = 0
+    too_recent = 0
+    unseen = 0
+    skipped_no_trigger = 0
+    imported = 0
+    errors = 0
+
+    for note in recent_notes:
+        if note.note_id in imported_ids:
+            already_imported += 1
+            continue
+        if note.updated_at and note.updated_at > now - timedelta(seconds=SETTLE_SECONDS):
+            too_recent += 1
+            continue
+        unseen += 1
+        try:
+            result = import_note(note, notes_dir, args.dry_run)
+        except Exception as exc:  # Keep going so one bad note does not block the import batch.
+            errors += 1
+            print(f"error note_id={note.note_id} title={note.title!r}: {exc}", file=sys.stderr, flush=True)
+            continue
+        if result is None:
+            skipped_no_trigger += 1
+            continue
+        imported += 1
+        action = "would_import" if args.dry_run else "imported"
+        log(f"{action} note_id={result.note_id} path={str(result.path)!r}")
+
+    log(
+        "summary "
+        f"checked={checked} already_imported={already_imported} unseen={unseen} "
+        f"imported={imported} skipped_no_trigger={skipped_no_trigger} "
+        f"skipped_too_recent={too_recent} errors={errors} dry_run={str(args.dry_run).lower()}"
+    )
+    return 1 if errors else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
