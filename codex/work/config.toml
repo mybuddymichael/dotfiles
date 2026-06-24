@@ -8,5 +8,8 @@ cli_auth_credentials_store = "file"
 [projects."/Users/michael/files_synced_outside_of_icloud/ds-wiki"]
 trust_level = "trusted"
 
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "context-remaining"]
+
 [tui.model_availability_nux]
 "gpt-5.5" = 1

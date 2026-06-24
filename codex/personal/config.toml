@@ -7,3 +7,6 @@ cli_auth_credentials_store = "file"
 
 [projects."/Users/michael/dotfiles"]
 trust_level = "trusted"
+
+[tui]
+status_line = ["five-hour-limit", "model-with-reasoning", "current-dir", "context-remaining"]
