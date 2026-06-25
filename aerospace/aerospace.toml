@@ -1,6 +1,8 @@
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
+config-version = 2
+
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
@@ -25,7 +27,7 @@ accordion-padding = 48
 
 # Limit width of a single tiled window in a workspace
 # 100 means no width cap (full available width, respecting outer gaps)
-single-window-width-percent = [{ monitor."ma270s" = 70 }, 90]
+# single-window-width-percent = [{ monitor."ma270s" = 70 }, 90]
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
 
@@ -39,8 +41,9 @@ default-root-container-orientation = 'auto'
 # See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 # Fallback value (if you omit the key): on-focused-monitor-changed = []
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # on-focus-changed = ['move-mouse window-lazy-center']
+focus-follows-mouse.enabled = false
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
@@ -112,7 +115,7 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 alt-shift-enter = 'fullscreen'
-alt-ctrl-enter = 'fullscreen --width 60'
+# alt-ctrl-enter = 'fullscreen --width 60'
 alt-shift-backspace = 'balance-sizes'
 
 alt-ctrl-h = 'workspace prev'
@@ -170,21 +173,21 @@ alt-shift-u = ['move-node-to-workspace u', 'workspace u']
 alt-shift-i = ['move-node-to-workspace i', 'workspace i']
 alt-shift-o = ['move-node-to-workspace o', 'workspace o']
 # See: https://nikitabobko.github.io/AeroSpace/commands#swap-workspace
-alt-shift-ctrl-1 = 'swap-workspace 1'
-alt-shift-ctrl-2 = 'swap-workspace 2'
-alt-shift-ctrl-3 = 'swap-workspace 3'
-alt-shift-ctrl-4 = 'swap-workspace 4'
-alt-shift-ctrl-5 = 'swap-workspace 5'
-alt-shift-ctrl-6 = 'swap-workspace 6'
-alt-shift-ctrl-q = 'swap-workspace q'
-alt-shift-ctrl-w = 'swap-workspace w'
-alt-shift-ctrl-e = 'swap-workspace e'
-alt-shift-ctrl-d = 'swap-workspace d'
-alt-shift-ctrl-f = 'swap-workspace f'
-alt-shift-ctrl-s = 'swap-workspace s'
-alt-shift-ctrl-u = 'swap-workspace u'
-alt-shift-ctrl-i = 'swap-workspace i'
-alt-shift-ctrl-o = 'swap-workspace o'
+# alt-shift-ctrl-1 = 'swap-workspace 1'
+# alt-shift-ctrl-2 = 'swap-workspace 2'
+# alt-shift-ctrl-3 = 'swap-workspace 3'
+# alt-shift-ctrl-4 = 'swap-workspace 4'
+# alt-shift-ctrl-5 = 'swap-workspace 5'
+# alt-shift-ctrl-6 = 'swap-workspace 6'
+# alt-shift-ctrl-q = 'swap-workspace q'
+# alt-shift-ctrl-w = 'swap-workspace w'
+# alt-shift-ctrl-e = 'swap-workspace e'
+# alt-shift-ctrl-d = 'swap-workspace d'
+# alt-shift-ctrl-f = 'swap-workspace f'
+# alt-shift-ctrl-s = 'swap-workspace s'
+# alt-shift-ctrl-u = 'swap-workspace u'
+# alt-shift-ctrl-i = 'swap-workspace i'
+# alt-shift-ctrl-o = 'swap-workspace o'
 
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
@@ -229,10 +232,18 @@ esc = 'mode main'
 enter = 'mode main'
 
 [workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = 'main'
+3 = 'main'
+4 = 'main'
+5 = 'main'
 6 = 'DeskPad'
 q = 'DeskPad'
 w = 'DeskPad'
 e = 'DeskPad'
+d = 'main'
+f = 'main'
+s = 'main'
 u = 'built-in'
 i = 'built-in'
 o = 'built-in'
