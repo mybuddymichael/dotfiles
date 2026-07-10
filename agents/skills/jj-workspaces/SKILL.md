@@ -83,18 +83,34 @@ Check `jj workspace list` for the exact name:
 
 ### Step 4: Choose the base and create
 
-For a fresh independent stream, use `jj workspace add` without `--revision`. JJ will create the new working-copy commit beside the current working-copy commit, on the same parent or parents:
+Use a revision supplied by the user when present. Otherwise, a fresh independent stream starts from JJ's `trunk()` revset rather than from the invoking workspace's current stack.
+
+Resolve the base before creating anything:
+
+```sh
+jj log --no-graph -r 'trunk()'
+```
+
+Confirm that `trunk()` resolves to exactly one plausible commit and record that commit for the final report. JJ normally resolves `trunk()` from the repository's configured default bookmark and remote, including common `main`, `master`, and `trunk` setups. It does not fetch, so the result is the latest trunk known to the local repository.
+
+If `trunk()` resolves to `root()` in a repository that has non-root history, or does not resolve to exactly one plausible commit, stop and ask the user for the intended base. Do not silently build a normal task from `root()` or guess a bookmark name.
+
+If the request clearly says the new stream should extend another workspace or revision but does not identify it unambiguously, ask for the base. Do not substitute the current `@` merely because the command is being run from that workspace.
+
+For the normal independent case, create from `trunk()`:
 
 ```sh
 tmp_root="${TMPDIR:-/tmp}"
 destination="${tmp_root%/}/jj-workspaces/<repo-folder>/<task-slug>"
 mkdir -p "$(dirname "$destination")"
-jj workspace add --name '<task-slug>' --message '<summary>' "$destination"
+jj workspace add \
+  --name '<task-slug>' \
+  --message '<summary>' \
+  --revision 'trunk()' \
+  "$destination"
 ```
 
-The sibling default isolates the new experiment from changes currently in the original working-copy commit. If the new stream must include those changes, do not silently add `--revision @` or create a commit boundary. Explain that `--revision @` makes the new workspace descend from a mutable working-copy commit and may cause automatic rebases as that commit changes. Ask the user which base they want when the intended base cannot be inferred safely.
-
-Use an explicit `--revision <revset>` only when the user chose a known base or the task unambiguously requires it.
+When the user chose another base, replace `trunk()` with that exact revset after verifying what it resolves to. Explain that `--revision @` makes the new workspace descend from a mutable working-copy commit and may cause automatic rebases as that commit changes. Do not create a commit boundary, rebase work, or otherwise alter the invoking workspace merely to prepare the new base.
 
 ### Step 5: Enter and verify
 
@@ -165,6 +181,8 @@ For broad pruning, default to reporting candidates. Do not bulk-remove existing 
 | Rationalization | Reality |
 |---|---|
 | "The matching name probably belongs to this task." | Human-readable names can collide. Resolve its path and inspect its workspace commit before resuming. |
+| "JJ's default base is close enough." | Omitting `--revision` makes the result depend on the invoking workspace's current parents. Independent streams start from the validated `trunk()`. |
+| "I know this repository uses `main`." | Use `trunk()` so repository configuration, remotes, and `master` or other trunk names are handled consistently. |
 | "Using `--revision @` includes everything I need." | It also makes the new stream descend from a mutable working-copy commit. Resolve the base deliberately. |
 | "I can inspect another workspace with `jj status`." | `jj status` snapshots that working copy and may race with the agent editing it. Inspect its registered commit from the current workspace first. |
 | "It is under `$TMPDIR`, so deleting it is harmless." | The directory can contain unsnapshotted files, and its workspace commit may be the only visible reference to useful work. |
@@ -175,6 +193,9 @@ For broad pruning, default to reporting candidates. Do not bulk-remove existing 
 
 - Creating a workspace without checking `jj workspace list`.
 - Resuming an existing name without resolving its path and inspecting its commit.
+- Omitting `--revision` for a new independent stream.
+- Hard-coding `main` or `master` instead of resolving `trunk()`.
+- Using an unresolved or implausible `trunk()` result, especially `root()` in a repository with non-root history.
 - Using `--revision @` by default.
 - Continuing edits or commands from the original workspace after creating the new one.
 - Running `jj status` in another possibly active workspace during read-only inspection.
@@ -189,9 +210,11 @@ For start or resume, confirm:
 
 - [ ] `jj workspace list` was checked before choosing the name.
 - [ ] Any existing matching workspace was resolved and inspected before reuse.
+- [ ] The selected base resolved to exactly one plausible commit.
+- [ ] New independent work used `--revision 'trunk()'`; any other base was user-supplied or explicitly confirmed.
 - [ ] `jj workspace root` in the selected workspace returned the intended absolute path.
 - [ ] `jj status` and `jj log -r @ -n 1` verified the selected working copy.
-- [ ] The workspace name, path, and base were reported.
+- [ ] The workspace name, path, base revset, and resolved base commit were reported.
 - [ ] Subsequent work runs from the selected workspace.
 
 For inspection, confirm:
